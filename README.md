@@ -9,13 +9,16 @@ automática por gesto de ingesta (ML) y aviso escalonado al cuidador.
 | Ruta | Qué es |
 |---|---|
 | `index.html` | Portada del sitio con enlaces a todo |
-| `prototipo.html` | Prototipo interactivo: smartwatch (tipo Fitbit Sense 2) + app móvil + señal IMU simulada + clasificador + aviso al cuidador. Datos en memoria |
-| `documento.html` / `documento.pdf` | Documento de proyecto: problema, objetivos, público objetivo, lineamientos, hardware, arquitectura, datos, modelo, BD, métricas, riesgos y hoja de ruta |
-| `presentacion.html` / `presentacion.pdf` | Presentación de 16 diapositivas (← → para navegar, F para pantalla completa) |
+| `prototipo.html` | Prototipo interactivo: 6 modelos de smartwatch, fusión de evidencias (gesto, secuencia, NFC, horario), app móvil, aviso al cuidador y comparativa de 8 relojes. Datos en memoria. `?reloj=fs2` abre un modelo concreto |
+| `documentos.html` | Índice de los dos documentos |
+| `doc-conceptual.html` / `.pdf` | Documento 1, conceptual/teórico: problema, objetivos, público, lineamientos, trabajos relacionados, validación y verificación de fuentes |
+| `doc-tecnico.html` / `.pdf` | Documento 2, técnico/tecnológico: arquitectura, comparativa de relojes, APIs, fusión de evidencias, modelo, motor de estados, BD y código |
+| `presentacion.html` / `.pdf` | Presentación de 17 diapositivas (← → para navegar, F para pantalla completa, `#n` abre la diapositiva n) |
 | `flujo.html` / `img/flujo.png` | Diapositiva única con el flujo de una toma y sus conexiones |
-| `db/schema.sql` | Esquema SQLite (tablas originales + correcciones) |
-| `db/test_schema.py` | Prueba del esquema con datos de ejemplo |
-| `assets/` | Tema visual compartido y logo |
+| `documento.html` | Redirección a `documentos.html` (enlace antiguo) |
+| `db/schema.sql` | Esquema SQLite (Device, IntakeRecord, Evidence, FusionDecision, ...) |
+| `db/test_schema.py` | Prueba del esquema y de la fusión de evidencias |
+| `assets/` | Tema visual, estilos de documentos y logo |
 
 ## Publicar en GitHub Pages
 
@@ -30,4 +33,4 @@ python3 db/test_schema.py
 ## Regenerar PDF y PNG
 
 Las exportaciones se hacen con Playwright (Chromium): `flujo.html?raw=1` a 1920×1080 para el PNG
-y la vista de impresión de `presentacion.html` y `documento.html` para los PDF.
+y la vista de impresión de `presentacion.html`, `doc-conceptual.html` y `doc-tecnico.html` para los PDF.

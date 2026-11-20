@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediTrack · Documento conceptual</title>
+<meta name="description" content="Documento conceptual de MediTrack: problema, objetivos, público objetivo, propuesta de valor, lineamientos, trabajos relacionados y plan de validación.">
+<link rel="icon" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/tema.css">
+<link rel="stylesheet" href="assets/doc.css">
+</head>
+<body>
+<nav class="sitenav">
+  <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
+  <a class="l" href="prototipo.html">Prototipo</a>
+  <a class="l on" href="documentos.html">Documentos</a>
+  <a class="l" href="presentacion.html">Presentación</a>
+  <a class="l" href="flujo.html">Flujo</a>
+</nav>
+
+<div class="wrap">
+<nav class="toc" aria-label="Contenido">
+  <b>Conceptual / teórico</b>
+  <a href="#resumen">Resumen</a>
+  <a href="#problema">1 · Problema</a>
+  <a href="#objetivos">2 · Objetivos</a>
+  <a href="#publico">3 · Público objetivo</a>
+  <a href="#propuesta">4 · Propuesta de valor</a>
+  <a href="#alcance">5 · Alcance</a>
+  <a href="#funcionamiento">6 · Cómo funciona</a>
+  <a href="#evidencias">7 · ¿Cómo sabe que la tomó?</a>
+  <a href="#reloj">8 · Elección del reloj</a>
+  <a href="#lineamientos">9 · Lineamientos</a>
+  <a href="#relacionados">10 · Trabajos relacionados</a>
+  <a href="#metricas">11 · Éxito y validación</a>
+  <a href="#riesgos">12 · Riesgos</a>
+  <a href="#roadmap">13 · Hoja de ruta</a>
+  <a href="#fuentes">Verificación de fuentes</a>
+  <a href="#referencias">Referencias</a>
+  <a href="doc-tecnico.html" style="margin-top:10px;color:var(--ac-dk)">→ Documento técnico</a>
+</nav>
+
+<article>
+  <header class="cover">
+    <span class="k">DOCUMENTO 1 DE 2 · CONCEPTUAL / TEÓRICO · v2.0</span>
+    <h1>MediTrack</h1>
+    <p>Qué queremos lograr, para quién, con qué principios y cómo vamos a saber si funciona. Para el detalle de base de datos, APIs, modelo y código, ver el <a href="doc-tecnico.html" style="color:#fff">documento técnico</a>.</p>
+    <div class="meta"><span>Noviembre 2026</span><span>Para: docentes, personal de salud, cuidadores e inversionistas</span></div>
+  </header>
+
+  <section id="resumen">
+    <h2>Resumen ejecutivo</h2>
+    <p><b>MediTrack</b> es una app móvil conectada a un smartwatch que ayuda a personas con tratamientos crónicos a tomar sus medicamentos a tiempo. En cada horario el reloj vibra con un recordatorio. Después, el sistema <b>junta varias evidencias</b> para saber si la persona realmente tomó la dosis: el movimiento de la muñeca (abrir el frasco, llevar la mano a la boca, beber agua), el toque de una etiqueta NFC en el frasco y el horario habitual. Si la evidencia es fuerte, registra la toma sola. Si es parcial, pregunta. Si no hay evidencia al terminar la tolerancia, avisa al <b>cuidador</b>.</p>
+    <p>El sistema distingue <b>“sin confirmar”</b> de <b>“no tomada”</b>. Cada toma queda registrada con su fuente y su nivel de confianza.</p>
+    <div class="grid2">
+      <div class="box"><span class="tag">Para quién</span><h4>Adultos mayores con polifarmacia</h4><p>y sus cuidadores familiares.</p></div>
+      <div class="box"><span class="tag">Qué cambia</span><h4>Confirmación con evidencia</h4><p>Varias señales combinadas, no solo un botón.</p></div>
+      <div class="box"><span class="tag">Qué medimos</span><h4>Adherencia real</h4><p>Hora, fuente y confianza de cada toma.</p></div>
+    </div>
+  </section>
+
+  <section id="problema">
+    <h2><span class="n">01</span>El problema</h2>
+    <p>Según la Organización Mundial de la Salud, la adherencia a los tratamientos de largo plazo en enfermedades crónicas es de <b>alrededor del 50 %</b> en los países desarrollados, y menor en los países en desarrollo (OMS, 2003). En Estados Unidos, el costo anual de la falta de adherencia se ha estimado en unos 100 mil millones de dólares (Osterberg y Blaschke, 2005), y estimaciones más recientes lo acercan a 500 mil millones (Watanabe et al., 2018, citados por Nzeyimana et al., 2024).</p>
+    <p>En adultos mayores, las causas suelen ser prácticas:</p>
+    <ul>
+      <li><b>Olvido</b> o confusión cuando hay varios medicamentos y horarios (polifarmacia).</li>
+      <li><b>Duda</b> de si ya se tomó la dosis, que lleva a omitirla o a duplicarla.</li>
+      <li><b>Rutinas cambiantes</b>: salir, dormir mal o comer a otra hora desplaza las tomas.</li>
+      <li><b>Carga del cuidador</b>, que llama varias veces al día para preguntar.</li>
+    </ul>
+    <div class="callout warn"><b>El hueco que atendemos</b>Las apps de recordatorio dependen de que el usuario marque “tomado”, así que un registro vacío no distingue un olvido de la dosis de un olvido del registro. Los sistemas de investigación que reconocen el gesto con el reloj (como DoseMate) muestran que el movimiento sí aporta evidencia, pero no combinan varias señales ni escalan a un cuidador familiar.</div>
+  </section>
+
+  <section id="objetivos">
+    <h2><span class="n">02</span>¿Qué queremos conseguir?</h2>
+    <h3>Objetivo general</h3>
+    <p>Diseñar, prototipar y evaluar un sistema de recordatorio y monitoreo de la adherencia a medicamentos con un smartwatch comercial. El sistema estima si la toma ocurrió combinando varias evidencias y escala al cuidador solo cuando falta evidencia.</p>
+    <h3>Objetivos específicos</h3>
+    <ol>
+      <li>Entregar recordatorios en la muñeca a la hora exacta, con segundo aviso y opción de posponer.</li>
+      <li>Reconocer el gesto de ingesta con el acelerómetro y el giroscopio, entrenando con datos públicos (DoseMate).</li>
+      <li>Combinar el gesto con otras evidencias (secuencia completa de la toma, etiqueta NFC en el frasco, horario) en una sola probabilidad de toma.</li>
+      <li>Confirmar en tres niveles: automático con evidencia fuerte, pregunta con evidencia parcial, aviso al cuidador sin evidencia.</li>
+      <li>Ofrecer un panel de adherencia con tendencias y patrones, por ejemplo qué horario se olvida más.</li>
+      <li>Elegir el reloj con el mejor equilibrio entre precio y capacidades para el proyecto.</li>
+    </ol>
+  </section>
+
+  <section id="publico">
+    <h2><span class="n">03</span>Público objetivo</h2>
+    <div class="tablewrap"><table>
+      <tr><th>Segmento</th><th>Quién es</th><th>Qué necesita</th></tr>
+      <tr><td><b>Primario</b></td><td>Adultos de 60 años o más con una o más enfermedades crónicas (por ejemplo, diabetes tipo 2 o hipertensión) y varias tomas al día. Autónomos, viven solos o en pareja.</td><td>Recordatorios claros, confirmar sin esfuerzo, letra grande y cero tecnicismos.</td></tr>
+      <tr><td><b>Secundario</b></td><td>Cuidadores familiares (hijos, pareja) o contratados que no viven con la persona.</td><td>Enterarse solo cuando algo falla, sin vigilar todo el día, y ver tendencias semanales.</td></tr>
+      <tr><td><b>Terciario</b></td><td>Personal de salud e investigadores en adherencia.</td><td>Registros con evidencia (fuente y confianza) para la consulta y para estudios.</td></tr>
+    </table></div>
+    <p>En México había <b>15.1 millones</b> de personas de 60 años o más en 2020, el <b>12 %</b> de la población. En 2010 eran el 9.1 % (INEGI, Censo de Población y Vivienda 2020).</p>
+    <h3>Personas de diseño (ficticias)</h3>
+    <div class="grid2">
+      <div class="box persona"><span class="av" style="background:#0d8a84">R</span><div><h4>Rafael, 72</h4><p>Diabetes tipo 2 e hipertensión, 5 tomas al día. Usa el reloj para contar pasos. Olvida la dosis de la noche cuando cena fuera. <i>“No quiero que mi hija me esté llamando a cada rato.”</i></p></div></div>
+      <div class="box persona"><span class="av" style="background:#d9463b">L</span><div><h4>Laura, 44</h4><p>Hija de Rafael, trabaja tiempo completo a 40 minutos. <i>“Me basta con saber si algo no va bien y ver cómo va la semana.”</i></p></div></div>
+      <div class="box persona"><span class="av" style="background:#6b4fe0">M</span><div><h4>Dra. Márquez</h4><p>Médica familiar. <i>“Si sé que la toma de la noche falla seguido, ajusto el esquema antes de subir la dosis.”</i></p></div></div>
+    </div>
+  </section>
+
+  <section id="propuesta">
+    <h2><span class="n">04</span>Propuesta de valor</h2>
+    <ul>
+      <li><b>Para el usuario:</b> el reloj le recuerda y, con evidencia suficiente, registra la toma solo. Menos pasos y menos dudas de “¿ya me la tomé?”.</li>
+      <li><b>Para el cuidador:</b> recibe un aviso solo si una toma queda sin evidencia, y puede cerrar el caso (“le llamé, sí la tomó”).</li>
+      <li><b>Para el médico o el investigador:</b> un historial con hora real, retraso, fuente y confianza de cada confirmación.</li>
+    </ul>
+    <div class="callout"><b>Qué NO es MediTrack</b>No es un dispositivo médico ni diagnostica. No decide dosis ni sustituye la indicación del médico. No garantiza que el medicamento se ingirió: estima, con un nivel de confianza, que la toma ocurrió.</div>
+  </section>
+
+  <section id="alcance">
+    <h2><span class="n">05</span>Alcance</h2>
+    <div class="tablewrap"><table>
+      <tr><th>MVP (fase 1)</th><th>Fase 2 · investigación</th><th>Fuera de alcance</th></tr>
+      <tr><td><ul><li>Alta de medicamentos y horarios</li><li>Recordatorio en reloj y teléfono, segundo aviso y posponer</li><li>Confirmación manual y por NFC</li><li>Estados automáticos y tolerancia configurable</li><li>Aviso al cuidador</li><li>Historial y adherencia semanal</li></ul></td>
+      <td><ul><li>Gesto y secuencia de toma con IMU</li><li>Fusión de evidencias y pregunta con confianza intermedia</li><li>Estimar el riesgo de olvido con sueño y actividad</li><li>Explorar EDA y pulso como contexto</li></ul></td>
+      <td><ul><li>Pastilleros electrónicos o hardware propio</li><li>Recetas electrónicas o integración con expediente clínico</li><li>Ajuste de dosis o consejos médicos</li><li>Inventario y resurtido en farmacia</li></ul></td></tr>
+    </table></div>
+  </section>
+
+  <section id="funcionamiento">
+    <h2><span class="n">06</span>Cómo funciona</h2>
+    <ol class="steps">
+      <li>Llega la hora programada del medicamento y la toma queda <b>pendiente</b>.</li>
+      <li>MediTrack envía el recordatorio al teléfono y al reloj, que vibra.</li>
+      <li>La persona toma el medicamento.</li>
+      <li>Durante la ventana de la toma, el sistema reúne evidencias: movimiento de la muñeca, toque NFC del frasco y horario.</li>
+      <li>Combina todo en una probabilidad: <b>¿tomó el medicamento?</b></li>
+      <li>Si la probabilidad es alta (0.85 por defecto), la toma queda <b>confirmada</b> sin que la persona haga nada. Si es intermedia, el reloj o el teléfono pregunta.</li>
+      <li>Si no hay evidencia suficiente, espera la confirmación manual dentro de la tolerancia (30 min por defecto), con un segundo aviso a los 15 min.</li>
+      <li>Al terminar la tolerancia sin evidencia, la toma queda <b>sin confirmar</b> y se avisa al cuidador. Si la evidencia llega después, la toma queda <b>con retraso</b>.</li>
+    </ol>
+    <p>Puedes probarlo en <a href="prototipo.html">el prototipo</a> y ver el diagrama en <a href="flujo.html">el flujo</a>.</p>
+  </section>
+
+  <section id="evidencias">
+    <h2><span class="n">07</span>¿Cómo sabe que de verdad la tomó?</h2>
+    <p>Ninguna señal sola es prueba. Llevar la mano a la boca también pasa al comer, beber o fumar. Por eso MediTrack junta varias evidencias, y cada una sube o baja la confianza.</p>
+    <div class="tablewrap"><table>
+      <tr><th>Evidencia</th><th>Qué indica</th><th>Límite</th><th>Peso</th></tr>
+      <tr><td><b>Gesto mano-boca</b><br><span class="mu">acelerómetro + giroscopio</span></td><td>La mano subió a la boca con la inclinación típica de llevarse una pastilla.</td><td>Se confunde con comer, beber o fumar. Requiere un reloj que permita leer la IMU.</td><td>Alto</td></tr>
+      <tr><td><b>Secuencia completa</b><br><span class="mu">abrir → boca → beber</span></td><td>El giro de muñeca al abrir el frasco o el blíster, seguido del gesto a la boca y de beber agua. DoseMate observó estas fases (abrir y cerrar el frasco, pastilla a la boca, beber).</td><td>No todas las personas beben agua o usan frasco.</td><td>Medio</td></tr>
+      <tr><td><b>Etiqueta NFC del frasco</b><br><span class="mu">el teléfono toca la etiqueta</span></td><td>La persona tuvo el frasco en la mano en la ventana de la toma. DoseMate usó un toque NFC similar para iniciar la grabación.</td><td>Requiere un gesto voluntario. Indica que manipuló el frasco, no que tragó la pastilla.</td><td>Alto</td></tr>
+      <tr><td><b>Ventana y rutina</b><br><span class="mu">hora programada + historial</span></td><td>La evidencia ocurre cerca de la hora programada y de su hora habitual.</td><td>Por sí sola no confirma nada.</td><td>Bajo</td></tr>
+      <tr><td><b>Reloj puesto</b><br><span class="mu">detección fuera de la muñeca</span></td><td>Es condición para confiar en el movimiento.</td><td>Sin reloj puesto, el gesto no cuenta.</td><td>Condición</td></tr>
+      <tr><td><b>Pulso o EDA</b><br><span class="mu">sensores fisiológicos</span></td><td>Contexto para la investigación (estrés, actividad, sueño).</td><td><b>No confirma la ingesta</b>, así que no se usa para decidir.</td><td>Cero</td></tr>
+    </table></div>
+    <div class="callout"><b>Tres niveles de decisión</b><b style="display:inline">≥ 0.85</b> confirmar automáticamente · <b style="display:inline">0.50 a 0.85</b> preguntar al usuario · <b style="display:inline">&lt; 0.50</b> seguir esperando o escalar al terminar la tolerancia. Los pesos iniciales son propuestas de diseño y se ajustarán con datos reales.</div>
+  </section>
+
+  <section id="reloj">
+    <h2><span class="n">08</span>Elección del reloj (resumen)</h2>
+    <p>La pregunta clave no es cuántos sensores tiene el reloj, sino <b>si una app propia puede leerlos</b>. El Fitbit Sense 2 tiene acelerómetro, giroscopio y cEDA, pero Fitbit declaró en 2023 que no planea permitir apps de terceros en Sense 2 y Versa 4. Con él solo se puede recordar y confirmar desde el teléfono, sin gesto.</p>
+    <div class="grid2">
+      <div class="box"><span class="tag">Mejor precio/beneficio</span><h4>Galaxy Watch FE · US$199.99</h4><p>App propia en Wear OS, IMU accesible y botón en el reloj.</p></div>
+      <div class="box"><span class="tag">Investigación multiseñal</span><h4>Galaxy Watch8 · US$349.99</h4><p>Abre PPG crudo y EDA continuo a terceros.</p></div>
+      <div class="box"><span class="tag">Presupuesto mínimo</span><h4>Amazfit Active 2 · US$99.99</h4><p>API de IMU en Zepp OS. Hay que validarla antes del piloto.</p></div>
+      <div class="box"><span class="tag">Usuarios de iPhone</span><h4>Apple Watch SE 3 · US$249</h4><p>Acceso maduro a la IMU. Requiere iPhone.</p></div>
+    </div>
+    <p>La tabla completa de 8 modelos está en el <a href="doc-tecnico.html#relojes">documento técnico</a> y en el <a href="prototipo.html#comparativa">prototipo</a>. Los precios son de lista en EUA; en México varían.</p>
+  </section>
+
+  <section id="lineamientos">
+    <h2><span class="n">09</span>Lineamientos</h2>
+    <h3>Diseño y accesibilidad</h3>
+    <ul>
+      <li>Una acción principal por pantalla en el reloj: “Ya la tomé” grande y verde.</li>
+      <li>Texto mínimo de 16 px en el teléfono, contraste AA (WCAG 2.1) y objetivos táctiles de 44 px o más.</li>
+      <li>Lenguaje sin culpa: “sin confirmar”, nunca “olvidaste”.</li>
+      <li>Nada depende solo del color: cada estado lleva texto.</li>
+      <li>Funciona sin el reloj: los recordatorios siguen llegando al teléfono.</li>
+    </ul>
+    <h3>Privacidad, consentimiento y ética</h3>
+    <ul>
+      <li>La nueva Ley Federal de Protección de Datos Personales en Posesión de los Particulares (DOF, 20 de marzo de 2025) trata los datos de salud como <b>datos sensibles</b>. Su tratamiento exige <b>consentimiento expreso y por escrito</b>, que puede darse con firma autógrafa, firma electrónica o un mecanismo de autenticación. La autoridad en la materia es ahora la Secretaría Anticorrupción y Buen Gobierno. El texto vigente debe revisarse antes de lanzar, porque la ley tiene reformas posteriores.</li>
+      <li>Minimización: la señal de movimiento se procesa en el dispositivo, solo dentro de la ventana de la toma, y se guarda el resultado, no la señal cruda.</li>
+      <li>El usuario decide quién es su cuidador y qué recibe, y puede revocarlo.</li>
+      <li>Para estudios con participantes: protocolo aprobado por un comité de ética y consentimiento informado. DoseMate, por ejemplo, contó con aprobación de IRB.</li>
+      <li>Si en el futuro se integra con expedientes clínicos, aplica la NOM-024-SSA3-2012 (sistemas de información de registro electrónico para la salud), vigente desde el 29 de enero de 2013.</li>
+    </ul>
+    <h3>Clínicos</h3>
+    <ul>
+      <li>No recomienda tomar dosis atrasadas: muestra la indicación y sugiere consultar al médico.</li>
+      <li>Las evidencias fuera de la ventana de la toma se ignoran.</li>
+      <li>La tolerancia y el umbral se configuran según el medicamento.</li>
+    </ul>
+  </section>
+
+  <section id="relacionados">
+    <h2><span class="n">10</span>Trabajos relacionados</h2>
+    <h3>DoseMate (Nzeyimana et al., CHIL 2024)</h3>
+    <p>Sistema de UMass Amherst y colaboradores, probado en un estudio clínico con <b>20 participantes</b> entre enero de 2020 y junio de 2022. Usó relojes Android (Wear OS 2.x) y un frasco con etiqueta NFC: al tocar el frasco con el teléfono, el reloj grababa unos 19 s de acelerómetro y giroscopio. Registró <b>1,154 eventos candidatos</b>, de los cuales 185 fueron no-tomas. Reporta una exactitud balanceada de 94 % (modelos con características) y 95 % (aprendizaje profundo), y un F1 promedio de 96.8 % y 96.2 %. DoseMate <b>sí enviaba recordatorios</b>, como notificaciones del teléfono reflejadas en el reloj, e incluía un botón de registro manual.</p>
+    <h3>Otros</h3>
+    <ul>
+      <li><b>Moccia et al. (2022)</b>, <i>Computer Methods and Programs in Biomedicine</i> 219: reconocimiento de gestos con pulsera inercial en laboratorio. Una CNN-LSTM obtuvo una F1 mediana de 90.5 % (multiclase) y 92.5 % (binaria) con validación leave-one-subject-out.</li>
+      <li><b>Odhiambo et al. (2023)</b>, <i>JMIR Human Factors</i> 10:e42714: redes neuronales con acelerómetro de smartwatch entrenadas con 2,800 gestos de toma (50 % naturales y 50 % guionizados), con 96.5 % de verdaderos positivos y 94.5 % de verdaderos negativos en promedio.</li>
+      <li><b>ActSafe (Seegmiller et al., 2023)</b>, arXiv:2301.07051: predice violaciones de restricciones temporales de medicamentos (por ejemplo, horario respecto a comidas) con datos de 28 pacientes y un F1 promedio de 0.86, alrededor de un día antes.</li>
+    </ul>
+    <h3>Qué aporta MediTrack</h3>
+    <div class="tablewrap"><table>
+      <tr><th>En DoseMate</th><th>En MediTrack</th></tr>
+      <tr><td>La grabación empieza solo cuando se toca el frasco con NFC.</td><td>La IMU escucha durante la ventana de la toma. El NFC es una evidencia más, opcional.</td></tr>
+      <tr><td>Clasificación del movimiento analizada después del estudio (los autores señalan como trabajo futuro el clasificador en línea).</td><td>Decisión en línea con tres niveles (confirmar, preguntar, esperar).</td></tr>
+      <tr><td>Una sola fuente de evidencia: el movimiento.</td><td>Fusión de varias evidencias: gesto, secuencia, NFC y horario.</td></tr>
+      <tr><td>Retroalimentación al paciente y a su equipo de salud.</td><td>Aviso escalonado a un cuidador familiar y panel de tendencias.</td></tr>
+      <tr><td>Relojes Android Wear 2.x.</td><td>Diseño multirreloj con una comparativa de precio y beneficio.</td></tr>
+    </table></div>
+  </section>
+
+  <section id="metricas">
+    <h2><span class="n">11</span>Métricas de éxito y validación</h2>
+    <div class="tablewrap"><table>
+      <tr><th>Métrica</th><th>Definición</th><th>Meta inicial y referencia</th></tr>
+      <tr><td>Adherencia confirmada</td><td>(confirmadas + con retraso) / tomas programadas</td><td>≥ 80 %. Referencia: la Pharmacy Quality Alliance usa 80 % de PDC (proporción de días cubiertos) en diabetes y cardiovasculares. Nuestra métrica es por dosis, no por días cubiertos.</td></tr>
+      <tr><td>Latencia de confirmación</td><td>Mediana de (confirmación − hora programada)</td><td>≤ 10 min (meta propia)</td></tr>
+      <tr><td>Confirmación automática</td><td>% de tomas confirmadas sin intervención</td><td>≥ 50 % en la fase 2 (meta propia)</td></tr>
+      <tr><td>Falsas alarmas al cuidador</td><td>Avisos en los que la toma sí ocurrió</td><td>≤ 1 por semana (meta propia)</td></tr>
+      <tr><td>Usabilidad</td><td>System Usability Scale (SUS)</td><td>≥ 68, el promedio de referencia (Sauro y Lewis, 446 estudios). Meta deseada: 75.</td></tr>
+    </table></div>
+    <h3>Plan de validación</h3>
+    <ol>
+      <li><b>Fuera de línea:</b> entrenar y evaluar el modelo de gesto con el dataset público de DoseMate.</li>
+      <li><b>Usabilidad:</b> prueba del prototipo con 5 a 8 adultos mayores y sus cuidadores (tareas guiadas, SUS y entrevista).</li>
+      <li><b>Piloto de 4 semanas:</b> 2 semanas de línea base (solo registro) y 2 con MediTrack completo.</li>
+    </ol>
+  </section>
+
+  <section id="riesgos">
+    <h2><span class="n">12</span>Riesgos y mitigaciones</h2>
+    <div class="tablewrap"><table>
+      <tr><th>Riesgo</th><th>Mitigación</th></tr>
+      <tr><td>El reloj elegido no permite leer los sensores</td><td>Elegir un reloj con app propia (sección 8). El MVP no depende del gesto.</td></tr>
+      <tr><td>Falsas confirmaciones (comer o beber parecen una toma)</td><td>Fusión de varias evidencias, ventana de la toma y pregunta con confianza intermedia.</td></tr>
+      <tr><td>El modelo no funciona igual en adultos mayores</td><td>Validación por edad y ajuste fino con datos del piloto.</td></tr>
+      <tr><td>Fatiga de alertas en el cuidador</td><td>Escalar solo sin evidencia y enviar un resumen semanal.</td></tr>
+      <tr><td>Privacidad de datos de salud</td><td>Consentimiento expreso por escrito, procesamiento local y mínimos datos en la nube.</td></tr>
+      <tr><td>Costo del reloj para el usuario</td><td>Opciones desde US$99.99 y funcionamiento básico solo con el teléfono.</td></tr>
+    </table></div>
+  </section>
+
+  <section id="roadmap">
+    <h2><span class="n">13</span>Hoja de ruta</h2>
+    <div class="tablewrap"><table>
+      <tr><th>Etapa</th><th>Entregables</th><th>Duración estimada</th></tr>
+      <tr><td><b>0 · Definición</b></td><td>Documentos, prototipo, flujo y esquema de BD</td><td>Hecho</td></tr>
+      <tr><td><b>1 · MVP</b></td><td>Recordatorios, estados, confirmación manual y NFC, cuidador y panel</td><td>6–8 semanas</td></tr>
+      <tr><td><b>2 · Modelo</b></td><td>Modelo de gesto entrenado y evaluado fuera de línea</td><td>4–6 semanas (en paralelo)</td></tr>
+      <tr><td><b>3 · Integración</b></td><td>App en el reloj elegido y fusión de evidencias</td><td>4 semanas</td></tr>
+      <tr><td><b>4 · Piloto</b></td><td>Estudio de 4 semanas, SUS y análisis</td><td>6 semanas</td></tr>
+    </table></div>
+  </section>
+
+  <section id="fuentes">
+    <h2>Verificación de fuentes</h2>
+    <p>Revisamos cada dato de la idea base contra su fuente. Estos son los cambios:</p>
+    <div class="tablewrap"><table>
+      <tr><th>Dato original</th><th>Resultado</th></tr>
+      <tr><td>“DoseMate no gestiona recordatorios”</td><td><b>Incorrecto.</b> El artículo describe recordatorios por notificación reflejados en el reloj y un botón de registro manual. Se corrigió la comparación.</td></tr>
+      <tr><td>Título de DoseMate</td><td>El título publicado es <i>“DoseMate: A Real-world Evaluation of Machine Learning Classification of Pill Taking Using Wrist-worn Motion Sensors”</i> (PMLR 248:566–581).</td></tr>
+      <tr><td>“Dataset de Glasgow con 228 gestos y CNN-LSTM”</td><td><b>No localizado.</b> No encontramos esa publicación. Se reemplazó por trabajos verificados (Moccia et al., 2022; Odhiambo et al., 2023). Si tienen el DOI, se reincorpora.</td></tr>
+      <tr><td>“AI for Elderly Care and Support” (Kaggle)</td><td><b>No verificado.</b> No pudimos confirmar su existencia ni su contenido. Se retiró de los datos usados.</td></tr>
+      <tr><td>“RHB Log Dataset” (ActSafe)</td><td>El artículo ActSafe existe (arXiv:2301.07051) con 28 pacientes. El nombre “RHB Log” no aparece en las fuentes consultadas, así que se cita solo el artículo.</td></tr>
+      <tr><td>Fitbit Web API e Intraday</td><td>El soporte de la Fitbit Web API heredada terminó el 30 de septiembre de 2026. Las integraciones deben migrar a la Google Health API con Google OAuth 2.0.</td></tr>
+      <tr><td>Sense 2 para reconocer el gesto</td><td>No es viable con apps propias: Fitbit declaró en 2023 que no planea apps de terceros para Sense 2 y Versa 4.</td></tr>
+      <tr><td>Población de 60+ en México</td><td>Se precisó: 15.1 millones, 12 % (INEGI, 2020).</td></tr>
+    </table></div>
+  </section>
+
+  <section id="referencias">
+    <h2>Referencias</h2>
+    <ol class="refs">
+      <li>Nzeyimana, A., Campbell, A., Scanlan, J. M., Stekler, J. D., Marquard, J. L., Saver, B. G. y Gummeson, J. (2024). <i>DoseMate: A Real-world Evaluation of Machine Learning Classification of Pill Taking Using Wrist-worn Motion Sensors.</i> PMLR 248:566–581 (CHIL 2024). <a href="https://proceedings.mlr.press/v248/nzeyimana24a.html">proceedings.mlr.press/v248/nzeyimana24a.html</a> · datos y código: <a href="https://gitlab.com/umass-smelt-lab/dosemate">gitlab.com/umass-smelt-lab/dosemate</a></li>
+      <li>Moccia et al. (2022). Reconocimiento de gestos con datos inerciales de pulsera para monitorear la adherencia. <i>Computer Methods and Programs in Biomedicine</i>, 219. <a href="https://www.pubmed.gov/35338885/">PubMed 35338885</a></li>
+      <li>Odhiambo et al. (2023). <i>Detecting Medication-Taking Gestures Using Machine Learning and Accelerometer Data Collected via Smartwatch Technology: Instrument Validation Study.</i> JMIR Human Factors, 10:e42714. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10196892/">PMC10196892</a></li>
+      <li>Seegmiller et al. (2023). <i>ActSafe: Predicting Violations of Medical Temporal Constraints for Medication Adherence.</i> arXiv:2301.07051. <a href="https://arxiv.org/abs/2301.07051">arxiv.org/abs/2301.07051</a></li>
+      <li>Organización Mundial de la Salud (2003). <i>Adherence to long-term therapies: evidence for action.</i> <a href="https://www.who.int/news/item/01-07-2003-failure-to-take-prescribed-medicine-for-chronic-diseases-is-a-massive-world-wide-problem">Comunicado de la OMS</a></li>
+      <li>INEGI (2022). <i>Estadísticas a propósito del Día Internacional de las Personas Adultas Mayores</i>, con datos del Censo 2020. <a href="https://www.inegi.org.mx/contenidos/saladeprensa/aproposito/2022/EAP_Poblac22.pdf">inegi.org.mx</a></li>
+      <li>Ley Federal de Protección de Datos Personales en Posesión de los Particulares (DOF, 20/03/2025). <a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPDPPP.pdf">diputados.gob.mx</a></li>
+      <li>NOM-024-SSA3-2012, Sistemas de información de registro electrónico para la salud. <a href="https://dof.gob.mx/nota_detalle_popup.php?codigo=5280847">DOF 30/11/2012</a></li>
+      <li>Pharmacy Quality Alliance. Proportion of Days Covered (PDC). <a href="https://www.qualityforum.org/Projects/n-r/Primary_Care_and_Chronic_Illness/Measure_Worksheet_-_0541.aspx">NQF 0541</a></li>
+      <li>Lewis, J. R. y Sauro, J. (2018). Item Benchmarks for the System Usability Scale. <i>Journal of Usability Studies</i>, 13(3), 158–167. <a href="https://uxpajournal.org/wp-content/uploads/sites/7/pdf/JUS_Lewis_May2018.pdf">uxpajournal.org</a></li>
+      <li>9to5Google (17/02/2023). Fitbit sin planes de apps de terceros para Sense 2 y Versa 4. <a href="https://9to5google.com/2023/02/17/fitbit-studio/">9to5google.com</a></li>
+    </ol>
+  </section>
+  <p class="foot">MediTrack · Documento conceptual v2.0. Los datos del prototipo son simulados. Las cifras de terceros se citan con su fuente; las metas marcadas como “propias” son propuestas del equipo.</p>
+</article>
+</div>
+</body>
+</html>

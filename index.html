@@ -37,7 +37,7 @@ footer{margin-top:56px;color:var(--mu);font-size:13px;border-top:1px solid var(-
 <nav class="sitenav">
   <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
   <a class="l" href="prototipo.html">Prototipo</a>
-  <a class="l" href="documento.html">Documento</a>
+  <a class="l" href="documentos.html">Documentos</a>
   <a class="l" href="presentacion.html">Presentación</a>
   <a class="l" href="flujo.html">Flujo</a>
 </nav>
@@ -46,27 +46,27 @@ footer{margin-top:56px;color:var(--mu);font-size:13px;border-top:1px solid var(-
     <div>
       <span class="pill ac">Adherencia a medicamentos · smartwatch · ML</span>
       <h1>Tomar la medicina no debería depender de la memoria.</h1>
-      <p>MediTrack recuerda cada toma en la muñeca, la confirma sola reconociendo el gesto de ingesta y avisa al cuidador solo cuando no hay evidencia.</p>
+      <p>MediTrack recuerda cada toma en la muñeca, combina varias evidencias (movimiento, etiqueta NFC del frasco, horario) para saber si de verdad se tomó y avisa al cuidador solo cuando no hay evidencia.</p>
       <div class="cta"><a href="prototipo.html">Probar el prototipo</a><a class="sec" href="presentacion.html">Ver la presentación</a></div>
     </div>
     <a href="prototipo.html"><img src="img/prototipo.png" alt="Prototipo de MediTrack: reloj con una toma confirmada por gesto y la app con la línea de tiempo"></a>
   </section>
 
   <section class="cards">
-    <a class="card" href="prototipo.html"><span class="n">01</span><b>Prototipo interactivo</b><span>Smartwatch y teléfono simulados: recordatorio, gesto, pregunta y escalamiento al cuidador.</span></a>
-    <a class="card" href="documento.html"><span class="n">02</span><b>Documento de proyecto</b><span>Objetivos, público objetivo, lineamientos, arquitectura, datos, modelo, riesgos y hoja de ruta.</span><span class="dl">También en PDF ↓</span></a>
-    <a class="card" href="presentacion.html"><span class="n">03</span><b>Presentación</b><span>16 diapositivas: idea, prototipo, datos usados, modelo y plan. Usa ← → para navegar.</span></a>
+    <a class="card" href="prototipo.html"><span class="n">01</span><b>Prototipo interactivo</b><span>6 modelos de smartwatch, evidencias combinadas (movimiento, NFC, horario), pregunta y aviso al cuidador. Incluye la comparativa de relojes.</span></a>
+    <a class="card" href="documentos.html"><span class="n">02</span><b>Documentos</b><span><b style="font-size:14.5px">Conceptual:</b> objetivos, público, lineamientos y validación. <b style="font-size:14.5px">Técnico:</b> relojes, APIs, fusión de evidencias, BD y código.</span><span class="dl">También en PDF ↓</span></a>
+    <a class="card" href="presentacion.html"><span class="n">03</span><b>Presentación</b><span>Idea, prototipo, relojes, evidencias, datos verificados, modelo y plan. Usa ← → para navegar.</span></a>
     <a class="card" href="flujo.html"><span class="n">04</span><b>Diagrama de flujo</b><span>Una sola diapositiva con el flujo de una toma y sus conexiones (PNG descargable).</span></a>
   </section>
 
   <section class="facts">
-    <div><b>Fitbit Sense 2</b><span>Notificaciones en la muñeca y cEDA continuo</span></div>
-    <div><b>CNN-LSTM</b><span>Reconocimiento del gesto con acelerómetro y giroscopio</span></div>
-    <div><b>DoseMate + Glasgow</b><span>Conjuntos de datos públicos para entrenar y validar</span></div>
+    <div><b>6 relojes comparados</b><span>Mejor precio/beneficio: Galaxy Watch FE (US$199.99)</span></div>
+    <div><b>Fusión de evidencias</b><span>Gesto, secuencia abrir → boca → beber, NFC y horario</span></div>
+    <div><b>DoseMate</b><span>20 participantes, 1,154 eventos: base pública para entrenar</span></div>
     <div><b>SQLite · UTC</b><span>Cada toma con estado, fuente y confianza</span></div>
   </section>
 
-  <footer>Descargas: <a href="documento.pdf">documento.pdf</a> · <a href="presentacion.pdf">presentacion.pdf</a> · <a href="img/flujo.png">flujo.png</a> · Código: <a href="https://github.com/ChristopherArgenis/MediTrack">GitHub</a>. Los datos del prototipo son simulados.</footer>
+  <footer>Descargas: <a href="doc-conceptual.pdf">doc-conceptual.pdf</a> · <a href="doc-tecnico.pdf">doc-tecnico.pdf</a> · <a href="presentacion.pdf">presentacion.pdf</a> · <a href="img/flujo.png">flujo.png</a> · Código: <a href="https://github.com/ChristopherArgenis/MediTrack">GitHub</a>. Los datos del prototipo son simulados.</footer>
 </main>
 </body>
 </html>
