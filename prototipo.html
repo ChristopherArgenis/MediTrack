@@ -15,22 +15,43 @@ body{font-size:14px;line-height:1.4}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none;padding:0}
 [hidden]{display:none!important}
-.stage{display:grid;grid-template-columns:320px 350px 390px;gap:28px;justify-content:center;align-items:start;padding:24px 16px 32px}
-@media (max-width:1150px){.stage{grid-template-columns:minmax(0,350px) minmax(0,390px)}.col-info{grid-column:1 / -1;max-width:768px;justify-self:center;width:100%}}
-@media (max-width:760px){.stage{grid-template-columns:minmax(0,1fr)}.col{justify-self:center;width:100%;max-width:390px}}
+.page{max-width:1480px;margin:0 auto;padding:20px 24px 56px}
+.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end}
+.top h1{margin:8px 0 6px;font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.top .lead{margin:0;max-width:760px}
+.simbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 12px}
+.simbar .lbl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);font-weight:800}
+.step{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:7px;background:var(--fg);color:#fff;font-size:11px;font-family:var(--mono);margin-right:6px;letter-spacing:0}
+.modelbar{margin-top:16px;display:grid;gap:10px}
+.modelbar .mb-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.modelbar .mb-head h3{margin:0}
+.modelbar .mb-head a{font-size:13px;font-weight:800;color:var(--ac-dk)}
+.stage{display:grid;grid-template-columns:290px minmax(0,1fr) 390px;gap:24px;margin-top:16px;align-items:start}
+.center-top{display:grid;grid-template-columns:300px minmax(0,1fr);gap:20px;align-items:start}
+.grp{margin:12px 0 6px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mu)}
+.grp:first-of-type{margin-top:0}
+.phcap{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);text-align:center;margin:0 0 8px}
+.details{margin-top:28px}
+.dtabs{display:flex;gap:6px;border-bottom:1.5px solid var(--line);margin-bottom:14px;overflow-x:auto}
+.dtabs button{padding:10px 14px;font-weight:800;font-size:14px;color:var(--mu);border-bottom:3px solid transparent;margin-bottom:-1.5px;white-space:nowrap}
+.dtabs button.on{color:var(--fg);border-bottom-color:var(--ac)}
+.dtabs button .cnt{font-family:var(--mono);font-size:11px;background:var(--bg);border-radius:999px;padding:1px 7px;margin-left:6px;color:var(--mu)}
+.details .console{max-height:320px}
+@media (max-width:1380px){.center-top{grid-template-columns:1fr}.center-top .watchwrap{justify-self:center}}
+@media (max-width:1100px){.stage{grid-template-columns:minmax(0,1fr) 390px}.col-acts{grid-column:1 / -1;grid-template-columns:minmax(0,2fr) minmax(0,1fr);align-items:start}.col-acts .acts{grid-template-columns:1fr 1fr}.models{grid-template-columns:repeat(3,1fr)!important}}
+@media (max-width:860px){.page{padding:16px 16px 48px}.top{grid-template-columns:1fr}.stage{grid-template-columns:minmax(0,1fr)}.col-acts{grid-template-columns:1fr}.col-phone{justify-self:center;width:100%;max-width:390px}}
+@media (max-width:560px){.models{grid-template-columns:repeat(2,1fr)!important}.col-acts .acts{grid-template-columns:1fr}}
 .col{display:grid;gap:14px;align-content:start;min-width:0}
 .card{background:var(--card);border-radius:18px;padding:14px;box-shadow:var(--sh)}
 .card h3{margin:0 0 10px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);font-weight:800;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .mu{color:var(--mu)}
-.col-info h1{margin:0;font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
-.col-info p{margin:0}
 .lead{color:var(--mu)}
-.models{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.models{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
 .models button{text-align:left;border-radius:12px;padding:8px 10px;background:var(--bg);border:1.5px solid transparent;display:grid;gap:1px}
 .models button b{font-size:12.5px;line-height:1.2}
 .models button span{font-size:11px;color:var(--mu);font-family:var(--mono)}
 .models button.on{border-color:var(--ac);background:var(--ac-soft)}
-.mnote{margin-top:10px;font-size:12px;background:var(--bg);border-radius:11px;padding:9px 10px;display:grid;gap:4px}
+.mnote{font-size:12.5px;background:var(--bg);border-radius:11px;padding:9px 12px;display:flex;gap:6px 16px;align-items:center;flex-wrap:wrap}
 .mnote .caps{display:flex;gap:4px;flex-wrap:wrap}
 .cap{font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:999px;background:var(--ok-soft);color:#13703b}
 .cap.no{background:var(--miss-soft);color:#a3261d}
@@ -39,10 +60,10 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .clock .ic{width:38px;height:38px;border-radius:12px;background:var(--fg);color:#fff;display:grid;place-items:center;flex:none}
 .clock .ic svg{width:18px;height:18px}
 .seg{display:flex;background:var(--bg);border-radius:11px;padding:3px;gap:2px}
-.seg button{flex:1;padding:6px 8px;border-radius:9px;font-weight:700;font-size:12.5px;color:var(--mu)}
+.seg button{flex:1;padding:6px 10px;border-radius:9px;font-weight:700;font-size:12.5px;color:var(--mu);white-space:nowrap}
 .seg button.on{background:var(--card);color:var(--fg);box-shadow:var(--sh)}
 .acts{display:grid;gap:7px}
-.act{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center;text-align:left;background:var(--bg);border-radius:13px;padding:9px 10px;border:1.5px solid transparent}
+.act{display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:center;text-align:left;background:var(--bg);border-radius:13px;padding:8px 10px;border:1.5px solid transparent}
 .act:hover{border-color:var(--line);background:#fff}
 .act.on{border-color:var(--miss);background:var(--miss-soft)}
 .act i{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-style:normal}
@@ -68,10 +89,22 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .watch[data-btn=right] .case::before{left:auto;right:-5px;top:80px;height:34px}
 .bezel{width:100%;height:100%;border-radius:58px;background:#05080a;padding:12px;position:relative;transition:border-radius .3s}
 .wscreen{width:100%;height:100%;border-radius:46px;background:#000;color:#fff;overflow:hidden;position:relative;font-size:12px;transition:border-radius .3s}
-.watch[data-shape=round] .case{width:246px;height:246px;border-radius:50%}
+.watch[data-shape=round] .case{width:256px;height:256px;border-radius:50%}
 .watch[data-shape=round] .bezel{border-radius:50%;padding:14px}
 .watch[data-shape=round] .wscreen{border-radius:50%}
-.watch[data-shape=round] .wpad{padding:30px 26px 26px}
+.watch[data-shape=round] .wpad{padding:24px 30px;justify-content:center;gap:2px}
+.watch[data-shape=round] .wpad .grow{display:none}
+.watch[data-shape=round] .wpad .k{font-size:9.5px}
+.watch[data-shape=round] .wpad .pill-ic{width:32px;height:32px}
+.watch[data-shape=round] .wpad .pill-ic svg{width:18px;height:18px}
+.watch[data-shape=round] .wpad .nm{font-size:16px}
+.watch[data-shape=round] .wpad .ds,.watch[data-shape=round] .wsmall{font-size:10.5px}
+.watch[data-shape=round] .wsense{font-size:9.5px}
+.watch[data-shape=round] .wbig{width:44px;height:44px;margin-top:2px}
+.watch[data-shape=round] .wbig svg{width:24px;height:24px}
+.watch[data-shape=round] .wbtns{width:82%;margin-top:4px}
+.watch[data-shape=round] .wbtn{padding:8px 6px;font-size:12px;border-radius:14px}
+.watch[data-shape=round] .wlist{width:92%}
 .watch[data-shape=apple] .case{width:226px;height:262px;border-radius:58px}
 .watch[data-shape=apple] .bezel{border-radius:50px}
 .watch[data-shape=apple] .wscreen{border-radius:40px}
@@ -111,10 +144,10 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .wcap{font-size:11.5px;text-align:center;color:var(--mu);margin-top:4px}
 .wpick{display:flex;align-items:center;gap:6px;margin-top:8px;background:var(--card);border-radius:14px;padding:5px;box-shadow:var(--sh)}
 .wpick button{width:34px;height:34px;border-radius:10px;background:var(--bg);font-size:18px;font-weight:800;color:var(--fg)}
-.wpick select{border:0;background:transparent;font-weight:800;font-size:14px;padding:6px 4px;min-width:0;max-width:220px;cursor:pointer}
+.wpick select{border:0;background:transparent;font-weight:800;font-size:14px;padding:6px 4px;min-width:0;max-width:280px;cursor:pointer}
 
 /* sensores y evidencias */
-.sig canvas{width:100%;height:132px;display:block;background:#0f1c24;border-radius:12px}
+.sig canvas{width:100%;height:auto;aspect-ratio:1200/264;display:block;background:#0f1c24;border-radius:12px}
 .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--mu);font-weight:700;margin-top:8px}
 .legend span{display:flex;align-items:center;gap:5px}
 .legend i{width:12px;height:3px;border-radius:2px}
@@ -140,7 +173,7 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .console .tag{font-weight:700}
 
 /* ===== teléfono ===== */
-.phone{width:min(390px,100%);height:min(800px,calc(100vh - 110px));min-height:660px;border-radius:46px;border:10px solid #0b0f12;background:var(--bg);box-shadow:0 30px 60px -30px rgba(10,25,35,.55);position:relative;overflow:hidden;justify-self:center}
+.phone{width:min(390px,100%);height:min(780px,calc(100vh - 90px));min-height:640px;border-radius:46px;border:10px solid #0b0f12;background:var(--bg);box-shadow:0 30px 60px -30px rgba(10,25,35,.55);position:relative;overflow:hidden;justify-self:center}
 .app{position:absolute;inset:0;display:flex;flex-direction:column}
 .ptop{flex:none;padding:16px 18px 8px;display:flex;align-items:center;gap:10px}
 .ptop h2{margin:0;font-size:20px;font-weight:800;letter-spacing:-.01em;flex:1;min-width:0}
@@ -227,7 +260,7 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .empty{text-align:center;color:var(--mu);padding:20px 10px;font-size:13px}
 
 /* ===== comparativa ===== */
-.cmp{max-width:1140px;margin:0 auto;padding:0 16px 64px}
+.cmp{padding:0}
 .cmp h2{font-size:24px;letter-spacing:-.01em;margin:8px 0 6px}
 .cmp>p{color:var(--mu);margin:0 0 16px;max-width:820px}
 .tw{overflow-x:auto;border-radius:16px;box-shadow:var(--sh)}
@@ -279,77 +312,81 @@ table.c .num{white-space:nowrap}
   <a class="l" href="flujo.html">Flujo</a>
 </nav>
 
-<div class="stage">
-  <!-- ===== columna 1: simulador ===== -->
-  <section class="col col-info">
-    <span class="pill ac" style="justify-self:start">Prototipo interactivo · datos simulados</span>
+<div class="page">
+<header class="top">
+  <div>
+    <span class="pill ac">Prototipo interactivo · datos simulados</span>
     <h1>Un día con MediTrack</h1>
     <p class="lead">Rafael, 72 años, toma 5 dosis al día. El reloj le recuerda cada toma y junta varias evidencias (movimiento, etiqueta NFC del frasco, horario) para saber si de verdad la tomó. Si no hay evidencia, avisa a su hija Laura.</p>
-
-    <div class="card">
-      <h3>Modelo de smartwatch <a href="#comparativa" class="mu" style="text-transform:none;letter-spacing:0;font-weight:700">comparar ↓</a></h3>
-      <div class="models" id="models" role="group" aria-label="Modelo de reloj"></div>
-      <div class="mnote" id="mnote"></div>
+  </div>
+  <div class="card simbar" aria-label="Controles del simulador">
+    <span class="lbl">Simulador <span class="num" id="speedlbl"></span></span>
+    <div class="clock">
+      <button class="ic" id="playbtn" type="button" aria-label="Pausar o reanudar"><svg><use href="#i-pause"/></svg></button>
+      <b id="simclock">07:58</b>
+      <button class="ic" id="skipbtn" type="button" aria-label="Ir a la próxima toma" title="Ir a la próxima toma" style="background:var(--ac)"><svg><use href="#i-skip"/></svg></button>
     </div>
-
-    <div class="card">
-      <h3>Reloj del simulador <span class="num" id="speedlbl"></span></h3>
-      <div class="clock">
-        <button class="ic" id="playbtn" type="button" aria-label="Pausar o reanudar"><svg><use href="#i-pause"/></svg></button>
-        <b id="simclock">07:58</b>
-        <button class="ic" id="skipbtn" type="button" aria-label="Ir a la próxima toma" title="Ir a la próxima toma" style="background:var(--ac)"><svg><use href="#i-skip"/></svg></button>
-      </div>
-      <div class="seg" id="speeds" style="margin-top:10px" role="group" aria-label="Velocidad">
-        <button type="button" data-sp="1">Real</button><button type="button" data-sp="60" class="on">1 min/s</button><button type="button" data-sp="300">5 min/s</button>
-      </div>
+    <div class="seg" id="speeds" role="group" aria-label="Velocidad">
+      <button type="button" data-sp="1">Real</button><button type="button" data-sp="60" class="on">1 min/s</button><button type="button" data-sp="300">5 min/s</button>
     </div>
+    <button class="reset" id="reset" type="button">Restablecer</button>
+  </div>
+</header>
 
+<section class="card modelbar" aria-label="Modelo de smartwatch">
+  <div class="mb-head"><h3><span class="step">1</span>Elige el smartwatch</h3><a href="#comparativa" data-opentab="cmp">Comparar los 8 modelos ↓</a></div>
+  <div class="models" id="models" role="group" aria-label="Modelo de reloj"></div>
+  <div class="mnote" id="mnote"></div>
+</section>
+
+<div class="stage">
+  <aside class="col col-acts">
     <div class="card">
-      <h3>¿Qué hace Rafael? <span class="mu" id="activefor" style="text-transform:none;letter-spacing:0;font-weight:700"></span></h3>
+      <h3><span><span class="step">2</span>¿Qué hace Rafael?</span></h3>
+      <p class="mu" id="activefor" style="margin:-4px 0 10px;font-size:12.5px;font-weight:700"></p>
+      <p class="grp">Movimientos</p>
       <div class="acts">
         <button class="act" type="button" data-g="ingesta"><i style="background:var(--ges-soft);color:var(--ges)"><svg><use href="#i-pill"/></svg></i><span><b>Se toma la pastilla</b><small>Abre el frasco, mano a la boca y bebe agua.</small></span></button>
         <button class="act" type="button" data-g="beber"><i style="background:var(--blue-soft);color:var(--blue)"><svg><use href="#i-cup"/></svg></i><span><b>Solo bebe agua</b><small>Parecido, pero sin abrir el frasco: el sistema duda.</small></span></button>
         <button class="act" type="button" data-g="otro"><i style="background:var(--pend-soft);color:var(--pend)"><svg><use href="#i-hand"/></svg></i><span><b>Mueve la mano</b><small>Actividad no relacionada.</small></span></button>
+      </div>
+      <p class="grp">Otras situaciones</p>
+      <div class="acts">
         <button class="act" type="button" id="nfc"><i style="background:var(--ac-soft);color:var(--ac-dk)"><svg><use href="#i-nfc"/></svg></i><span><b>Toca el frasco con el teléfono</b><small>Etiqueta NFC en el frasco (funciona con cualquier reloj).</small></span></button>
         <button class="act" type="button" id="wrist"><i style="background:var(--late-soft);color:#8a5600"><svg><use href="#i-off"/></svg></i><span><b>Se quita el reloj</b><small>Sin el reloj puesto no hay evidencia de movimiento.</small></span></button>
         <button class="act" type="button" id="nada"><i style="background:var(--miss-soft);color:var(--miss)"><svg><use href="#i-clock"/></svg></i><span><b>No hace nada</b><small>Adelanta el reloj al fin de la tolerancia.</small></span></button>
       </div>
     </div>
-
     <div class="card">
       <h3>Teléfono de Laura · cuidadora</h3>
       <div class="feed" id="cgfeed"></div>
     </div>
-    <button class="reset" id="reset" type="button">Restablecer el día</button>
-  </section>
+  </aside>
 
-  <!-- ===== columna 2: reloj, evidencias y sensores ===== -->
-  <section class="col">
-    <div class="watchwrap">
-      <div class="watch" id="watch">
-        <div class="strap t"></div><div class="strap b"></div>
-        <div class="case"><div class="bezel"><div class="wscreen" id="wscreen"></div></div></div>
+  <section class="col col-center">
+    <div class="center-top">
+      <div class="watchwrap">
+        <div class="watch" id="watch">
+          <div class="strap t"></div><div class="strap b"></div>
+          <div class="case"><div class="bezel"><div class="wscreen" id="wscreen"></div></div></div>
+        </div>
+        <div class="wpick"><button type="button" data-mstep="-1" aria-label="Reloj anterior">‹</button><select id="wsel" aria-label="Cambiar modelo de reloj"></select><button type="button" data-mstep="1" aria-label="Reloj siguiente">›</button></div>
+        <p class="wcap" id="wcap"></p>
       </div>
-      <div class="wpick"><button type="button" data-mstep="-1" aria-label="Reloj anterior">‹</button><select id="wsel" aria-label="Cambiar modelo de reloj"></select><button type="button" data-mstep="1" aria-label="Reloj siguiente">›</button></div>
-      <p class="wcap" id="wcap"></p>
-    </div>
-    <div class="card">
-      <h3>Evidencias de la toma <span class="pill pend" id="evfor">sin toma activa</span></h3>
-      <div class="ev" id="ev"></div>
+      <div class="card">
+        <h3><span><span class="step">3</span>Evidencias de la toma</span> <span class="pill pend" id="evfor">sin toma activa</span></h3>
+        <div class="ev" id="ev"></div>
+      </div>
     </div>
     <div class="card sig">
       <h3>Sensores de muñeca <span class="pill ges" id="sigstate">en reposo</span></h3>
-      <canvas id="sig" width="640" height="264" aria-label="Señal simulada del acelerómetro y giroscopio"></canvas>
+      <canvas id="sig" width="1200" height="264" aria-label="Señal simulada del acelerómetro y giroscopio"></canvas>
       <div class="legend"><span><i style="background:#5fd0c8"></i>acc X</span><span><i style="background:#f0b35a"></i>acc Y</span><span><i style="background:#ff7d73"></i>acc Z</span><span><i style="background:#a994ff"></i>giroscopio</span></div>
-    </div>
-    <div class="card">
-      <h3>Bitácora del sistema</h3>
-      <div class="console" id="console"></div>
     </div>
   </section>
 
-  <!-- ===== columna 3: teléfono ===== -->
-  <section class="col">
+  <section class="col col-phone">
+    <p class="phcap"><span class="step">4</span>App de Rafael</p>
     <div class="phone"><div class="app">
       <div class="banner" id="banner"><img src="assets/logo.svg" alt=""><div id="bannertxt"></div></div>
       <header class="ptop" id="ptop"></header>
@@ -359,7 +396,14 @@ table.c .num{white-space:nowrap}
   </section>
 </div>
 
-<section class="cmp" id="comparativa">
+<section class="details" id="detalles">
+  <div class="dtabs" role="tablist" aria-label="Detalles">
+    <button type="button" role="tab" data-dtab="log" class="on" aria-selected="true">Bitácora del sistema<span class="cnt" id="logcnt">0</span></button>
+    <button type="button" role="tab" data-dtab="cmp" aria-selected="false">Comparativa de relojes<span class="cnt">8</span></button>
+  </div>
+  <div id="p-log" role="tabpanel"><div class="card"><div class="console" id="console"></div></div></div>
+  <div id="p-cmp" role="tabpanel" hidden>
+    <section class="cmp" id="comparativa">
   <span class="pill ac">Comparativa · noviembre 2026</span>
   <h2>¿Qué reloj conviene para MediTrack?</h2>
   <p>Lo decisivo no es cuántos sensores tiene el reloj, sino si una app propia puede <b>leerlos</b>. Sin acceso al acelerómetro y al giroscopio no hay confirmación automática. Precios de lista en EUA (USD), como referencia: en México varían por tienda y promociones.</p>
@@ -372,6 +416,9 @@ table.c .num{white-space:nowrap}
   </div>
   <p class="fine">Fuentes: páginas oficiales de especificaciones (Google Store, Samsung, Apple, Amazfit), documentación para desarrolladores (Samsung Health Sensor SDK, Zepp OS, Garmin Connect IQ) y prensa especializada. El detalle y los enlaces están en el <a href="doc-tecnico.html#relojes">documento técnico</a>. Fitbit declaró en 2023 que no planea apps de terceros para Sense 2 y Versa 4.</p>
 </section>
+  </div>
+</section>
+</div>
 
 <script>
 /* ===================== utilidades ===================== */
@@ -603,7 +650,7 @@ function renderModels(){
   const w = W();
   const caps = [[w.app, 'app propia'], [w.app, 'IMU'], [w.app, 'botones en reloj'], [true, 'notificaciones']];
   $('#mnote').innerHTML = `<div class="caps">${caps.map(([ok, l]) => `<span class="cap ${ok ? '' : 'no'}">${ok ? '✓' : '✕'} ${l}</span>`).join('')}</div>
-    <span>${esc(w.unique)}</span><span class="mu">Requiere: ${esc(w.needs)} · ${esc(w.verdict)}</span>`;
+    <span>${esc(w.unique)}</span><span class="mu">Requiere: ${esc(w.needs)} · <b>${esc(w.verdict)}</b></span>`;
   const el = $('#watch');
   el.dataset.shape = w.shape; el.dataset.btn = w.btn;
   el.style.setProperty('--c1', w.c[0]); el.style.setProperty('--c2', w.c[1]); el.style.setProperty('--c3', w.c[2]); el.style.setProperty('--strap', w.strap);
@@ -929,6 +976,7 @@ function renderCG(){
 }
 function renderConsole(){
   const el = $('#console'); if (!el) return;
+  const lc = document.getElementById('logcnt'); if (lc) lc.textContent = S.log.length;
   const col = {sistema:'var(--mu)', notif:'var(--ac-dk)', ml:'var(--ges)', estado:'var(--blue)', cuidador:'var(--miss)', usuario:'#8a5600'};
   el.innerHTML = S.log.map(l => `<div><span>${hm(l.at)}</span><p style="margin:0"><span class="tag" style="color:${col[l.tag]}">[${l.tag}]</span> ${esc(l.msg)}</p></div>`).join('');
 }
@@ -978,6 +1026,16 @@ $('#skipbtn').addEventListener('click', () => {
 });
 $('#reset').addEventListener('click', () => { seed(S.watchId); setWatch('face'); renderModels(); render(); });
 
+function openTab(k){
+  document.querySelectorAll('[data-dtab]').forEach(b => { const on = b.dataset.dtab === k; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  $('#p-log').hidden = k !== 'log'; $('#p-cmp').hidden = k !== 'cmp';
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-dtab],[data-opentab]'); if (!t) return;
+  if (t.dataset.opentab){ e.preventDefault(); openTab(t.dataset.opentab); $('#detalles').scrollIntoView({behavior:'smooth'}); }
+  else openTab(t.dataset.dtab);
+});
+if (location.hash === '#comparativa') { openTab('cmp'); addEventListener('load', () => $('#detalles').scrollIntoView()); }
 const qm = new URLSearchParams(location.search).get('reloj');
 seed(WATCHES.some(w => w.sim && w.id === qm) ? qm : null); renderModels(); render(); setWatch('face'); requestAnimationFrame(frame);
 </script>
