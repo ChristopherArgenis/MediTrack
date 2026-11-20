@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediTrack · Presentación inversionistas</title>
+<meta name="description" content="Presentación de MediTrack para inversionistas, aceleradoras y aliados.">
+<link rel="icon" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/tema.css">
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body>
+<!-- Presentación para inversionistas -->
+<nav class="sitenav">
+  <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
+  <a class="l" href="prototipo.html">Prototipo</a>
+  <a class="l" href="documentos.html">Documentos</a>
+  <a class="l on" href="presentaciones.html">Presentaciones</a>
+  <a class="l" href="flujo.html">Flujo</a>
+</nav>
+<div class="bar" id="bar"></div>
+<div class="viewer" id="viewer"><div class="deck" id="deck">
+<section class="s cover">
+  <div class="logo"><img src="assets/logo.svg" alt="">MEDITRACK</div>
+  <span class="aud">📈 Presentación para inversionistas</span>
+  <h1>MediTrack</h1>
+  <p class="lead">Adherencia a medicamentos medida con evidencia, usando relojes que la gente ya compra.</p>
+  <div class="meta"><span>Inversionistas, aceleradoras y aliados</span><span>Noviembre 2026</span></div>
+</section>
+<section class="s">
+  <span class="k">El problema</span>
+  <h2>La falta de adherencia es costosa y masiva</h2>
+  <div class="body"><div class="cols c3">
+    <div class="card"><div class="big" style="font-size:130px">≈50<small style="font-size:60px">%</small></div><p>de adherencia en enfermedades crónicas, en países desarrollados (OMS, 2003).</p></div>
+    <div class="card"><div class="big" style="font-size:130px">US$100</div><p><b>mil millones</b> de dólares al año en EUA por baja adherencia (Osterberg y Blaschke, 2005). Estimaciones recientes: cerca de US$500 mil millones (Watanabe et al., 2018).</p></div>
+    <div class="card"><div class="big" style="font-size:130px">15.1<small style="font-size:60px">M</small></div><p>personas de 60+ en México en 2020, el 12 % de la población y en crecimiento (INEGI).</p></div>
+  </div></div>
+</section>
+<section class="s">
+  <span class="k">La solución</span>
+  <h2>Del “¿se la tomó?” a un dato con evidencia</h2>
+  <div class="body"><div class="cols c4">
+    <div class="card"><div class="ic" style="background:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div><h3>Recuerda</h3><p>En la muñeca, a la hora exacta.</p></div>
+    <div class="card"><div class="ic" style="background:var(--ges)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12h3l3-7 4 14 3-7h7"/></svg></div><h3>Confirma</h3><p>Movimiento + NFC + horario en una probabilidad.</p></div>
+    <div class="card"><div class="ic" style="background:var(--miss)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div><h3>Escala</h3><p>Al familiar, solo si falta evidencia.</p></div>
+    <div class="card"><div class="ic" style="background:var(--late)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h16"/><path d="M7 16v-5M12 16V6M17 16v-8"/></svg></div><h3>Mide</h3><p>Adherencia real para pacientes, familias y médicos.</p></div>
+  </div></div>
+</section>
+<section class="s">
+  <div style="display:grid;grid-template-columns:1fr 780px;gap:70px;height:100%;align-items:center">
+    <div>
+      <span class="k">Prototipo interactivo</span>
+      <h2>Funciona hoy, en el navegador</h2>
+      <div class="card" style="margin-top:44px"><ul><li>Prototipo con 6 modelos de reloj</li><li>Simula la toma, la duda, el NFC y el escalamiento</li><li>Panel de adherencia y patrones por horario</li><li>Comparativa de relojes por precio y beneficio</li></ul></div>
+      <p class="sub" style="font-size:22px;font-family:var(--mono)">christopherargenis.github.io/MediTrack/prototipo.html</p>
+    </div>
+    <img class="shot" src="img/prototipo.png" alt="Captura del prototipo: reloj con toma confirmada y app con la línea de tiempo" style="max-height:900px;justify-self:center">
+  </div>
+</section>
+<section class="s">
+  <span class="k">Ventaja</span>
+  <h2>Por qué ahora y por qué nosotros</h2>
+  <div class="body"><table class="tsm">
+    <tr><th>Alternativa</th><th>Limitación</th><th>MediTrack</th></tr>
+    <tr><td><b>Apps de recordatorio</b></td><td>Dependen de que el usuario marque “tomado”</td><td>Confirma con evidencia, sin tocar nada si es clara</td></tr>
+    <tr><td><b>Pastilleros electrónicos</b></td><td>Hardware dedicado y costoso</td><td>Usa un smartwatch comercial y una etiqueta NFC</td></tr>
+    <tr><td><b>Investigación (DoseMate)</b></td><td>Un solo tipo de evidencia, análisis después del estudio</td><td>Fusión de evidencias, decisión en línea y cuidador familiar</td></tr>
+    <tr><td><b>Ecosistemas cerrados</b></td><td>Un solo fabricante</td><td>Multirreloj: Wear OS, watchOS y Zepp OS</td></tr>
+  </table></div>
+</section>
+<section class="s">
+  <span class="k">Costo de entrada para el usuario</span>
+  <h2>Relojes desde US$99.99</h2>
+  <div class="body"><table class="tsm">
+    <tr><th>Reloj recomendado</th><th>Precio de lista (EUA)</th><th>Para quién</th></tr>
+    <tr><td><b>Amazfit Active 2</b></td><td class="num">US$99.99</td><td>Presupuesto mínimo (validación técnica pendiente)</td></tr>
+    <tr class="best"><td><b>Galaxy Watch FE</b></td><td class="num">US$199.99</td><td>Mejor equilibrio: app propia, sensores y botón en el reloj</td></tr>
+    <tr><td><b>Apple Watch SE 3</b></td><td class="num">US$249</td><td>Usuarios de iPhone</td></tr>
+    <tr><td><b>Galaxy Watch8</b></td><td class="num">US$349.99</td><td>Estudios con señales fisiológicas</td></tr>
+  </table>
+  <p class="sub" style="font-size:21px">Sin reloj, MediTrack funciona con el teléfono: recordatorios, NFC y confirmación manual. Los precios en México varían.</p></div>
+</section>
+<section class="s">
+  <span class="k">Modelo de negocio · hipótesis a validar</span>
+  <h2>Tres caminos de ingreso</h2>
+  <div class="body"><div class="cols c3">
+    <div class="card"><span class="tag" style="background:var(--ac-soft);color:var(--ac-dk)">B2C · familias</span><h3>Plan familiar</h3><p>Paciente gratis. El cuidador paga por avisos, reportes y varios familiares.</p></div>
+    <div class="card"><span class="tag" style="background:var(--blue-soft);color:#1f4fa8">B2B · salud</span><h3>Clínicas y consultorios</h3><p>Panel para médicos con el reporte de adherencia de sus pacientes.</p></div>
+    <div class="card"><span class="tag" style="background:var(--ges-soft);color:#4a32b0">B2B2C · aseguradoras</span><h3>Programas crónicos</h3><p>Adherencia medible para programas de diabetes e hipertensión.</p></div>
+  </div>
+  <p class="sub" style="font-size:21px">Precios y conversión aún sin datos: se validarán en el piloto y con entrevistas a cuidadores y clínicas.</p></div>
+</section>
+<section class="s">
+  <span class="k">Riesgos</span>
+  <h2>Qué podría salir mal y cómo lo cubrimos</h2>
+  <div class="body"><table class="tsm">
+    <tr><th>Riesgo</th><th>Mitigación</th></tr>
+    <tr><td>Cambios en plataformas (por ejemplo, el fin de la Fitbit Web API heredada)</td><td>Diseño multirreloj e integración aislada</td></tr>
+    <tr><td>Falsas confirmaciones</td><td>Varias evidencias, pregunta con confianza intermedia</td></tr>
+    <tr><td>Regulación de datos de salud</td><td>Consentimiento expreso por escrito y procesamiento local (LFPDPPP 2025)</td></tr>
+    <tr><td>Adopción en adultos mayores</td><td>Una acción por pantalla y prueba de usabilidad (SUS ≥ 68)</td></tr>
+  </table></div>
+</section>
+<section class="s">
+  <span class="k">Hoja de ruta</span>
+  <h2>Del prototipo al piloto</h2>
+  <div class="body"><div class="road">
+    <div><span class="dot done">0</span><b>Definición</b><p>Prototipo, documentos y modelo de datos</p><span class="t">hecho</span></div>
+    <div><span class="dot">1</span><b>MVP</b><p>App con recordatorios, NFC y cuidador</p><span class="t">6–8 sem</span></div>
+    <div><span class="dot">2</span><b>Modelo</b><p>Detección de la toma con datos públicos</p><span class="t">4–6 sem</span></div>
+    <div><span class="dot">3</span><b>Integración</b><p>App en el reloj y fusión de evidencias</p><span class="t">4 sem</span></div>
+    <div><span class="dot">4</span><b>Piloto</b><p>4 semanas con pacientes reales</p><span class="t">6 sem</span></div>
+  </div>
+  <div class="ask" style="margin-top:50px"><h3>Buscamos aliados para el piloto</h3><ul><li>Financiar relojes y etiquetas NFC para los participantes</li><li>Una clínica o aseguradora para el primer caso de uso</li></ul></div></div>
+</section>
+<section class="s end">
+  <span class="k" style="color:#5fd0c8">Gracias</span>
+  <h2>Hablemos</h2>
+  <div class="links"><div><b>Prototipo</b><span>christopherargenis.github.io/MediTrack/prototipo.html</span></div><div><b>Documentos</b><span>christopherargenis.github.io/MediTrack/documentos.html</span></div><div><b>Repositorio</b><span>github.com/ChristopherArgenis/MediTrack</span></div></div>
+</section>
+</div></div>
+<div class="ctrl"><a href="presentaciones.html" style="color:#fff;font:700 13px var(--f);padding:8px 10px;text-decoration:none">📈 Inversionistas</a><button id="prev" type="button" aria-label="Anterior">←</button><span id="cnt"></span><button id="next" type="button" aria-label="Siguiente">→</button><button id="fs" type="button">Pantalla completa</button></div>
+<script src="assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediTrack · Presentación académico</title>
+<meta name="description" content="Presentación de MediTrack para docentes, sinodales y comunidad académica.">
+<link rel="icon" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/tema.css">
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body>
+<!-- Generado desde el contenido de la presentación general anterior -->
+<nav class="sitenav">
+  <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
+  <a class="l" href="prototipo.html">Prototipo</a>
+  <a class="l" href="documentos.html">Documentos</a>
+  <a class="l on" href="presentaciones.html">Presentaciones</a>
+  <a class="l" href="flujo.html">Flujo</a>
+</nav>
+<div class="bar" id="bar"></div>
+<div class="viewer" id="viewer"><div class="deck" id="deck">
+<section class="s cover">
+  <div class="logo"><img src="assets/logo.svg" alt="">MEDITRACK</div>
+  <span class="aud">🎓 Presentación para académico</span>
+  <h1>MediTrack</h1>
+  <p class="lead">Monitoreo de la adherencia a medicamentos con smartwatch: recordatorio, fusión de evidencias y escalamiento al cuidador.</p>
+  <div class="meta"><span>Docentes, sinodales y comunidad académica</span><span>Noviembre 2026</span></div>
+</section>
+<!-- 2 problema -->
+<section class="s">
+  <span class="k">El problema</span>
+  <h2>La mitad de los tratamientos crónicos no se sigue como se indicó</h2>
+  <div class="body"><div class="split">
+    <div><div class="big">≈50<small>%</small></div><p class="sub" style="margin-top:24px">de adherencia en enfermedades crónicas en países desarrollados (OMS, 2003). En adultos mayores con varios medicamentos el reto es mayor.</p></div>
+    <div class="reasons">
+      <div class="reason"><i style="background:var(--miss-soft);color:var(--miss)">1</i><div><b>Olvido</b><span>Varios medicamentos y horarios (polifarmacia).</span></div></div>
+      <div class="reason"><i style="background:var(--late-soft);color:#8a5600">2</i><div><b>Duda</b><span>“¿Ya me la tomé?” lleva a omitir o a duplicar.</span></div></div>
+      <div class="reason"><i style="background:var(--blue-soft);color:var(--blue)">3</i><div><b>Registros vacíos</b><span>Las apps dependen de que el usuario marque “tomado”.</span></div></div>
+      <div class="reason"><i style="background:var(--ges-soft);color:var(--ges)">4</i><div><b>Carga del cuidador</b><span>Llama varias veces al día para preguntar.</span></div></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 3 objetivo -->
+<section class="s">
+  <span class="k">Qué queremos conseguir</span>
+  <h2>Que tomar la medicina no dependa solo de la memoria</h2>
+  <p class="sub">Diseñar, prototipar y evaluar un sistema con smartwatch comercial que recuerde cada toma, estime si de verdad se tomó combinando varias evidencias y avise al cuidador solo si no las hay.</p>
+  <div class="body"><div class="cols c4">
+    <div class="card"><div class="ic" style="background:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div><h3>Recordar</h3><p>En la muñeca, a la hora exacta, con segundo aviso.</p></div>
+    <div class="card"><div class="ic" style="background:var(--ges)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12h3l3-7 4 14 3-7h7"/></svg></div><h3>Confirmar con evidencia</h3><p>Gesto, secuencia, NFC del frasco y horario, combinados.</p></div>
+    <div class="card"><div class="ic" style="background:var(--miss)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div><h3>Escalar</h3><p>Aviso al cuidador solo cuando falta evidencia.</p></div>
+    <div class="card"><div class="ic" style="background:var(--late)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h16"/><path d="M7 16v-5M12 16V6M17 16v-8"/></svg></div><h3>Medir</h3><p>Adherencia con hora, fuente y confianza de cada toma.</p></div>
+  </div></div>
+</section>
+
+<!-- 4 público -->
+<section class="s">
+  <span class="k">Público objetivo</span>
+  <h2>Tres personas, una misma toma</h2>
+  <div class="body"><div class="cols c3">
+    <div class="card"><span class="tag" style="background:var(--ac-soft);color:var(--ac-dk)">Primario</span><h3>Rafael, 72</h3><p>Adultos de 60 años o más con enfermedades crónicas y 3 o más tomas al día. Autónomos.</p><p style="margin-top:16px;color:var(--mu);font-style:italic">“No quiero que mi hija me esté llamando a cada rato.”</p></div>
+    <div class="card"><span class="tag" style="background:var(--miss-soft);color:#a3261d">Secundario</span><h3>Laura, 44 · cuidadora</h3><p>Hijos, pareja o cuidadores que no viven con la persona.</p><p style="margin-top:16px;color:var(--mu);font-style:italic">“Me basta con saber si algo no va bien.”</p></div>
+    <div class="card"><span class="tag" style="background:var(--ges-soft);color:#4a32b0">Terciario</span><h3>Dra. Márquez</h3><p>Personal de salud e investigadores en adherencia.</p><p style="margin-top:16px;color:var(--mu);font-style:italic">“Si la toma de la noche falla, ajusto el esquema.”</p></div>
+  </div>
+  <p class="sub" style="font-size:24px">15.1 millones de personas de 60 años o más en México en 2020: el 12 % de la población, frente al 9.1 % en 2010 (INEGI).</p></div>
+</section>
+
+<!-- 5 solución -->
+<section class="s">
+  <span class="k">La solución</span>
+  <h2>Confirmación en tres capas</h2>
+  <p class="sub">Cada capa solo entra si la anterior no tuvo evidencia. “Sin confirmar” nunca se trata como “no tomada”.</p>
+  <div class="body"><div class="layers3">
+    <div class="card" style="border-top:10px solid var(--ges)"><span class="tag" style="background:var(--ges-soft);color:#4a32b0">1 · Automática</span><h3>Fusión de evidencias</h3><p>Gesto, secuencia, NFC y horario en una probabilidad. P ≥ 0.85 confirma. Entre 0.50 y 0.85, pregunta.</p></div>
+    <div class="arr">→</div>
+    <div class="card" style="border-top:10px solid var(--blue)"><span class="tag" style="background:var(--blue-soft);color:#1f4fa8">2 · Manual</span><h3>“Ya la tomé”</h3><p>Un botón grande en el reloj o la app, dentro de la tolerancia (30 min) y con segundo aviso a los 15.</p></div>
+    <div class="arr">→</div>
+    <div class="card" style="border-top:10px solid var(--miss)"><span class="tag" style="background:var(--miss-soft);color:#a3261d">3 · Cuidador</span><h3>Aviso escalonado</h3><p>Sin evidencia al cerrar la tolerancia: avisamos a Laura. Puede cerrar el caso tras llamar.</p></div>
+  </div></div>
+</section>
+
+<!-- 5b evidencias -->
+<section class="s">
+  <span class="k">¿Cómo sabe que de verdad la tomó?</span>
+  <h2>Más que acc X, Y, Z y giroscopio</h2>
+  <p class="sub">Ninguna señal sola es prueba: llevar la mano a la boca también pasa al comer o beber. Cada evidencia suma o resta confianza.</p>
+  <div class="body"><table class="tsm">
+    <tr><th>Evidencia</th><th>Sensor</th><th>Qué indica</th><th>Peso</th></tr>
+    <tr><td><b>Gesto mano-boca</b></td><td>Acelerómetro + giroscopio</td><td>La mano sube a la boca con la inclinación típica</td><td>Alto</td></tr>
+    <tr><td><b>Secuencia abrir → boca → beber</b></td><td>Giro de muñeca + inclinación sostenida</td><td>Abrió el frasco o el blíster y bebió agua (fases observadas en DoseMate)</td><td>Medio</td></tr>
+    <tr><td><b>Etiqueta NFC del frasco</b></td><td>NFC del teléfono</td><td>Tuvo el frasco en la mano en la ventana. Funciona con cualquier reloj</td><td>Alto</td></tr>
+    <tr><td><b>Ventana y rutina</b></td><td>Hora programada + historial</td><td>Ocurre cerca de su hora habitual</td><td>Bajo</td></tr>
+    <tr><td><b>Reloj puesto</b></td><td>Detección fuera de la muñeca</td><td>Condición para confiar en el movimiento</td><td>Condición</td></tr>
+    <tr><td><b>Pulso / EDA</b></td><td>PPG, cEDA</td><td>Solo contexto: <b>no confirma la ingesta</b></td><td>Cero</td></tr>
+  </table></div>
+</section>
+
+<!-- 6 flujo -->
+<section class="s full"><img src="img/flujo.png" alt="Diagrama del flujo de una toma en MediTrack y sus conexiones: Fitbit Sense 2, app, nube y cuidador"></section>
+
+<!-- 7 prototipo -->
+<section class="s">
+  <div style="display:grid;grid-template-columns:1fr 780px;gap:70px;height:100%;align-items:center">
+    <div>
+      <span class="k">Prototipo interactivo</span>
+      <h2>Un día con MediTrack, en el navegador</h2>
+      <div class="card" style="margin-top:44px"><ul>
+        <li><b>6 modelos de reloj</b>: cambian la forma, las pantallas y las evidencias disponibles.</li>
+        <li>Escenarios: <b>pastilla</b>, <b>beber agua</b> (duda), <b>NFC</b>, <b>quitarse el reloj</b> o <b>nada</b> (escalamiento).</li>
+        <li>Panel de evidencias con la P(tomó) fusionada en vivo.</li>
+        <li>Comparativa de 8 relojes al final de la página.</li>
+      </ul></div>
+      <p class="sub" style="font-size:22px;font-family:var(--mono)">christopherargenis.github.io/MediTrack/prototipo.html</p>
+    </div>
+    <img class="shot" src="img/prototipo.png" alt="Captura del prototipo: reloj con toma confirmada por gesto y app con la línea de tiempo" style="max-height:900px;justify-self:center">
+  </div>
+</section>
+
+<!-- 8 relojes -->
+<section class="s">
+  <span class="k">¿Qué smartwatch?</span>
+  <h2>La clave: que una app propia pueda leer los sensores</h2>
+  <div class="body"><table class="tsm">
+    <tr><th>Modelo</th><th>Precio (EUA)</th><th>App + IMU</th><th>Qué capta que otros no</th><th>Precio / beneficio</th></tr>
+    <tr class="best"><td><b>Galaxy Watch FE</b></td><td class="num">US$199.99</td><td class="y">sí</td><td>Wear OS completo al menor precio de Samsung</td><td><span class="st">●●●●●</span> mejor equilibrio</td></tr>
+    <tr><td><b>Galaxy Watch8</b></td><td class="num">US$349.99</td><td class="y">sí</td><td>PPG crudo y EDA continuo abiertos a terceros (SDK)</td><td><span class="st">●●●●○</span> investigación</td></tr>
+    <tr><td><b>Amazfit Active 2</b></td><td class="num">US$99.99</td><td class="m">sí, validar</td><td>API de IMU en Zepp OS al menor precio</td><td><span class="st">●●●●○</span> presupuesto</td></tr>
+    <tr><td><b>Apple Watch SE 3</b></td><td class="num">US$249</td><td class="y">sí</td><td>CoreMotion maduro. Requiere iPhone</td><td><span class="st">●●●●○</span> iPhone</td></tr>
+    <tr><td><b>Pixel Watch 4</b></td><td class="num">US$349.99</td><td class="y">sí</td><td>cEDA y temperatura de piel en hardware</td><td><span class="st">●●●○○</span></td></tr>
+    <tr><td><b>Fitbit Sense 2</b></td><td class="num">US$249.95</td><td class="n">no</td><td>cEDA continuo, sin apps de terceros (Fitbit, 2023)</td><td><span class="st">●●○○○</span> solo aviso</td></tr>
+  </table>
+  <p class="sub" style="font-size:20px;margin-top:20px">Precios de lista en EUA, noviembre 2026. También se compararon Apple Watch Series 11 (US$399) y Garmin Venu 4 (≈US$549.99): ver el documento técnico.</p></div>
+</section>
+
+<!-- 9 datos -->
+<section class="s">
+  <span class="k">Datos usados · verificados</span>
+  <h2>De dónde salen los datos</h2>
+  <div class="body">
+    <div class="cols c2" style="margin-bottom:24px">
+      <div class="card" style="padding:24px 30px"><span class="tag" style="background:var(--ac-soft);color:var(--ac-dk)">App</span><p>Hora programada y real, estado, fuente (sensor, manual o cuidador), P fusionada y cada evidencia con su peso.</p></div>
+      <div class="card" style="padding:24px 30px"><span class="tag" style="background:var(--blue-soft);color:#1f4fa8">Reloj</span><p>IMU solo en la ventana de la toma (no se guarda cruda). Pulso, sueño y EDA solo como contexto: Google Health API, HealthKit o Samsung SDK.</p></div>
+    </div>
+    <table class="tsm">
+      <tr><th>Fuente</th><th>Contenido verificado</th><th>Uso</th></tr>
+      <tr><td><b>DoseMate</b> · CHIL 2024</td><td>20 participantes, 1,154 eventos (185 no-tomas) de unos 19 s, IMU a 15 Hz. Datos y código públicos</td><td>Entrenar el modelo</td></tr>
+      <tr><td><b>Moccia et al.</b> · 2022</td><td>CNN-LSTM en laboratorio: F1 mediana 90.5 % / 92.5 % (LOSO)</td><td>Arquitectura</td></tr>
+      <tr><td><b>Odhiambo et al.</b> · 2023</td><td>2,800 gestos con smartwatch, 96.5 % VP y 94.5 % VN</td><td>Referencia</td></tr>
+      <tr><td><b>ActSafe</b> · 2023</td><td>28 pacientes, F1 0.86 al predecir violaciones de horario</td><td>Reglas de horario</td></tr>
+    </table>
+    <p class="sub" style="font-size:19px;margin-top:14px">Se retiraron por no poder verificarse: el “dataset de Glasgow con 228 gestos” y “AI for Elderly Care” (Kaggle).</p>
+  </div>
+</section>
+
+<!-- 10 modelo -->
+<section class="s">
+  <span class="k">Modelo de gesto y fusión</span>
+  <h2>De la muñeca a una decisión</h2>
+  <div class="body">
+    <div class="pipe">
+      <div class="card"><span class="n">01</span><h3>Señal</h3><p>Acelerómetro + giroscopio de 3 ejes, unos 19 s, remuestreados a 15 Hz (como DoseMate).</p></div>
+      <div class="card"><span class="n">02</span><h3>Características</h3><p>Filtros 0.2–2 Hz, FFT, DFA y estadísticas por subsegmento.</p></div>
+      <div class="card"><span class="n">03</span><h3>Modelos</h3><p>XGBoost y Transformer + LSTM. DoseMate reporta 94–95 % de exactitud balanceada.</p></div>
+      <div class="card"><span class="n">04</span><h3>Fusión</h3><p>Gesto + secuencia + NFC + horario en log-odds → P(tomó).</p></div>
+      <div class="card"><span class="n">05</span><h3>Decisión en línea</h3><p>≥ 0.85 confirma · 0.50–0.85 pregunta · menor espera.</p></div>
+    </div>
+    <div class="card" style="margin-top:26px;display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:center"><b style="font-size:26px">Evaluación</b><p>Leave-one-subject-out · exactitud balanceada, AUC y F1 · falsos positivos por hora (comer, beber, fumar) · desglose por edad · calibración de P. Los pesos de la fusión se aprenden con los datos del piloto.</p></div>
+  </div>
+</section>
+
+<!-- 11 BD -->
+<section class="s">
+  <span class="k">Base de datos · SQLite, horas en UTC</span>
+  <h2>El esquema original, más lo necesario para medir</h2>
+  <div class="body"><div class="er">
+    <div class="card"><h3>Medication</h3><ul><li class="pk">id</li><li>name · dose</li><li class="new">instructions</li><li>frequency_hours</li><li>is_active</li></ul></div>
+    <div class="card"><h3>Schedule</h3><ul><li class="pk">id</li><li>medication_id →</li><li>scheduled_time</li><li>days_of_week</li></ul></div>
+    <div class="card" style="box-shadow:0 0 0 3px var(--ac),0 18px 40px -24px rgba(15,34,48,.35)"><h3>IntakeRecord</h3><ul><li class="pk">id</li><li>scheduled_datetime</li><li>confirmed_datetime</li><li>status</li><li class="new">confirmation_source</li><li class="new">fused_confidence</li><li class="new">device_id →</li></ul></div>
+    <div class="card"><h3 class="new" style="color:var(--ges)">Evidence</h3><ul><li class="pk">id</li><li>intake_record_id →</li><li>kind · value</li><li>weight</li><li>model_version</li></ul></div>
+    <div class="card"><h3>Caregiver</h3><ul><li class="pk">id</li><li>name · phone</li><li class="new">relationship</li><li class="new">consent_at</li></ul></div>
+    <div class="card"><h3>Notification</h3><ul><li class="pk">id</li><li>recipient_type</li><li class="new">kind</li><li>channel · status</li></ul></div>
+    <div class="card"><h3 style="color:var(--ges)">Device · FusionDecision</h3><ul><li>model · platform</li><li>has_watch_app</li><li>imu_access</li><li>probability · decision</li></ul></div>
+    <div class="card" style="background:var(--ges-soft);box-shadow:none"><h3 style="font-family:var(--f);color:#4a32b0">En morado</h3><p style="font-size:21px">Lo nuevo frente al documento original. Esquema y prueba en <code>db/</code>.</p></div>
+  </div></div>
+</section>
+
+<!-- 12 diferenciación -->
+<section class="s">
+  <span class="k">Trabajos relacionados · corregido</span>
+  <h2>Qué agrega MediTrack sobre DoseMate</h2>
+  <p class="sub">DoseMate sí enviaba recordatorios reflejados en el reloj y tenía un botón manual. Las diferencias reales son estas:</p>
+  <div class="body"><table>
+    <tr><th style="width:45%">DoseMate (2024)</th><th>MediTrack</th></tr>
+    <tr><td>La grabación empieza solo al tocar el frasco con NFC.</td><td><b>IMU activa en la ventana</b>. El NFC es una evidencia opcional.</td></tr>
+    <tr><td>Clasificación analizada después del estudio (en línea, como trabajo futuro).</td><td><b>Decisión en línea</b> con tres niveles.</td></tr>
+    <tr><td>Una fuente: el movimiento.</td><td><b>Fusión</b> de gesto, secuencia, NFC y horario.</td></tr>
+    <tr><td>Retroalimentación al paciente y a su equipo de salud.</td><td><b>Cuidador familiar</b> con aviso escalonado.</td></tr>
+    <tr><td>Relojes Android Wear 2.x.</td><td><b>Multirreloj</b> con comparativa de precio y beneficio.</td></tr>
+  </table></div>
+</section>
+
+<!-- 13 lineamientos -->
+<section class="s">
+  <span class="k">Lineamientos</span>
+  <h2>Diseñar para confiar</h2>
+  <div class="body"><div class="cols c3">
+    <div class="card"><h3>Accesibilidad</h3><ul><li>Una acción principal por pantalla</li><li>Texto ≥ 16 px, contraste AA</li><li>Lenguaje sin culpa</li><li>Funciona sin el reloj</li></ul></div>
+    <div class="card"><h3>Privacidad</h3><ul><li>Datos de salud = datos sensibles (LFPDPPP, DOF 20/03/2025)</li><li>Consentimiento expreso y por escrito, revocable</li><li>Procesamiento local, sin guardar la señal cruda</li></ul></div>
+    <div class="card"><h3>Clínico</h3><ul><li>No es un dispositivo médico</li><li>No recomienda dosis</li><li>“Sin confirmar” ≠ “no tomada”</li><li>Tolerancia según el medicamento</li></ul></div>
+  </div></div>
+</section>
+
+<!-- 14 métricas -->
+<section class="s">
+  <span class="k">Métricas y validación</span>
+  <h2>Cómo sabremos que funciona</h2>
+  <div class="body"><div class="cols c2" style="align-items:start">
+    <table>
+      <tr><th>Métrica</th><th>Meta</th></tr>
+      <tr><td>Adherencia confirmada</td><td><b>≥ 80 %</b> (ref. PDC 80 %, PQA)</td></tr>
+      <tr><td>Latencia mediana</td><td><b>≤ 10 min</b></td></tr>
+      <tr><td>Confirmadas por gesto</td><td><b>≥ 50 %</b> (fase 2)</td></tr>
+      <tr><td>Falsas alarmas al cuidador</td><td><b>≤ 1 / semana</b></td></tr>
+      <tr><td>Usabilidad (SUS)</td><td><b>≥ 68</b> = promedio (Sauro y Lewis)</td></tr>
+    </table>
+    <div class="card"><h3>Plan</h3><ul>
+      <li><b>Fuera de línea:</b> modelo con el dataset público de DoseMate.</li>
+      <li><b>Usabilidad:</b> 5 a 8 adultos mayores y cuidadores con el prototipo.</li>
+      <li><b>Piloto de 4 semanas:</b> 2 de línea base y 2 con MediTrack.</li>
+    </ul></div>
+  </div></div>
+</section>
+
+<!-- 15 roadmap -->
+<section class="s">
+  <span class="k">Hoja de ruta</span>
+  <h2>Siguientes pasos</h2>
+  <div class="body"><div class="road">
+    <div><span class="dot done">0</span><b>Definición</b><p>Documentos, prototipo, flujo y esquema de BD</p><span class="t">hecho</span></div>
+    <div><span class="dot">1</span><b>MVP</b><p>Recordatorios, estados, botón, NFC, cuidador y panel</p><span class="t">6–8 sem</span></div>
+    <div><span class="dot">2</span><b>Modelo</b><p>Modelo de gesto entrenado y evaluado fuera de línea</p><span class="t">4–6 sem</span></div>
+    <div><span class="dot">3</span><b>Integración</b><p>App en el reloj elegido y fusión de evidencias</p><span class="t">4 sem</span></div>
+    <div><span class="dot">4</span><b>Piloto</b><p>Estudio de 4 semanas y SUS</p><span class="t">6 sem</span></div>
+  </div></div>
+</section>
+
+
+<!-- verificación -->
+<section class="s">
+  <span class="k">Rigor · verificación de fuentes</span>
+  <h2>Qué cambió al verificar la idea base</h2>
+  <div class="body"><table class="tsm">
+    <tr><th>Afirmación original</th><th>Resultado</th></tr>
+    <tr><td>“DoseMate no gestiona recordatorios”</td><td class="n">Incorrecto: tenía recordatorios reflejados en el reloj y un botón manual</td></tr>
+    <tr><td>Dataset de Glasgow, 228 gestos, CNN-LSTM</td><td class="m">No localizado: se reemplazó por Moccia (2022) y Odhiambo (2023)</td></tr>
+    <tr><td>“AI for Elderly Care” (Kaggle)</td><td class="m">No verificado: se retiró</td></tr>
+    <tr><td>Sense 2 para el gesto</td><td class="n">No viable: sin apps de terceros (Fitbit, 2023)</td></tr>
+    <tr><td>Fitbit Web API</td><td class="m">Soporte heredado terminó el 30/09/2026: migrar a la Google Health API</td></tr>
+    <tr><td>Población de 60+ en México</td><td class="y">15.1 millones, 12 % (INEGI, 2020)</td></tr>
+  </table></div>
+</section>
+<section class="s end">
+  <span class="k" style="color:#5fd0c8">Gracias</span>
+  <h2>¿Preguntas?</h2>
+  <div class="links"><div><b>Prototipo</b><span>christopherargenis.github.io/MediTrack/prototipo.html</span></div><div><b>Documentos</b><span>christopherargenis.github.io/MediTrack/documentos.html</span></div><div><b>Repositorio</b><span>github.com/ChristopherArgenis/MediTrack</span></div></div>
+</section>
+</div></div>
+<div class="ctrl"><a href="presentaciones.html" style="color:#fff;font:700 13px var(--f);padding:8px 10px;text-decoration:none">🎓 Académico</a><button id="prev" type="button" aria-label="Anterior">←</button><span id="cnt"></span><button id="next" type="button" aria-label="Siguiente">→</button><button id="fs" type="button">Pantalla completa</button></div>
+<script src="assets/deck.js"></script>
+</body>
+</html>

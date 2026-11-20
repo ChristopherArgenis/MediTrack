@@ -109,6 +109,9 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .wlist b{font-family:var(--mono);font-size:10.5px;color:#9fb0bb}
 .wlist i{width:8px;height:8px;border-radius:50%}
 .wcap{font-size:11.5px;text-align:center;color:var(--mu);margin-top:4px}
+.wpick{display:flex;align-items:center;gap:6px;margin-top:8px;background:var(--card);border-radius:14px;padding:5px;box-shadow:var(--sh)}
+.wpick button{width:34px;height:34px;border-radius:10px;background:var(--bg);font-size:18px;font-weight:800;color:var(--fg)}
+.wpick select{border:0;background:transparent;font-weight:800;font-size:14px;padding:6px 4px;min-width:0;max-width:220px;cursor:pointer}
 
 /* sensores y evidencias */
 .sig canvas{width:100%;height:132px;display:block;background:#0f1c24;border-radius:12px}
@@ -272,7 +275,7 @@ table.c .num{white-space:nowrap}
   <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
   <a class="l on" href="prototipo.html">Prototipo</a>
   <a class="l" href="documentos.html">Documentos</a>
-  <a class="l" href="presentacion.html">Presentación</a>
+  <a class="l" href="presentaciones.html">Presentaciones</a>
   <a class="l" href="flujo.html">Flujo</a>
 </nav>
 
@@ -327,6 +330,7 @@ table.c .num{white-space:nowrap}
         <div class="strap t"></div><div class="strap b"></div>
         <div class="case"><div class="bezel"><div class="wscreen" id="wscreen"></div></div></div>
       </div>
+      <div class="wpick"><button type="button" data-mstep="-1" aria-label="Reloj anterior">‹</button><select id="wsel" aria-label="Cambiar modelo de reloj"></select><button type="button" data-mstep="1" aria-label="Reloj siguiente">›</button></div>
       <p class="wcap" id="wcap"></p>
     </div>
     <div class="card">
@@ -595,6 +599,7 @@ function syncControls(){
 /* ===================== selector de modelo ===================== */
 function renderModels(){
   $('#models').innerHTML = WATCHES.filter(w => w.sim).map(w => `<button type="button" data-model="${w.id}" class="${w.id === S.watchId ? 'on' : ''}"><b>${w.name}</b><span>US$${w.price} · ${w.os}</span></button>`).join('');
+  $('#wsel').innerHTML = WATCHES.filter(w => w.sim).map(w => `<option value="${w.id}" ${w.id === S.watchId ? 'selected' : ''}>${w.name} · US$${w.price}</option>`).join('');
   const w = W();
   const caps = [[w.app, 'app propia'], [w.app, 'IMU'], [w.app, 'botones en reloj'], [true, 'notificaciones']];
   $('#mnote').innerHTML = `<div class="caps">${caps.map(([ok, l]) => `<span class="cap ${ok ? '' : 'no'}">${ok ? '✓' : '✕'} ${l}</span>`).join('')}</div>
@@ -604,6 +609,13 @@ function renderModels(){
   el.style.setProperty('--c1', w.c[0]); el.style.setProperty('--c2', w.c[1]); el.style.setProperty('--c3', w.c[2]); el.style.setProperty('--strap', w.strap);
   $('#wcap').textContent = `${w.name} · ${w.app ? 'toca la pantalla' : 'solo muestra la notificación'}`;
   renderCmp();
+}
+function setModel(id){
+  if (!WATCHES.some(w => w.sim && w.id === id)) return;
+  S.watchId = id; S.onWrist = true;
+  logx('sistema', `Reloj cambiado a ${W().name} (${W().app ? 'app propia con IMU' : 'solo notificaciones'}).`);
+  try { history.replaceState(null, '', '?reloj=' + id + location.hash); } catch (e) {}
+  setWatch('face'); renderModels(); render();
 }
 function renderCmp(){
   const yn = v => /^sí$/.test(v) ? `<span class="y">${v}</span>` : /^no/.test(v) ? `<span class="n">${v}</span>` : `<span class="m">${v}</span>`;
@@ -926,10 +938,11 @@ function hideBanner(){ $('#banner').classList.remove('show'); }
 
 /* ===================== eventos ===================== */
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-tab],[data-confirm],[data-del],[data-tol],[data-sw],[data-cgok],[data-model],[data-bconfirm],[data-bno],#addbtn,#cancel');
+  const t = e.target.closest('[data-tab],[data-confirm],[data-del],[data-tol],[data-sw],[data-cgok],[data-model],[data-mstep],[data-bconfirm],[data-bno],#addbtn,#cancel');
   if (!t) return;
   if (t.dataset.tab){ S.tab = t.dataset.tab; S.adding = false; render(); $('#pview').scrollTop = 0; }
-  else if (t.dataset.model){ S.watchId = t.dataset.model; S.onWrist = true; logx('sistema', `Reloj cambiado a ${W().name} (${W().app ? 'app propia con IMU' : 'solo notificaciones'}).`); setWatch('face'); renderModels(); render(); }
+  else if (t.dataset.model) setModel(t.dataset.model);
+  else if (t.dataset.mstep){ const sims = WATCHES.filter(w => w.sim), i = sims.findIndex(w => w.id === S.watchId); setModel(sims[(i + +t.dataset.mstep + sims.length) % sims.length].id); }
   else if (t.dataset.confirm){ const r = S.records.find(x => x.id === +t.dataset.confirm); logx('usuario', 'Confirma desde la app del teléfono.'); confirm(r, 'manual'); }
   else if (t.dataset.bconfirm){ const r = S.records.find(x => x.id === +t.dataset.bconfirm); logx('usuario', 'Responde «Sí, la tomé» en el teléfono.'); confirm(r, 'manual'); }
   else if (t.dataset.bno){ hideBanner(); logx('usuario', 'Responde «Aún no».'); }
@@ -956,7 +969,7 @@ document.addEventListener('submit', e => {
   S.meds.push(m); times.forEach(tm => { if (toMin(tm) > S.t) addRecord(m, toMin(tm)); });
   S.adding = false; logx('sistema', `Medication «${m.name}» creada con ${times.length} horario(s).`); render();
 });
-document.addEventListener('change', e => { if (e.target.id === 'thr'){ S.thr = +e.target.value; logx('sistema', `Umbral de confirmación = ${S.thr.toFixed(2)}.`); render(); } });
+document.addEventListener('change', e => { if (e.target.id === 'wsel') setModel(e.target.value); if (e.target.id === 'thr'){ S.thr = +e.target.value; logx('sistema', `Umbral de confirmación = ${S.thr.toFixed(2)}.`); render(); } });
 $('#playbtn').addEventListener('click', () => { S.running = !S.running; syncControls(); });
 document.querySelectorAll('#speeds button').forEach(b => b.addEventListener('click', () => { S.speed = +b.dataset.sp; syncControls(); }));
 $('#skipbtn').addEventListener('click', () => {

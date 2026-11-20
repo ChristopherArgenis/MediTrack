@@ -23,7 +23,7 @@ table.wide{min-width:900px}
   <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
   <a class="l" href="prototipo.html">Prototipo</a>
   <a class="l on" href="documentos.html">Documentos</a>
-  <a class="l" href="presentacion.html">Presentación</a>
+  <a class="l" href="presentaciones.html">Presentaciones</a>
   <a class="l" href="flujo.html">Flujo</a>
 </nav>
 
@@ -213,11 +213,12 @@ VIEW v_adherence_daily(day, scheduled, on_time, delayed, unconfirmed, pct_confir
 ├── documentos.html       índice de los dos documentos
 ├── doc-conceptual.html   documento 1 (+ .pdf)
 ├── doc-tecnico.html      documento 2 (+ .pdf)
-├── presentacion.html     presentación (+ .pdf)
+├── presentaciones.html   índice de las 4 presentaciones
+├── pres-*.html           académica, médica, inversión, general (+ .pdf)
 ├── flujo.html            diagrama (img/flujo.png)
 ├── db/schema.sql         esquema SQLite
 ├── db/test_schema.py     prueba del esquema y de la fusión
-└── assets/               tema.css, doc.css, logo.svg</pre>
+└── assets/               tema.css, doc.css, deck.css, deck.js, nav.js, logo.svg</pre>
     <h3>Prototipo: piezas principales</h3>
     <ul>
       <li><code>WATCHES</code>: catálogo con capacidades (<code>app</code>, <code>imu</code>, sensores, precio). Cambiar de reloj cambia la forma, las pantallas y las evidencias disponibles. También se puede abrir con <code>prototipo.html?reloj=fs2</code>.</li>
@@ -275,5 +276,6 @@ VIEW v_adherence_daily(day, scheduled, on_time, delayed, unconfirmed, pct_confir
   <p class="foot">MediTrack · Documento técnico v2.0. Precios y APIs cambian: verificar con la documentación del fabricante antes de comprar o implementar.</p>
 </article>
 </div>
+<script src="assets/nav.js"></script>
 </body>
 </html>
