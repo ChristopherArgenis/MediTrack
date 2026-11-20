@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediTrack · Flujo</title>
+<meta name="description" content="Diagrama de cómo funciona MediTrack y a qué está conectado.">
+<link rel="icon" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/tema.css">
+<style>
+/* Lienzo fijo 1920×1080 escalado al ancho disponible (también se exporta a img/flujo.png). */
+.fit{padding:20px 16px 40px;display:grid;justify-items:center;gap:12px}
+.fit .tools{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;font-size:13px}
+.fit .tools a{font-weight:700}
+.scaler{width:100%;max-width:1600px;position:relative}
+.slide{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;background:#f6f9fb;border-radius:0;overflow:hidden;font-family:var(--f);color:var(--fg)}
+body.raw{background:#f6f9fb}
+body.raw .sitenav,body.raw .tools{display:none}
+body.raw .fit{padding:0}
+body.raw .scaler{max-width:none;width:1920px}
+.b{position:absolute;border-radius:22px;background:#fff;box-shadow:0 2px 4px rgba(15,34,48,.05),0 14px 30px -18px rgba(15,34,48,.35);padding:20px 22px}
+.hd{position:absolute;left:80px;top:54px}
+.hd .k{font-size:18px;font-weight:800;letter-spacing:.12em;color:var(--ac)}
+.hd h1{margin:6px 0 0;font-size:56px;letter-spacing:-.025em;line-height:1}
+.hd p{margin:10px 0 0;font-size:22px;color:var(--mu)}
+.logo{position:absolute;right:80px;top:62px;display:flex;align-items:center;gap:12px;font-size:26px;font-weight:800}
+.logo img{width:44px;height:44px}
+.comp .t{display:flex;align-items:center;gap:12px;font-size:24px;font-weight:800}
+.comp .t i{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;flex:none;font-style:normal;color:#fff}
+.comp .t i svg{width:24px;height:24px}
+.comp ul{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:5px;font-size:17px;color:#3a4a56}
+.comp ul li::before{content:"·";margin-right:8px;color:var(--mu);font-weight:800}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chips span{font-size:15.5px;font-weight:800;padding:7px 12px;border-radius:11px}
+.lbl{position:absolute;font-size:15px;font-weight:800;color:var(--mu);text-align:center;line-height:1.25;background:#f6f9fb;padding:2px 6px;border-radius:6px}
+.sec{position:absolute;left:80px;font-size:15px;font-weight:800;letter-spacing:.12em;color:var(--mu)}
+.st{display:grid;align-content:center;gap:6px}
+.st .n{width:34px;height:34px;border-radius:10px;background:var(--ac-soft);color:var(--ac-dk);display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:18px}
+.st b{font-size:20px;line-height:1.15}
+.st small{font-size:15px;color:var(--mu);line-height:1.3}
+.st .row{display:flex;align-items:center;gap:10px}
+.dia{position:absolute;display:grid;place-items:center;text-align:center}
+.dia b{font-size:20px;line-height:1.15;display:block}
+.dia small{font-size:14.5px;color:var(--mu);font-weight:700}
+.res{display:grid;align-content:center;gap:4px;border-left:8px solid}
+.res b{font-size:21px}
+.res small{font-size:15px;color:#3a4a56;line-height:1.3}
+.foot{position:absolute;left:80px;right:80px;top:968px;height:72px;border-radius:20px;background:var(--fg);color:#fff;display:flex;align-items:center;gap:22px;padding:0 26px;font-size:19px}
+.foot b{font-weight:800}
+.foot .sep{opacity:.4}
+.foot code{font-family:var(--mono);font-size:16px;background:rgba(255,255,255,.12);padding:3px 8px;border-radius:7px}
+</style>
+</head>
+<body>
+<nav class="sitenav">
+  <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
+  <a class="l" href="prototipo.html">Prototipo</a>
+  <a class="l" href="documento.html">Documento</a>
+  <a class="l" href="presentacion.html">Presentación</a>
+  <a class="l on" href="flujo.html">Flujo</a>
+</nav>
+<div class="fit">
+  <div class="tools"><span class="mu">Diapositiva 1920×1080</span><a href="img/flujo.png" download>Descargar PNG</a></div>
+  <div class="scaler" id="scaler"><div class="slide" id="slide">
+    <svg width="0" height="0" style="position:absolute"><defs>
+      <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#5b6b78"/></marker>
+      <marker id="arg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#1f9d55"/></marker>
+      <marker id="arb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#2f6fd6"/></marker>
+      <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#d9463b"/></marker>
+      <marker id="arv" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#6b4fe0"/></marker>
+    </defs></svg>
+
+    <div class="hd"><span class="k">CÓMO FUNCIONA</span><h1>Flujo de una toma y sus conexiones</h1><p>Del horario programado a la confirmación (o al aviso al cuidador)</p></div>
+    <div class="logo"><img src="assets/logo.svg" alt="">MediTrack</div>
+
+    <!-- líneas y flechas -->
+    <svg width="1920" height="1080" style="position:absolute;left:0;top:0" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <!-- conexiones entre componentes -->
+      <path d="M430 300 H 530" stroke="#5b6b78" stroke-width="3" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      <path d="M1110 300 H 1190" stroke="#5b6b78" stroke-width="3" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      <path d="M1490 300 H 1570" stroke="#5b6b78" stroke-width="3" marker-end="url(#ar)"/>
+      <!-- pasos -->
+      <path d="M300 612 H 334" stroke="#5b6b78" stroke-width="3" marker-end="url(#ar)"/>
+      <path d="M580 612 H 614" stroke="#5b6b78" stroke-width="3" marker-end="url(#ar)"/>
+      <path d="M820 612 H 854" stroke="#5b6b78" stroke-width="3" marker-end="url(#ar)"/>
+      <path d="M1080 612 H 1122" stroke="#5b6b78" stroke-width="3" marker-end="url(#ar)"/>
+      <!-- rombo -->
+      <polygon points="1240,497 1355,612 1240,727 1125,612" fill="#fff" stroke="#6b4fe0" stroke-width="3"/>
+      <!-- salidas del rombo -->
+      <path d="M1290 547 C 1350 500, 1420 515, 1564 515" stroke="#1f9d55" stroke-width="3.5" marker-end="url(#arg)"/>
+      <path d="M1355 612 H 1564" stroke="#6b4fe0" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arv)"/>
+      <path d="M1240 727 V 778" stroke="#5b6b78" stroke-width="3" marker-end="url(#ar)"/>
+      <!-- desde espera manual -->
+      <path d="M1400 830 C 1470 830, 1480 700, 1564 680" stroke="#2f6fd6" stroke-width="3" marker-end="url(#arb)"/>
+      <path d="M1400 880 C 1480 880, 1500 870, 1564 870" stroke="#d9463b" stroke-width="3.5" marker-end="url(#arr)"/>
+      <!-- todo a la BD -->
+      <path d="M1710 930 V 960" stroke="#9fb0bb" stroke-width="2.5"/>
+    </svg>
+
+    <!-- componentes -->
+    <div class="b comp" style="left:80px;top:212px;width:350px;height:218px">
+      <div class="t"><i style="background:#0f2230"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="4"/><path d="M9 6V2h6v4M9 18v4h6v-4"/></svg></i>Fitbit Sense 2</div>
+      <ul><li>Vibra y muestra el recordatorio</li><li>Botones: “Ya la tomé” y “+10”</li><li>Acelerómetro + giroscopio (IMU)</li><li>Ritmo cardiaco, sueño, cEDA</li></ul>
+    </div>
+    <div class="b comp" style="left:540px;top:212px;width:570px;height:218px">
+      <div class="t"><i style="background:#0d8a84"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg></i>App MediTrack · teléfono</div>
+      <ul><li>Medicamentos, horarios y tolerancia</li><li>Línea de tiempo, historial y adherencia</li></ul>
+      <div class="chips"><span style="background:var(--blue-soft);color:#1f4fa8">Motor de reglas</span><span style="background:var(--ges-soft);color:#4a32b0">Modelo ML · TFLite</span><span style="background:var(--late-soft);color:#8a5600">SQLite · UTC</span></div>
+    </div>
+    <div class="b comp" style="left:1200px;top:212px;width:290px;height:218px">
+      <div class="t"><i style="background:#2f6fd6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M7 18a5 5 0 1 1 1-9.9A6 6 0 0 1 19 10a4 4 0 0 1-1 8z"/></svg></i>Nube</div>
+      <ul><li>Fitbit Web API: pulso, sueño, pasos</li><li>Servicio push (p. ej. FCM)</li><li>Respaldo cifrado opcional</li></ul>
+    </div>
+    <div class="b comp" style="left:1580px;top:212px;width:260px;height:218px">
+      <div class="t"><i style="background:#d9463b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></i>Cuidador</div>
+      <ul><li>Aviso si falta evidencia</li><li>Confirma tras llamar</li><li>Resumen semanal</li></ul>
+    </div>
+    <span class="lbl" style="left:430px;top:316px;width:100px">Bluetooth<br><span style="font-weight:600">avisos · sensores</span></span>
+    <span class="lbl" style="left:1104px;top:316px;width:92px">HTTPS<br><span style="font-weight:600">OAuth 2.0</span></span>
+    <span class="lbl" style="left:1488px;top:316px;width:84px">Push</span>
+
+    <span class="sec" style="top:470px">FLUJO DE UNA TOMA</span>
+
+    <!-- pasos -->
+    <div class="b st" style="left:80px;top:556px;width:220px;height:112px;padding:14px 18px"><div class="row"><span class="n">1</span><b>Hora programada</b></div><small>Schedule → IntakeRecord <i>pending</i></small></div>
+    <div class="b st" style="left:340px;top:556px;width:240px;height:112px;padding:14px 18px"><div class="row"><span class="n">2</span><b>Recordatorio</b></div><small>push → reloj vibra · 2.º aviso a los 15 min</small></div>
+    <div class="b st" style="left:620px;top:556px;width:200px;height:112px;padding:14px 18px"><div class="row"><span class="n">3</span><b>Toma la pastilla</b></div><small>el usuario, idealmente</small></div>
+    <div class="b st" style="left:860px;top:556px;width:220px;height:112px;padding:14px 18px"><div class="row"><span class="n">4</span><b>IMU captura</b></div><small>acelerómetro + giroscopio, ventanas de 3 s</small></div>
+    <div class="dia" style="left:1140px;top:532px;width:200px;height:160px"><div><span class="st"><span class="n" style="margin:0 auto 4px">5</span></span><b>Modelo ML</b><small>¿gesto de ingesta?</small></div></div>
+
+    <span class="lbl" style="left:1380px;top:486px;width:160px;color:#13703b">Sí · P ≥ 0.80</span>
+    <span class="lbl" style="left:1380px;top:622px;width:170px;color:#4a32b0">Dudoso → pregunta</span>
+    <span class="lbl" style="left:1252px;top:736px;width:40px">No</span>
+
+    <div class="b st" style="left:1080px;top:782px;width:320px;height:130px;padding:14px 18px"><div class="row"><span class="n">7</span><b>Espera confirmación manual</b></div><small>dentro de la tolerancia (30 min) · botón en reloj o app</small></div>
+    <span class="lbl" style="left:1432px;top:748px;width:100px;color:#1f4fa8">confirma</span>
+    <span class="lbl" style="left:1420px;top:890px;width:130px;color:#a3261d">30 min sin evidencia</span>
+
+    <!-- resultados -->
+    <div class="b res" style="left:1570px;top:466px;width:270px;height:100px;padding:12px 18px;border-color:#1f9d55"><b><span class="num" style="color:#1f9d55">6</span> Confirmada</b><small>por gesto · se guarda la confianza</small></div>
+    <div class="b res" style="left:1570px;top:600px;width:270px;height:100px;padding:12px 18px;border-color:#2f6fd6"><b>Confirmada</b><small>manual · reloj o app</small></div>
+    <div class="b res" style="left:1570px;top:800px;width:270px;height:130px;padding:12px 18px;border-color:#d9463b"><b><span class="num" style="color:#d9463b">8</span> Sin confirmar</b><small>se avisa al cuidador. Si llega evidencia después: <b style="font-size:15px">con retraso</b></small></div>
+
+    <!-- línea de tiempo de la tolerancia -->
+    <div class="b" style="left:80px;top:720px;width:960px;height:210px;padding:20px 26px">
+      <div style="font-size:15px;font-weight:800;letter-spacing:.12em;color:var(--mu)">VENTANA DE UNA TOMA</div>
+      <svg width="908" height="150" viewBox="0 0 908 150" style="display:block;margin-top:6px" font-family="Manrope, sans-serif">
+        <rect x="10" y="58" width="420" height="14" rx="7" fill="#ddf2f0"/>
+        <rect x="430" y="58" width="468" height="14" rx="7" fill="#fdf1dc"/>
+        <text x="220" y="48" text-anchor="middle" font-size="15" font-weight="800" fill="#06615d">tolerancia · confirmada a tiempo</text>
+        <text x="664" y="48" text-anchor="middle" font-size="15" font-weight="800" fill="#8a5600">evidencia tardía · “con retraso”</text>
+        <g font-size="17" font-weight="800" fill="#0f2230">
+          <circle cx="12" cy="65" r="11" fill="#0d8a84"/><text x="2" y="104" text-anchor="start">0 min</text>
+          <circle cx="220" cy="65" r="11" fill="#2f6fd6"/><text x="220" y="104" text-anchor="middle">15 min</text>
+          <circle cx="430" cy="65" r="11" fill="#d9463b"/><text x="430" y="104" text-anchor="middle">30 min</text>
+          <circle cx="896" cy="65" r="11" fill="#5b6b78"/><text x="896" y="104" text-anchor="end">2 h</text>
+        </g>
+        <g font-size="15" fill="#5b6b78" font-weight="600">
+          <text x="12" y="128" text-anchor="start">recordatorio + IMU</text>
+          <text x="220" y="128" text-anchor="middle">2.º recordatorio</text>
+          <text x="430" y="128" text-anchor="middle">sin confirmar → cuidador</text>
+          <text x="896" y="128" text-anchor="end">cierra la ventana del gesto</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="foot"><b>Todo queda registrado</b><span class="sep">|</span><span><code>IntakeRecord</code> estado · hora · fuente (gesto / manual / cuidador) · confianza</span><span class="sep">|</span><span>→ Panel de adherencia para usuario, cuidador y médico</span></div>
+  </div></div>
+</div>
+<script>
+// ?raw=1 → lienzo sin escalar (para exportar a PNG)
+const raw = new URLSearchParams(location.search).has('raw');
+if (raw) document.body.classList.add('raw');
+function fit(){
+  const sc = document.getElementById('scaler'), sl = document.getElementById('slide');
+  const k = raw ? 1 : sc.clientWidth / 1920;
+  sl.style.transform = `scale(${k})`; sc.style.height = (1080*k) + 'px';
+}
+addEventListener('resize', fit); fit();
+</script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediTrack · Presentación</title>
+<meta name="description" content="Presentación de MediTrack: idea, prototipo, datos, modelo y plan.">
+<link rel="icon" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/tema.css">
+<style>
+/* Diapositivas de 1920×1080 escaladas a la ventana. ← → / espacio para navegar, F para pantalla completa. */
+html,body{height:100%;overflow:hidden}
+body{background:#0b151c}
+.viewer{position:fixed;inset:56px 0 0 0;display:grid;place-items:center}
+.deck{position:relative;width:1920px;height:1080px;transform-origin:center center;flex:none}
+.s{position:absolute;inset:0;background:#f6f9fb;color:var(--fg);padding:90px 110px;display:none;flex-direction:column;overflow:hidden}
+.s.on{display:flex}
+.s .k{font-size:20px;font-weight:800;letter-spacing:.14em;color:var(--ac);text-transform:uppercase}
+.s h2{font-size:64px;line-height:1.04;letter-spacing:-.025em;margin:12px 0 0;max-width:1500px}
+.s .sub{font-size:28px;color:var(--mu);margin:18px 0 0;max-width:1400px;line-height:1.35}
+.s .body{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0;margin-top:40px}
+.pg{position:absolute;right:110px;bottom:54px;font-family:var(--mono);font-size:18px;color:var(--mu)}
+.brandmark{position:absolute;left:110px;bottom:50px;display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;color:var(--mu)}
+.brandmark img{width:28px;height:28px}
+.cols{display:grid;gap:28px}
+.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:repeat(3,1fr)}.c4{grid-template-columns:repeat(4,1fr)}
+.card{background:#fff;border-radius:28px;padding:34px 36px;box-shadow:0 2px 4px rgba(15,34,48,.05),0 18px 40px -24px rgba(15,34,48,.35)}
+.card h3{margin:0 0 12px;font-size:32px;letter-spacing:-.01em;line-height:1.15}
+.card p,.card li{font-size:24px;line-height:1.4;color:#33434f;margin:0}
+.card ul{margin:0;padding-left:28px;display:grid;gap:8px}
+.tag{display:inline-block;font-size:17px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:999px;margin-bottom:16px}
+.ic{width:68px;height:68px;border-radius:20px;display:grid;place-items:center;color:#fff;margin-bottom:22px}
+.ic svg{width:36px;height:36px}
+/* portada */
+.cover{background:linear-gradient(150deg,#14a39b 0%,#06615d 70%);color:#fff;justify-content:center}
+.cover::before{content:"";position:absolute;right:-160px;top:-160px;width:720px;height:720px;border-radius:50%;border:3px solid rgba(255,255,255,.14)}
+.cover::after{content:"";position:absolute;right:120px;top:120px;width:300px;height:300px;border-radius:50%;border:3px solid rgba(255,255,255,.1)}
+.cover h1{font-size:150px;letter-spacing:-.04em;margin:0;line-height:.95}
+.cover .lead{font-size:40px;margin-top:26px;max-width:1150px;line-height:1.25;font-weight:600}
+.cover .meta{margin-top:60px;font-size:24px;display:flex;gap:40px;opacity:.9}
+.cover .logo{display:flex;align-items:center;gap:16px;font-size:26px;font-weight:800;letter-spacing:.1em;margin-bottom:40px}
+.cover .logo img{width:64px;height:64px;border-radius:18px;box-shadow:0 0 0 3px rgba(255,255,255,.3)}
+/* estadística */
+.big{font-size:240px;font-weight:800;letter-spacing:-.05em;line-height:.9;color:var(--ac-dk);font-family:var(--f)}
+.big small{font-size:110px}
+.split{display:grid;grid-template-columns:640px 1fr;gap:80px;align-items:center}
+.reasons{display:grid;gap:18px}
+.reason{display:grid;grid-template-columns:60px 1fr;gap:20px;align-items:center;background:#fff;border-radius:22px;padding:22px 26px;box-shadow:0 2px 4px rgba(15,34,48,.05),0 14px 30px -22px rgba(15,34,48,.35)}
+.reason i{width:60px;height:60px;border-radius:17px;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:26px;font-family:var(--mono)}
+.reason b{font-size:27px;display:block}
+.reason span{font-size:22px;color:var(--mu)}
+/* capas de confirmación */
+.layers3{display:grid;grid-template-columns:1fr 70px 1fr 70px 1fr;align-items:stretch}
+.layers3 .arr{display:grid;place-items:center;font-size:48px;color:var(--mu);font-weight:300}
+/* imagen */
+.shot{border-radius:24px;box-shadow:0 30px 60px -30px rgba(10,25,35,.5);display:block;max-width:100%;max-height:100%}
+.full{position:absolute;inset:0;padding:0}
+.full img{width:100%;height:100%;object-fit:contain;display:block}
+.callout{border-radius:24px;padding:28px 32px;font-size:24px;line-height:1.4}
+.callout.warn{background:#fff6e6;border:2px solid #f3cf8e;color:#5a3a00}
+.callout b{font-size:26px}
+table{border-collapse:collapse;width:100%;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 2px 4px rgba(15,34,48,.05),0 18px 40px -24px rgba(15,34,48,.35)}
+th,td{text-align:left;padding:20px 26px;border-bottom:1px solid var(--line);font-size:23px;vertical-align:top;line-height:1.35}
+th{background:var(--bg);font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+tr:last-child td{border-bottom:0}
+td b{font-size:24px}
+.pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}
+.pipe .card{padding:28px}
+.pipe .n{font-family:var(--mono);font-weight:700;font-size:22px;color:var(--ges);margin-bottom:8px;display:block}
+.pipe h3{font-size:27px}
+.pipe p{font-size:21px}
+.er{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.er .card{padding:24px 26px}
+.er h3{font-size:25px;font-family:var(--mono);margin-bottom:10px}
+.er ul{list-style:none;padding:0;gap:4px}
+.er li{font-family:var(--mono);font-size:18px;color:#33434f}
+.er li.new{color:var(--ges);font-weight:700}
+.er li.pk{color:var(--ac-dk);font-weight:700}
+.road{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative;margin-top:20px}
+.road::before{content:"";position:absolute;left:4%;right:4%;top:34px;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--ac) 0 20%,var(--line) 20%)}
+.road>div{display:grid;justify-items:center;text-align:center;gap:12px;padding:0 14px;position:relative}
+.road .dot{width:74px;height:74px;border-radius:50%;background:#fff;border:6px solid var(--line);display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:26px}
+.road .dot.done{background:var(--ac);border-color:var(--ac);color:#fff}
+.road b{font-size:27px}
+.road p{margin:0;font-size:21px;color:var(--mu);line-height:1.35}
+.road .t{font-family:var(--mono);font-size:19px;font-weight:700;color:var(--ac-dk)}
+.end{background:#0f2230;color:#fff;justify-content:center}
+.end h2{font-size:110px}
+.end .links{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:70px}
+.end .links div{background:rgba(255,255,255,.07);border-radius:24px;padding:28px 30px}
+.end .links b{font-size:26px;display:block;margin-bottom:6px}
+.end .links span{font-family:var(--mono);font-size:19px;color:#9fd8d2;word-break:break-all}
+.end .pg,.end .brandmark,.cover .pg{color:rgba(255,255,255,.6)}
+/* controles */
+.ctrl{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);display:flex;gap:8px;align-items:center;background:rgba(15,34,48,.85);backdrop-filter:blur(6px);color:#fff;border-radius:14px;padding:6px;z-index:30;opacity:.2;transition:opacity .2s}
+.ctrl:hover,.ctrl:focus-within{opacity:1}
+.ctrl button{border:0;background:rgba(255,255,255,.1);color:#fff;font:700 13px var(--f);padding:8px 12px;border-radius:10px;cursor:pointer}
+.ctrl span{font-family:var(--mono);font-size:12.5px;padding:0 6px}
+.bar{position:fixed;left:0;top:56px;height:3px;background:var(--ac);z-index:30;transition:width .25s}
+@media print{
+  @page{size:1920px 1080px;margin:0}
+  html,body{height:auto;overflow:visible;background:#fff}
+  .sitenav,.ctrl,.bar{display:none}
+  .viewer{position:static;display:block}
+  .deck{transform:none!important;width:1920px;height:auto}
+  .s{display:flex!important;position:relative;width:1920px;height:1080px;break-after:page;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<nav class="sitenav">
+  <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
+  <a class="l" href="prototipo.html">Prototipo</a>
+  <a class="l" href="documento.html">Documento</a>
+  <a class="l on" href="presentacion.html">Presentación</a>
+  <a class="l" href="flujo.html">Flujo</a>
+</nav>
+<div class="bar" id="bar"></div>
+<div class="viewer" id="viewer"><div class="deck" id="deck">
+
+<!-- 1 portada -->
+<section class="s cover">
+  <div class="logo"><img src="assets/logo.svg" alt="">MEDITRACK</div>
+  <h1>MediTrack</h1>
+  <p class="lead">Recordatorios de medicamentos en el reloj, confirmación automática por gesto y aviso al cuidador solo cuando hace falta.</p>
+  <div class="meta"><span>Propuesta de proyecto</span><span>Noviembre 2026</span><span>Adherencia terapéutica · wearables · ML</span></div>
+</section>
+
+<!-- 2 problema -->
+<section class="s">
+  <span class="k">El problema</span>
+  <h2>La mitad de los tratamientos crónicos no se sigue como se indicó</h2>
+  <div class="body"><div class="split">
+    <div><div class="big">≈50<small>%</small></div><p class="sub" style="margin-top:24px">de adherencia en enfermedades crónicas en países desarrollados (OMS, 2003). En adultos mayores con varios medicamentos el reto es mayor.</p></div>
+    <div class="reasons">
+      <div class="reason"><i style="background:var(--miss-soft);color:var(--miss)">1</i><div><b>Olvido</b><span>Varios medicamentos y horarios (polifarmacia).</span></div></div>
+      <div class="reason"><i style="background:var(--late-soft);color:#8a5600">2</i><div><b>Duda</b><span>“¿Ya me la tomé?” lleva a omitir o a duplicar.</span></div></div>
+      <div class="reason"><i style="background:var(--blue-soft);color:var(--blue)">3</i><div><b>Registros vacíos</b><span>Las apps dependen de que el usuario marque “tomado”.</span></div></div>
+      <div class="reason"><i style="background:var(--ges-soft);color:var(--ges)">4</i><div><b>Carga del cuidador</b><span>Llama varias veces al día para preguntar.</span></div></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 3 objetivo -->
+<section class="s">
+  <span class="k">Qué queremos conseguir</span>
+  <h2>Que tomar la medicina no dependa solo de la memoria</h2>
+  <p class="sub">Diseñar, prototipar y evaluar un sistema con smartwatch comercial que recuerde cada toma, la confirme sola con el movimiento de la muñeca y avise al cuidador solo si no hay evidencia.</p>
+  <div class="body"><div class="cols c4">
+    <div class="card"><div class="ic" style="background:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div><h3>Recordar</h3><p>En la muñeca, a la hora exacta, con segundo aviso.</p></div>
+    <div class="card"><div class="ic" style="background:var(--ges)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12h3l3-7 4 14 3-7h7"/></svg></div><h3>Confirmar solo</h3><p>Un modelo ML reconoce el gesto de ingesta.</p></div>
+    <div class="card"><div class="ic" style="background:var(--miss)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div><h3>Escalar</h3><p>Aviso al cuidador solo cuando falta evidencia.</p></div>
+    <div class="card"><div class="ic" style="background:var(--late)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h16"/><path d="M7 16v-5M12 16V6M17 16v-8"/></svg></div><h3>Medir</h3><p>Adherencia con hora, fuente y confianza de cada toma.</p></div>
+  </div></div>
+</section>
+
+<!-- 4 público -->
+<section class="s">
+  <span class="k">Público objetivo</span>
+  <h2>Tres personas, una misma toma</h2>
+  <div class="body"><div class="cols c3">
+    <div class="card"><span class="tag" style="background:var(--ac-soft);color:var(--ac-dk)">Primario</span><h3>Rafael, 72</h3><p>Adultos de 60 años o más con enfermedades crónicas y 3 o más tomas al día. Autónomos.</p><p style="margin-top:16px;color:var(--mu);font-style:italic">“No quiero que mi hija me esté llamando a cada rato.”</p></div>
+    <div class="card"><span class="tag" style="background:var(--miss-soft);color:#a3261d">Secundario</span><h3>Laura, 44 · cuidadora</h3><p>Hijos, pareja o cuidadores que no viven con la persona.</p><p style="margin-top:16px;color:var(--mu);font-style:italic">“Me basta con saber si algo no va bien.”</p></div>
+    <div class="card"><span class="tag" style="background:var(--ges-soft);color:#4a32b0">Terciario</span><h3>Dra. Márquez</h3><p>Personal de salud e investigadores en adherencia.</p><p style="margin-top:16px;color:var(--mu);font-style:italic">“Si la toma de la noche falla, ajusto el esquema.”</p></div>
+  </div>
+  <p class="sub" style="font-size:24px">≈15 millones de personas de 60 años o más en México (INEGI, Censo 2020): el grupo de edad que más crece.</p></div>
+</section>
+
+<!-- 5 solución -->
+<section class="s">
+  <span class="k">La solución</span>
+  <h2>Confirmación en tres capas</h2>
+  <p class="sub">Cada capa solo entra si la anterior no tuvo evidencia. “Sin confirmar” nunca se trata como “no tomada”.</p>
+  <div class="body"><div class="layers3">
+    <div class="card" style="border-top:10px solid var(--ges)"><span class="tag" style="background:var(--ges-soft);color:#4a32b0">1 · Automática</span><h3>Gesto de ingesta</h3><p>Acelerómetro + giroscopio y modelo CNN-LSTM. P ≥ 0.80 → confirmada. Si duda, el reloj pregunta.</p></div>
+    <div class="arr">→</div>
+    <div class="card" style="border-top:10px solid var(--blue)"><span class="tag" style="background:var(--blue-soft);color:#1f4fa8">2 · Manual</span><h3>“Ya la tomé”</h3><p>Un botón grande en el reloj o la app, dentro de la tolerancia (30 min) y con segundo aviso a los 15.</p></div>
+    <div class="arr">→</div>
+    <div class="card" style="border-top:10px solid var(--miss)"><span class="tag" style="background:var(--miss-soft);color:#a3261d">3 · Cuidador</span><h3>Aviso escalonado</h3><p>Sin evidencia al cerrar la tolerancia: avisamos a Laura. Puede cerrar el caso tras llamar.</p></div>
+  </div></div>
+</section>
+
+<!-- 6 flujo -->
+<section class="s full"><img src="img/flujo.png" alt="Diagrama del flujo de una toma en MediTrack y sus conexiones: Fitbit Sense 2, app, nube y cuidador"></section>
+
+<!-- 7 prototipo -->
+<section class="s">
+  <div style="display:grid;grid-template-columns:1fr 780px;gap:70px;height:100%;align-items:center">
+    <div>
+      <span class="k">Prototipo interactivo</span>
+      <h2>Un día con MediTrack, en el navegador</h2>
+      <div class="card" style="margin-top:44px"><ul>
+        <li>Smartwatch y teléfono sincronizados con un reloj simulado.</li>
+        <li>Simula el gesto: <b>pastilla</b>, <b>beber agua</b> (dudoso) o <b>nada</b> (escalamiento).</li>
+        <li>Señal IMU en vivo y probabilidad del clasificador.</li>
+        <li>Línea de tiempo, medicinas, avisos, adherencia y ajustes.</li>
+      </ul></div>
+      <p class="sub" style="font-size:22px;font-family:var(--mono)">christopherargenis.github.io/MediTrack/prototipo.html</p>
+    </div>
+    <img class="shot" src="img/prototipo.png" alt="Captura del prototipo: reloj con toma confirmada por gesto y app con la línea de tiempo" style="max-height:900px;justify-self:center">
+  </div>
+</section>
+
+<!-- 8 hardware -->
+<section class="s">
+  <span class="k">Hardware</span>
+  <h2>Fitbit Sense 2 y su límite técnico</h2>
+  <div class="body"><div class="cols c2" style="align-items:start">
+    <div class="card"><h3>Por qué Sense 2</h3><ul>
+      <li>Muestra en la muñeca las notificaciones del teléfono: el recordatorio no necesita API.</li>
+      <li><b>cEDA continuo</b>: permite estudiar el estrés tras el recordatorio (en el Sense original el escaneo es manual).</li>
+      <li>Web API: ritmo cardiaco, pasos, sueño y temperatura. Intraday por minuto requiere aprobación.</li>
+    </ul></div>
+    <div class="callout warn"><b>A validar: el gesto necesita la señal cruda de la IMU</b><br>La Web API entrega valores ya procesados, no las muestras del acelerómetro, y el Sense 2 no admite apps de terceros en el reloj.<br><br>
+      <b>A</b> · MVP en Sense 2 (avisos, botón y datos fisiológicos). El modelo se valida fuera de línea.<br>
+      <b>B</b> · Módulo de gesto en Wear OS, que da acceso a los sensores.<br>
+      <b>C</b> · Sense 1.ª gen. (con SDK) solo para recolectar datos.</div>
+  </div></div>
+</section>
+
+<!-- 9 datos -->
+<section class="s">
+  <span class="k">Datos usados</span>
+  <h2>Tres fuentes de datos</h2>
+  <div class="body">
+    <div class="cols c2" style="margin-bottom:28px">
+      <div class="card" style="padding:26px 32px"><span class="tag" style="background:var(--ac-soft);color:var(--ac-dk)">App</span><p><code style="font-size:20px">scheduled_time · event_timestamp · medication_id · status</code> + fuente y confianza de la confirmación.</p></div>
+      <div class="card" style="padding:26px 32px"><span class="tag" style="background:var(--blue-soft);color:#1f4fa8">Wearable · Fitbit Web API</span><p>Ritmo cardiaco, pasos, sueño y temperatura, ya procesados. Intraday: <code style="font-size:18px">/activities/heart/date/{date}/1d/1min</code></p></div>
+    </div>
+    <table>
+      <tr><th>Dataset (entrenar y validar)</th><th>Contenido</th><th>Uso en MediTrack</th></tr>
+      <tr><td><b>DoseMate</b> · 2024</td><td>IMU de muñeca en entorno naturalista, mano dominante y no dominante. Público en GitLab.</td><td>Entrenar el clasificador</td></tr>
+      <tr><td><b>Free-Living</b> · Glasgow 2024</td><td>228 gestos anotados, arquitectura CNN-LSTM, variabilidad por edad y género.</td><td>Validación externa</td></tr>
+      <tr><td><b>RHB Log / ActSafe</b> · 2023</td><td>Restricciones temporales médicas.</td><td>Predecir violaciones de horario</td></tr>
+      <tr><td><b>AI for Elderly Care</b> · Kaggle 2025</td><td>Salud, seguridad y recordatorios de adultos mayores.</td><td>Probar el panel y las reglas</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 10 modelo -->
+<section class="s">
+  <span class="k">Modelo de gesto</span>
+  <h2>De la muñeca a una decisión</h2>
+  <div class="body">
+    <div class="pipe">
+      <div class="card"><span class="n">01</span><h3>Señal</h3><p>Acelerómetro + giroscopio, 6 canales, ≈50 Hz.</p></div>
+      <div class="card"><span class="n">02</span><h3>Ventanas</h3><p>Ventanas de 3 s con 50 % de traslape, normalizadas.</p></div>
+      <div class="card"><span class="n">03</span><h3>CNN-LSTM</h3><p>Patrón local (levantar, girar, bajar) + orden temporal.</p></div>
+      <div class="card"><span class="n">04</span><h3>Decisión</h3><p>≥ 0.80 confirma · 0.5–0.8 pregunta · menor ignora. Solo dentro de la ventana de la toma.</p></div>
+      <div class="card"><span class="n">05</span><h3>En el dispositivo</h3><p>TFLite cuantizado y <code>model_version</code> en cada evento.</p></div>
+    </div>
+    <div class="card" style="margin-top:28px;display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:center"><b style="font-size:26px">Evaluación</b><p>Leave-one-subject-out · precisión, recall y F1 · falsos positivos por hora (comer, beber, fumar) · desglose por edad, género y mano dominante · calibración del umbral.</p></div>
+  </div>
+</section>
+
+<!-- 11 BD -->
+<section class="s">
+  <span class="k">Base de datos · SQLite, horas en UTC</span>
+  <h2>El esquema original, más lo necesario para medir</h2>
+  <div class="body"><div class="er">
+    <div class="card"><h3>Medication</h3><ul><li class="pk">id</li><li>name · dose</li><li class="new">instructions</li><li>frequency_hours</li><li>is_active</li></ul></div>
+    <div class="card"><h3>Schedule</h3><ul><li class="pk">id</li><li>medication_id →</li><li>scheduled_time</li><li>days_of_week</li></ul></div>
+    <div class="card" style="box-shadow:0 0 0 3px var(--ac),0 18px 40px -24px rgba(15,34,48,.35)"><h3>IntakeRecord</h3><ul><li class="pk">id</li><li>scheduled_datetime</li><li>confirmed_datetime</li><li>status</li><li class="new">confirmation_source</li><li class="new">gesture_confidence</li><li>tolerance_minutes</li></ul></div>
+    <div class="card"><h3 class="new" style="color:var(--ges)">GestureEvent</h3><ul><li class="pk">id</li><li>intake_record_id →</li><li>confidence</li><li>model_version</li><li>decision</li></ul></div>
+    <div class="card"><h3>Caregiver</h3><ul><li class="pk">id</li><li>name · phone</li><li class="new">relationship</li><li class="new">consent_at</li></ul></div>
+    <div class="card"><h3>Notification</h3><ul><li class="pk">id</li><li>recipient_type</li><li class="new">kind</li><li>channel · status</li></ul></div>
+    <div class="card"><h3 style="color:var(--ges)">WearableDaily</h3><ul><li class="pk">date</li><li>resting_hr · steps</li><li>sleep_minutes</li></ul></div>
+    <div class="card" style="background:var(--ges-soft);box-shadow:none"><h3 style="font-family:var(--f);color:#4a32b0">En morado</h3><p style="font-size:21px">Lo nuevo frente al documento original. Esquema y prueba en <code>db/</code>.</p></div>
+  </div></div>
+</section>
+
+<!-- 12 diferenciación -->
+<section class="s">
+  <span class="k">Trabajos relacionados</span>
+  <h2>Qué agrega MediTrack sobre DoseMate</h2>
+  <div class="body"><table>
+    <tr><th style="width:45%">Limitación de DoseMate (2024)</th><th>Mejora en MediTrack</th></tr>
+    <tr><td>Solo clasifica el gesto: no gestiona recordatorios.</td><td><b>Sistema completo:</b> recordatorio, gesto, cuidador e historial.</td></tr>
+    <tr><td>Depende de la precisión del clasificador.</td><td><b>Confirmación multicapa</b> y gestos fuera de la ventana ignorados.</td></tr>
+    <tr><td>No integra datos fisiológicos.</td><td><b>Sueño, pulso y actividad</b> para estimar el riesgo de olvido.</td></tr>
+    <tr><td>No considera la carga del cuidador.</td><td><b>Aviso escalonado</b> y panel de tendencias.</td></tr>
+  </table></div>
+</section>
+
+<!-- 13 lineamientos -->
+<section class="s">
+  <span class="k">Lineamientos</span>
+  <h2>Diseñar para confiar</h2>
+  <div class="body"><div class="cols c3">
+    <div class="card"><h3>Accesibilidad</h3><ul><li>Una acción principal por pantalla</li><li>Texto ≥ 16 px, contraste AA</li><li>Lenguaje sin culpa</li><li>Funciona sin el reloj</li></ul></div>
+    <div class="card"><h3>Privacidad</h3><ul><li>Datos de salud = datos sensibles (LFPDPPP)</li><li>Consentimiento expreso y revocable</li><li>Procesamiento local, sin guardar la señal cruda</li></ul></div>
+    <div class="card"><h3>Clínico</h3><ul><li>No es un dispositivo médico</li><li>No recomienda dosis</li><li>“Sin confirmar” ≠ “no tomada”</li><li>Tolerancia según el medicamento</li></ul></div>
+  </div></div>
+</section>
+
+<!-- 14 métricas -->
+<section class="s">
+  <span class="k">Métricas y validación</span>
+  <h2>Cómo sabremos que funciona</h2>
+  <div class="body"><div class="cols c2" style="align-items:start">
+    <table>
+      <tr><th>Métrica</th><th>Meta</th></tr>
+      <tr><td>Adherencia confirmada</td><td><b>≥ 80 %</b></td></tr>
+      <tr><td>Latencia mediana</td><td><b>≤ 10 min</b></td></tr>
+      <tr><td>Confirmadas por gesto</td><td><b>≥ 50 %</b> (fase 2)</td></tr>
+      <tr><td>Falsas alarmas al cuidador</td><td><b>≤ 1 / semana</b></td></tr>
+      <tr><td>Usabilidad (SUS)</td><td><b>≥ 68</b>, con meta de 75</td></tr>
+    </table>
+    <div class="card"><h3>Plan</h3><ul>
+      <li><b>Fuera de línea:</b> modelo con DoseMate y Glasgow.</li>
+      <li><b>Usabilidad:</b> 5 a 8 adultos mayores y cuidadores con el prototipo.</li>
+      <li><b>Piloto de 4 semanas:</b> 2 de línea base y 2 con MediTrack.</li>
+    </ul></div>
+  </div></div>
+</section>
+
+<!-- 15 roadmap -->
+<section class="s">
+  <span class="k">Hoja de ruta</span>
+  <h2>Siguientes pasos</h2>
+  <div class="body"><div class="road">
+    <div><span class="dot done">0</span><b>Definición</b><p>Documento, prototipo, flujo y esquema de BD</p><span class="t">hecho</span></div>
+    <div><span class="dot">1</span><b>MVP</b><p>Recordatorios, estados, botón, cuidador y panel</p><span class="t">6–8 sem</span></div>
+    <div><span class="dot">2</span><b>Modelo</b><p>CNN-LSTM entrenado y evaluado fuera de línea</p><span class="t">4–6 sem</span></div>
+    <div><span class="dot">3</span><b>Integración</b><p>Gesto en el reloj elegido</p><span class="t">4 sem</span></div>
+    <div><span class="dot">4</span><b>Piloto</b><p>Estudio de 4 semanas y SUS</p><span class="t">6 sem</span></div>
+  </div></div>
+</section>
+
+<!-- 16 cierre -->
+<section class="s end">
+  <span class="k" style="color:#5fd0c8">Gracias</span>
+  <h2>¿Preguntas?</h2>
+  <div class="links">
+    <div><b>Prototipo</b><span>christopherargenis.github.io/MediTrack/prototipo.html</span></div>
+    <div><b>Documento</b><span>christopherargenis.github.io/MediTrack/documento.html</span></div>
+    <div><b>Repositorio</b><span>github.com/ChristopherArgenis/MediTrack</span></div>
+  </div>
+</section>
+
+</div></div>
+<div class="ctrl"><button id="prev" type="button" aria-label="Anterior">←</button><span id="cnt"></span><button id="next" type="button" aria-label="Siguiente">→</button><button id="fs" type="button">Pantalla completa</button></div>
+<script>
+const slides = [...document.querySelectorAll('.s')];
+slides.forEach((s, i) => {
+  if (i === 0 || s.classList.contains('full')) return;
+  s.insertAdjacentHTML('beforeend', `<span class="pg">${String(i+1).padStart(2,'0')} / ${slides.length}</span>${s.classList.contains('end') ? '' : '<span class="brandmark"><img src="assets/logo.svg" alt="">MediTrack</span>'}`);
+});
+let cur = Math.min(slides.length - 1, Math.max(0, (parseInt(location.hash.slice(1)) || 1) - 1));
+function show(i){
+  cur = Math.max(0, Math.min(slides.length - 1, i));
+  slides.forEach((s, k) => s.classList.toggle('on', k === cur));
+  document.getElementById('cnt').textContent = `${cur+1} / ${slides.length}`;
+  document.getElementById('bar').style.width = ((cur+1)/slides.length*100) + '%';
+  history.replaceState(null, '', '#' + (cur+1));
+}
+function fit(){
+  const v = document.getElementById('viewer');
+  const k = Math.min(v.clientWidth / 1920, v.clientHeight / 1080);
+  document.getElementById('deck').style.transform = `scale(${k})`;
+}
+addEventListener('resize', fit);
+addEventListener('keydown', e => {
+  if (['ArrowRight','PageDown',' '].includes(e.key)){ e.preventDefault(); show(cur+1); }
+  if (['ArrowLeft','PageUp'].includes(e.key)){ e.preventDefault(); show(cur-1); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length-1);
+  if (e.key === 'f' || e.key === 'F') toggleFs();
+});
+function toggleFs(){ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); }
+document.getElementById('prev').onclick = () => show(cur-1);
+document.getElementById('next').onclick = () => show(cur+1);
+document.getElementById('fs').onclick = toggleFs;
+document.getElementById('viewer').addEventListener('click', e => { if (!e.target.closest('a,button')) show(cur + (e.clientX > innerWidth/2 ? 1 : -1)); });
+let tx = null;
+addEventListener('touchstart', e => tx = e.touches[0].clientX, {passive:true});
+addEventListener('touchend', e => { if (tx == null) return; const d = e.changedTouches[0].clientX - tx; if (Math.abs(d) > 40) show(cur + (d < 0 ? 1 : -1)); tx = null; });
+fit(); show(cur);
+</script>
+</body>
+</html>
