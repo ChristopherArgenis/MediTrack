@@ -1,6 +1,6 @@
 -- MediTrack · esquema SQLite local (app móvil)
 -- Base: tablas del documento original + correcciones (fuente de confirmación,
--- eventos de gesto, consentimiento del cuidador y resumen diario del wearable).
+-- reloj usado, evidencias múltiples, consentimiento del cuidador y resumen diario del wearable).
 -- Regla: todas las fechas/horas se guardan en UTC (ISO-8601); la UI convierte a la zona local.
 
 PRAGMA foreign_keys = ON;
@@ -22,16 +22,28 @@ CREATE TABLE Schedule (
   days_of_week     TEXT    NOT NULL DEFAULT '1,2,3,4,5,6,7'                               -- 1 = lunes
 );
 
+-- Reloj vinculado: define qué evidencias se pueden capturar
+CREATE TABLE Device (
+  id               INTEGER PRIMARY KEY AUTOINCREMENT,
+  model            TEXT    NOT NULL,                 -- 'Galaxy Watch FE', 'Fitbit Sense 2', ...
+  platform         TEXT    NOT NULL CHECK (platform IN ('wearos','watchos','zeppos','fitbitos','garmin')),
+  has_watch_app    INTEGER NOT NULL CHECK (has_watch_app IN (0,1)),  -- ¿corre una app propia en el reloj?
+  imu_access       INTEGER NOT NULL CHECK (imu_access IN (0,1)),     -- ¿la app puede leer acelerómetro/giroscopio?
+  paired_at        TEXT    NOT NULL,
+  is_active        INTEGER NOT NULL DEFAULT 1 CHECK (is_active IN (0,1))
+);
+
 CREATE TABLE IntakeRecord (
   id                   INTEGER PRIMARY KEY AUTOINCREMENT,
   medication_id        INTEGER NOT NULL REFERENCES Medication(id),
   schedule_id          INTEGER REFERENCES Schedule(id),
+  device_id            INTEGER REFERENCES Device(id),        -- reloj activo en la toma (NULL = solo teléfono)
   scheduled_datetime   TEXT    NOT NULL,                -- UTC
   confirmed_datetime   TEXT,                            -- UTC, NULL si no hay confirmación
   status               TEXT    NOT NULL DEFAULT 'pending'
                        CHECK (status IN ('pending','confirmed','delayed','unconfirmed')),
-  confirmation_source  TEXT    CHECK (confirmation_source IN ('gesture','manual','caregiver')),
-  gesture_confidence   REAL    CHECK (gesture_confidence IS NULL OR gesture_confidence BETWEEN 0 AND 1),
+  confirmation_source  TEXT    CHECK (confirmation_source IN ('sensor','manual','caregiver')), -- 'sensor' = fusión automática
+  fused_confidence     REAL    CHECK (fused_confidence IS NULL OR fused_confidence BETWEEN 0 AND 1),
   tolerance_minutes    INTEGER NOT NULL DEFAULT 30,
   -- coherencia: una toma confirmada siempre tiene hora y fuente
   CHECK ((status IN ('confirmed','delayed')) = (confirmed_datetime IS NOT NULL AND confirmation_source IS NOT NULL)),
@@ -40,14 +52,26 @@ CREATE TABLE IntakeRecord (
 CREATE INDEX idx_intake_sched ON IntakeRecord(scheduled_datetime);
 CREATE INDEX idx_intake_status ON IntakeRecord(status);
 
--- Cada clasificación del modelo de gesto, aceptada o no (sirve para auditar falsos positivos)
-CREATE TABLE GestureEvent (
+-- Cada evidencia observada (aceptada o no): permite auditar falsos positivos y reentrenar
+CREATE TABLE Evidence (
   id                 INTEGER PRIMARY KEY AUTOINCREMENT,
   intake_record_id   INTEGER REFERENCES IntakeRecord(id),   -- NULL si ocurrió fuera de una ventana de toma
-  detected_at        TEXT    NOT NULL,
-  confidence         REAL    NOT NULL CHECK (confidence BETWEEN 0 AND 1),
-  model_version      TEXT    NOT NULL,
-  decision           TEXT    NOT NULL CHECK (decision IN ('accepted','asked_user','rejected','ignored'))
+  kind               TEXT    NOT NULL CHECK (kind IN ('imu_gesture','imu_sequence','nfc_tap','time_routine','off_body')),
+  value              REAL    NOT NULL CHECK (value BETWEEN 0 AND 1),  -- probabilidad o 1/0 para eventos
+  weight             REAL    NOT NULL,                      -- peso usado en la fusión (log-odds)
+  observed_at        TEXT    NOT NULL,
+  model_version      TEXT                                   -- versión del modelo que produjo el valor
+);
+CREATE INDEX idx_evidence_intake ON Evidence(intake_record_id);
+
+-- Cada decisión de la fusión de evidencias
+CREATE TABLE FusionDecision (
+  id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+  intake_record_id   INTEGER NOT NULL REFERENCES IntakeRecord(id),
+  decided_at         TEXT    NOT NULL,
+  probability        REAL    NOT NULL CHECK (probability BETWEEN 0 AND 1),
+  threshold          REAL    NOT NULL,
+  decision           TEXT    NOT NULL CHECK (decision IN ('confirmed','asked_user','waiting'))
 );
 
 CREATE TABLE Caregiver (

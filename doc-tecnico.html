@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediTrack · Documento técnico</title>
+<meta name="description" content="Documento técnico de MediTrack: arquitectura, comparativa de relojes, APIs, fusión de evidencias, modelo, base de datos y código.">
+<link rel="icon" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/tema.css">
+<link rel="stylesheet" href="assets/doc.css">
+<style>
+.cover{background:linear-gradient(150deg,#2a3f50,#0f2230)}
+.y{color:#13703b;font-weight:800}.n{color:#a3261d;font-weight:800}.m{color:#8a5600;font-weight:800}
+table.wide{min-width:900px}
+@media print{table.wide{min-width:0;font-size:11px!important}.tablewrap{overflow:visible}}
+.tablewrap table{font-size:13.5px}
+</style>
+</head>
+<body>
+<nav class="sitenav">
+  <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
+  <a class="l" href="prototipo.html">Prototipo</a>
+  <a class="l on" href="documentos.html">Documentos</a>
+  <a class="l" href="presentacion.html">Presentación</a>
+  <a class="l" href="flujo.html">Flujo</a>
+</nav>
+
+<div class="wrap">
+<nav class="toc" aria-label="Contenido">
+  <b>Técnico / tecnológico</b>
+  <a href="#arquitectura">1 · Arquitectura</a>
+  <a href="#relojes">2 · Comparativa de relojes</a>
+  <a href="#apis">3 · Plataformas y APIs</a>
+  <a href="#datos">4 · Datos</a>
+  <a href="#fusion">5 · Fusión de evidencias</a>
+  <a href="#modelo">6 · Modelo de gesto</a>
+  <a href="#estados">7 · Motor de estados</a>
+  <a href="#bd">8 · Base de datos</a>
+  <a href="#codigo">9 · Código y repositorio</a>
+  <a href="#metricas">10 · Métricas técnicas</a>
+  <a href="#riesgos">11 · Riesgos técnicos</a>
+  <a href="#referencias">Referencias</a>
+  <a href="doc-conceptual.html" style="margin-top:10px;color:var(--ac-dk)">← Documento conceptual</a>
+</nav>
+
+<article>
+  <header class="cover">
+    <span class="k">DOCUMENTO 2 DE 2 · TÉCNICO / TECNOLÓGICO · v2.0</span>
+    <h1>MediTrack · técnico</h1>
+    <p>Arquitectura, comparativa de relojes, APIs, fusión de evidencias, modelo, base de datos y código. El por qué del proyecto, el público y los lineamientos están en el <a href="doc-conceptual.html" style="color:#fff">documento conceptual</a>.</p>
+    <div class="meta"><span>Noviembre 2026</span><span>Para: desarrollo, datos y ML, evaluadores técnicos</span></div>
+  </header>
+
+  <section id="arquitectura">
+    <h2><span class="n">01</span>Arquitectura</h2>
+    <div class="layers">
+      <div class="layer"><span class="i" style="background:#0d8a84">1</span><b>Presentación (UI)</b><p>App del teléfono (Hoy, Medicinas, Avisos, Adherencia, Ajustes) y app del reloj (recordatorio, “Ya la tomé”, pregunta, confirmación).</p></div>
+      <div class="layer"><span class="i" style="background:#2f6fd6">2</span><b>Dominio / reglas</b><p>Motor de estados de la toma, temporizadores (tolerancia y segundo aviso), fusión de evidencias, umbrales y escalamiento.</p></div>
+      <div class="layer"><span class="i" style="background:#6b4fe0">3</span><b>Servicios</b><p>Planificador de notificaciones, captura IMU en el reloj, inferencia del modelo en el dispositivo, lector NFC y cliente de APIs de salud.</p></div>
+      <div class="layer"><span class="i" style="background:#d98a12">4</span><b>Datos</b><p>SQLite local como fuente de verdad: Medication, Schedule, Device, IntakeRecord, Evidence, FusionDecision, Caregiver, Notification, WearableDaily.</p></div>
+      <div class="layer"><span class="i" style="background:#d9463b">5</span><b>Integración / nube</b><p>Push al cuidador, respaldo cifrado opcional y resúmenes de salud (Google Health API, HealthKit o Samsung Health). Sin nube, lo demás funciona.</p></div>
+    </div>
+    <p>Comunicación reloj ↔ teléfono por Bluetooth: Wearable Data Layer en Wear OS, WatchConnectivity en Apple y la mensajería del SDK en Zepp OS o Connect IQ. Las horas se guardan en UTC.</p>
+  </section>
+
+  <section id="relojes">
+    <h2><span class="n">02</span>Comparativa de relojes</h2>
+    <p>Criterio principal: <b>¿una app propia puede leer el acelerómetro y el giroscopio y mostrar botones en el reloj?</b> Sin eso no hay confirmación automática por movimiento. Precios de lista en EUA (USD) a noviembre de 2026. En México varían por tienda y promociones.</p>
+    <div class="tablewrap"><table class="wide">
+      <tr><th>Modelo</th><th>Precio</th><th>Plataforma</th><th>App propia</th><th>IMU accesible</th><th>Otros sensores</th><th>Qué capta que otros no</th><th>Requiere</th></tr>
+      <tr><td><b>Galaxy Watch FE</b></td><td class="num">US$199.99</td><td>Wear OS</td><td class="y">sí</td><td class="y">sí</td><td>BioActive (ritmo cardiaco óptico, eléctrico, BIA)</td><td>Wear OS completo al menor precio de Samsung. Sin sensor de temperatura.</td><td>Android</td></tr>
+      <tr><td><b>Galaxy Watch8</b></td><td class="num">US$349.99</td><td>Wear OS</td><td class="y">sí</td><td class="y">sí</td><td>BioActive, temperatura, barómetro, geomagnético</td><td><b>PPG crudo</b> (verde, IR, rojo) y <b>EDA continuo</b> vía Samsung Health Sensor SDK (EDA desde Watch8)</td><td>Android</td></tr>
+      <tr><td><b>Pixel Watch 4</b></td><td class="num">US$349.99</td><td>Wear OS 6</td><td class="y">sí</td><td class="y">sí</td><td>cEDA, temperatura de piel, SpO2, ECG, barómetro, magnetómetro</td><td>cEDA y temperatura de piel en hardware, más integración con Google y Fitbit</td><td>Android</td></tr>
+      <tr><td><b>Apple Watch SE 3</b></td><td class="num">US$249</td><td>watchOS</td><td class="y">sí</td><td class="y">sí</td><td>Temperatura de muñeca. Sin ECG ni SpO2</td><td>CoreMotion: acceso maduro y documentado a la IMU</td><td>iPhone</td></tr>
+      <tr><td><b>Apple Watch Series 11</b></td><td class="num">US$399</td><td>watchOS</td><td class="y">sí</td><td class="y">sí</td><td>SpO2, ECG, temperatura, avisos de hipertensión (algunas regiones)</td><td>Más funciones de salud que no se usan para confirmar</td><td>iPhone 11 o posterior con iOS 26</td></tr>
+      <tr><td><b>Amazfit Active 2</b></td><td class="num">US$99.99</td><td>Zepp OS 4.5</td><td class="y">sí</td><td class="m">sí (validar)</td><td>Temperatura, luz ambiental, geomagnético, barómetro</td><td>API de acelerómetro y giroscopio (API_LEVEL 3.0) al menor precio</td><td>Android o iPhone</td></tr>
+      <tr><td><b>Fitbit Sense 2</b></td><td class="num">US$249.95</td><td>Fitbit OS</td><td class="n">no</td><td class="n">no</td><td>Acelerómetro, giroscopio, cEDA, ECG, SpO2, temperatura de piel (en hardware)</td><td>cEDA continuo, pero sin acceso de terceros en tiempo real</td><td>Android o iPhone</td></tr>
+      <tr><td><b>Garmin Venu 4</b></td><td class="num">≈US$549.99</td><td>Connect IQ</td><td class="y">sí</td><td class="m">acelerómetro sí; giroscopio limitado</td><td>SpO2, ECG, temperatura de piel, barómetro</td><td>Batería de hasta 12 días (45 mm) en modo smartwatch</td><td>Android o iPhone</td></tr>
+    </table></div>
+    <h3>Precio / beneficio para MediTrack</h3>
+    <div class="tablewrap"><table>
+      <tr><th>Uso</th><th>Recomendado</th><th>Por qué</th></tr>
+      <tr><td>MVP + gesto (mejor equilibrio)</td><td><b>Galaxy Watch FE</b> · US$199.99</td><td>Cubre todo lo que MediTrack necesita (app, IMU, botones) por el menor precio en Wear OS.</td></tr>
+      <tr><td>Investigación multiseñal</td><td><b>Galaxy Watch8</b> · US$349.99</td><td>Paga US$150 más por PPG crudo y EDA continuo para estudiar estrés y contexto. No mejora la confirmación en sí.</td></tr>
+      <tr><td>Piloto con muchos participantes</td><td><b>Amazfit Active 2</b> · US$99.99</td><td>La mitad del precio de FE. Antes hay que validar la frecuencia de muestreo real, la estabilidad en segundo plano y la batería con la IMU activa.</td></tr>
+      <tr><td>Usuarios con iPhone</td><td><b>Apple Watch SE 3</b> · US$249</td><td>Series 11 cuesta US$150 más por ECG, SpO2 y avisos de hipertensión, que no usamos.</td></tr>
+      <tr><td>Ya tienen Sense 2</td><td>Sense 2 en modo básico</td><td>Recordatorio reflejado y confirmación en el teléfono o por NFC. Sin gesto.</td></tr>
+      <tr><td>Prioridad: batería</td><td>Garmin Venu 4</td><td>Menos cargas, pero cuesta 2.75 veces lo que FE y el giroscopio está limitado en Connect IQ.</td></tr>
+    </table></div>
+    <h3>Evidencias disponibles por reloj</h3>
+    <div class="tablewrap"><table>
+      <tr><th>Evidencia</th><th>Galaxy FE / W8</th><th>Pixel W4</th><th>Apple SE 3</th><th>Amazfit A2</th><th>Sense 2</th></tr>
+      <tr><td>Gesto mano-boca (IMU)</td><td class="y">sí</td><td class="y">sí</td><td class="y">sí</td><td class="m">validar</td><td class="n">no</td></tr>
+      <tr><td>Secuencia abrir → boca → beber</td><td class="y">sí</td><td class="y">sí</td><td class="y">sí</td><td class="m">validar</td><td class="n">no</td></tr>
+      <tr><td>Etiqueta NFC (teléfono)</td><td class="y">sí</td><td class="y">sí</td><td class="y">sí</td><td class="y">sí</td><td class="y">sí</td></tr>
+      <tr><td>Botón en el reloj</td><td class="y">sí</td><td class="y">sí</td><td class="y">sí</td><td class="y">sí</td><td class="n">no (teléfono)</td></tr>
+      <tr><td>Contexto fisiológico</td><td>FE: pulso · W8: PPG crudo y EDA</td><td>Pulso (Health Services)</td><td>Pulso (HealthKit)</td><td>Pulso</td><td>Resúmenes diferidos (Google Health API)</td></tr>
+    </table></div>
+  </section>
+
+  <section id="apis">
+    <h2><span class="n">03</span>Plataformas y APIs</h2>
+    <div class="tablewrap"><table>
+      <tr><th>Plataforma</th><th>Qué usamos</th><th>Notas verificadas</th></tr>
+      <tr><td><b>Wear OS</b> (Galaxy, Pixel)</td><td>SensorManager para acelerómetro y giroscopio, Health Services para ritmo cardiaco, Data Layer para hablar con el teléfono.</td><td>App propia en el reloj con acceso a los sensores estándar de Android.</td></tr>
+      <tr><td><b>Samsung Health Sensor SDK</b></td><td>PPG (verde, IR, rojo; continuo y bajo demanda), EDA continuo y temperatura de piel.</td><td>El acelerómetro del SDK registra a 25 Hz de forma continua. EDA requiere Galaxy Watch8 o posterior. Los datos son de bienestar, no de diagnóstico. La API indica qué trackers soporta cada modelo.</td></tr>
+      <tr><td><b>watchOS</b> (Apple)</td><td>CoreMotion (acelerómetro y giroscopio), HealthKit (ritmo cardiaco) y WatchConnectivity.</td><td>Requiere iPhone. Series 11 pide iPhone 11 o posterior con iOS 26.</td></tr>
+      <tr><td><b>Zepp OS</b> (Amazfit)</td><td><code>@zos/sensor</code>: <code>Accelerometer</code> y <code>Gyroscope</code>.</td><td>Disponibles desde API_LEVEL 3.0, con permisos <code>device:os.accelerometer</code> y <code>device:os.gyroscope</code>. Hay que validar la frecuencia efectiva.</td></tr>
+      <tr><td><b>Garmin Connect IQ</b></td><td><code>Sensor.registerSensorDataListener()</code>.</td><td>Acelerómetro de alta frecuencia desde API 2.3.0, en mili-g. Solo una solicitud activa a la vez. Los foros reportan límites con el giroscopio.</td></tr>
+      <tr><td><b>Fitbit / Google Health API</b></td><td>Resúmenes de ritmo cardiaco, sueño y actividad, solo como contexto.</td><td>Sense 2 no admite apps de terceros. El soporte de la Fitbit Web API heredada terminó el 30/09/2026 y Google indica que sus endpoints se apagan después (las fechas publicadas difieren). Las integraciones deben migrar a la Google Health API con Google OAuth 2.0 y volver a pedir consentimiento al usuario.</td></tr>
+    </table></div>
+  </section>
+
+  <section id="datos">
+    <h2><span class="n">04</span>Datos</h2>
+    <h3>4.1 Generados por la app</h3>
+    <p><code>scheduled_datetime</code>, <code>confirmed_datetime</code>, <code>medication_id</code>, <code>status</code>, <code>confirmation_source</code> (sensor, manual o cuidador), <code>fused_confidence</code> y cada evidencia con su valor y peso.</p>
+    <h3>4.2 Del reloj</h3>
+    <ul>
+      <li><b>IMU</b> (acelerómetro y giroscopio de 3 ejes), solo durante la ventana de la toma. Se procesa en el dispositivo y no se guarda la señal cruda.</li>
+      <li><b>Detección fuera de la muñeca</b>, como condición para usar la IMU.</li>
+      <li><b>Fisiológicos</b> (pulso, PPG, EDA), como contexto y para la fase de investigación. Nunca para confirmar.</li>
+    </ul>
+    <h3>4.3 Para entrenar y validar</h3>
+    <div class="tablewrap"><table>
+      <tr><th>Fuente</th><th>Contenido verificado</th><th>Uso</th></tr>
+      <tr><td><b>DoseMate</b> (Nzeyimana et al., 2024)</td><td>20 participantes (ene 2020 – jun 2022), relojes Android Wear OS 2.x, 1,154 eventos candidatos (185 no-tomas) de unos 19 s, con acelerómetro y giroscopio remuestreados a 15 Hz. Datos y código públicos.</td><td>Entrenamiento base</td></tr>
+      <tr><td>Datasets abiertos de actividades de muñeca usados por DoseMate como negativos</td><td>FIC, IM-WSHA, Cafeteria, Handy, Daily Sports, MHEALTH y PAMAP2 (enlaces en el artículo).</td><td>Negativos: comer, beber y otras actividades</td></tr>
+      <tr><td>Moccia et al. (2022)</td><td>CNN-LSTM con IMU de pulsera en laboratorio. F1 mediana 90.5 % (multiclase) y 92.5 % (binaria), validación LOSO.</td><td>Referencia de arquitectura</td></tr>
+      <tr><td>ActSafe (Seegmiller et al., 2023)</td><td>28 pacientes, F1 promedio 0.86 al predecir violaciones de restricciones temporales.</td><td>Reglas de horario (fase 2)</td></tr>
+      <tr><td><b>Piloto MediTrack</b></td><td>Etiquetas por NFC + autorreporte (como DoseMate) y una sesión en laboratorio con video para marcar fases.</td><td>Ajuste fino y validación</td></tr>
+    </table></div>
+  </section>
+
+  <section id="fusion">
+    <h2><span class="n">05</span>Fusión de evidencias</h2>
+    <p>Cada evidencia observada <i>e</i> con valor <i>v<sub>e</sub></i> ∈ [0,1] y peso <i>w<sub>e</sub></i> suma log-odds. Lo no observado no suma ni resta:</p>
+<pre>P(tomó) = σ( b + Σ  w_e · (2·v_e − 1) )        b = −0.35  (sesgo inicial)
+              e∈observadas
+decisión:  P ≥ 0.85 → confirmed (fuente 'sensor')
+           0.50 ≤ P &lt; 0.85 → asked_user (reloj o teléfono)
+           P &lt; 0.50 → waiting (escala al cerrar la tolerancia)</pre>
+    <div class="tablewrap"><table>
+      <tr><th>kind</th><th>Valor</th><th>w inicial</th><th>Condición</th></tr>
+      <tr><td><code>imu_gesture</code></td><td>P(mano-boca) del clasificador</td><td>2.2</td><td>Reloj con IMU accesible y puesto</td></tr>
+      <tr><td><code>imu_sequence</code></td><td>Puntaje de la secuencia abrir → boca → beber</td><td>1.2</td><td>Ídem</td></tr>
+      <tr><td><code>nfc_tap</code></td><td>1 si se tocó la etiqueta en la ventana</td><td>1.6</td><td>Teléfono con NFC</td></tr>
+      <tr><td><code>time_routine</code></td><td>Cercanía a la hora programada y a la habitual</td><td>0.5</td><td>Siempre</td></tr>
+      <tr><td><code>off_body</code></td><td>Reloj puesto (sí/no)</td><td>condición</td><td>Si es 0, se descartan las evidencias IMU</td></tr>
+    </table></div>
+    <p>Ejemplos con los pesos iniciales: toma completa (gesto 0.9, secuencia 0.85) → P ≈ 0.92. Solo beber agua (0.7 / 0.4) → P ≈ 0.63, el sistema pregunta. Solo NFC → P ≈ 0.82, pregunta. NFC + toma completa → P ≈ 0.98. Todos incluyen la ventana y rutina con valor 0.75. Los pesos son <b>propuestas de diseño</b>: en la fase 2 se aprenden con regresión logística sobre los datos del piloto y se calibran (Platt o isotónica).</p>
+  </section>
+
+  <section id="modelo">
+    <h2><span class="n">06</span>Modelo de gesto</h2>
+    <p>Basado en el pipeline publicado de DoseMate:</p>
+    <ol>
+      <li><b>Entrada:</b> segmentos de unos 19 s de acelerómetro y giroscopio de 3 ejes, remuestreados a 15 Hz.</li>
+      <li><b>Aumento de la señal:</b> versiones filtradas del acelerómetro (paso bajo 2 Hz y paso alto 0.2 Hz), valor absoluto por eje y RMS de cada sensor.</li>
+      <li><b>Características:</b> componentes 1 a 5 de la FFT y exponente α de DFA sobre el segmento completo, más estadísticas de 4 subsegmentos.</li>
+      <li><b>Modelos:</b> XGBoost con características (línea base) y Transformer + LSTM. DoseMate reporta 94 % y 95 % de exactitud balanceada, con F1 de 96.8 % y 96.2 %.</li>
+      <li><b>MediTrack agrega:</b> salida por fase (abrir, boca, beber) para el puntaje de secuencia, y ejecución en línea en el reloj o el teléfono (TFLite, Core ML), que DoseMate deja como trabajo futuro.</li>
+    </ol>
+    <h3>Evaluación</h3>
+    <ul>
+      <li>Leave-one-subject-out, con exactitud balanceada, especificidad, AUC y F1.</li>
+      <li>Falsos positivos por hora fuera de la ventana con actividades parecidas (comer, beber, fumar).</li>
+      <li>Desglose por edad y mano dominante, y calibración de la probabilidad.</li>
+    </ul>
+  </section>
+
+  <section id="estados">
+    <h2><span class="n">07</span>Motor de estados</h2>
+    <div class="tablewrap"><table>
+      <tr><th>Evento</th><th>Transición / acción</th></tr>
+      <tr><td>t = hora programada</td><td>Recordatorio y apertura de la ventana de evidencias (IMU activa si está disponible)</td></tr>
+      <tr><td>t = +15 min, sigue pending</td><td>Segundo recordatorio</td></tr>
+      <tr><td>Fusión ≥ umbral</td><td><code>pending → confirmed</code> (o <code>unconfirmed → delayed</code>)</td></tr>
+      <tr><td>0.50 ≤ fusión &lt; umbral</td><td>Pregunta en el reloj o en el teléfono</td></tr>
+      <tr><td>“+10” (posponer)</td><td>Nuevo recordatorio en 10 min. La expiración espera a que ocurra.</td></tr>
+      <tr><td>t = +tolerancia (30 min) sin evidencia</td><td><code>pending → unconfirmed</code> y Notification al cuidador</td></tr>
+      <tr><td>t = +2 h</td><td>Se cierra la ventana de evidencias. La confirmación manual sigue posible y queda como <code>delayed</code>.</td></tr>
+    </table></div>
+  </section>
+
+  <section id="bd">
+    <h2><span class="n">08</span>Base de datos</h2>
+    <p>SQLite local con horas en UTC. Esquema completo en <a href="https://github.com/ChristopherArgenis/MediTrack/blob/main/db/schema.sql"><code>db/schema.sql</code></a> y prueba en <code>python3 db/test_schema.py</code>.</p>
+<pre>Medication(id, name, dose, instructions, frequency_hours, is_active, created_at)
+Schedule(id, medication_id→Medication, scheduled_time 'HH:MM', days_of_week)
+Device(id, model, platform, has_watch_app, imu_access, paired_at, is_active)        ← nuevo
+IntakeRecord(id, medication_id, schedule_id, device_id→Device,
+             scheduled_datetime, confirmed_datetime,
+             status ∈ {pending, confirmed, delayed, unconfirmed},
+             confirmation_source ∈ {sensor, manual, caregiver},
+             fused_confidence, tolerance_minutes)
+Evidence(id, intake_record_id, kind, value, weight, observed_at, model_version)     ← nuevo
+FusionDecision(id, intake_record_id, decided_at, probability, threshold, decision)  ← nuevo
+Caregiver(id, name, relationship, email, phone, consent_at, is_active)
+Notification(id, intake_record_id, recipient_type, recipient_id, kind, sent_at, channel, status)
+WearableDaily(date, resting_hr, steps, sleep_minutes, skin_temp_delta, synced_at)
+VIEW v_adherence_daily(day, scheduled, on_time, delayed, unconfirmed, pct_confirmed)</pre>
+    <p>Restricciones clave: una toma <code>confirmed</code> o <code>delayed</code> siempre tiene hora y fuente, el par (medicamento, hora programada) es único y los valores de evidencia y probabilidad van de 0 a 1. La prueba también comprueba que la probabilidad guardada coincide con la fusión logística de las evidencias.</p>
+  </section>
+
+  <section id="codigo">
+    <h2><span class="n">09</span>Código y repositorio</h2>
+<pre>MediTrack/
+├── index.html            portada del sitio (GitHub Pages)
+├── prototipo.html        prototipo: 6 relojes, evidencias, teléfono, comparativa
+├── documentos.html       índice de los dos documentos
+├── doc-conceptual.html   documento 1 (+ .pdf)
+├── doc-tecnico.html      documento 2 (+ .pdf)
+├── presentacion.html     presentación (+ .pdf)
+├── flujo.html            diagrama (img/flujo.png)
+├── db/schema.sql         esquema SQLite
+├── db/test_schema.py     prueba del esquema y de la fusión
+└── assets/               tema.css, doc.css, logo.svg</pre>
+    <h3>Prototipo: piezas principales</h3>
+    <ul>
+      <li><code>WATCHES</code>: catálogo con capacidades (<code>app</code>, <code>imu</code>, sensores, precio). Cambiar de reloj cambia la forma, las pantallas y las evidencias disponibles. También se puede abrir con <code>prototipo.html?reloj=fs2</code>.</li>
+      <li><code>EV</code> y <code>fuse()</code>: definición de evidencias y fusión logística, idéntica a la sección 5.</li>
+      <li><code>tickRules()</code>: motor de estados con temporizadores. <code>decide()</code> aplica los umbrales.</li>
+      <li><code>sample()</code>: señal sintética por fase (abrir, boca, beber) para visualizar el gesto. No proviene de un sensor real.</li>
+    </ul>
+    <h3>Stack propuesto para la app real</h3>
+    <ul>
+      <li>Android y Wear OS: Kotlin, Jetpack Compose, Room (SQLite), WorkManager y AlarmManager, TFLite.</li>
+      <li>iOS y watchOS: Swift, SwiftUI, Core Data o GRDB, Core ML.</li>
+      <li>Nube mínima: FCM o APNs para el cuidador y una función serverless para el escalamiento.</li>
+    </ul>
+  </section>
+
+  <section id="metricas">
+    <h2><span class="n">10</span>Métricas técnicas</h2>
+    <div class="tablewrap"><table>
+      <tr><th>Métrica</th><th>Meta</th></tr>
+      <tr><td>Exactitud balanceada del gesto (LOSO)</td><td>Comparable a DoseMate (94–95 %), reportada por reloj</td></tr>
+      <tr><td>Falsos positivos por hora fuera de la ventana</td><td>Medir y reportar (meta propia: &lt; 0.1/h)</td></tr>
+      <tr><td>Calibración de P(tomó)</td><td>Error de calibración esperado (ECE) &lt; 0.05 (meta propia)</td></tr>
+      <tr><td>Batería con IMU solo en ventanas</td><td>Consumo extra &lt; 10 % diario (meta propia, por medir)</td></tr>
+      <tr><td>Entrega del recordatorio</td><td>≥ 99 % entregadas dentro de 1 min (meta propia)</td></tr>
+    </table></div>
+  </section>
+
+  <section id="riesgos">
+    <h2><span class="n">11</span>Riesgos técnicos</h2>
+    <div class="tablewrap"><table>
+      <tr><th>Riesgo</th><th>Mitigación</th></tr>
+      <tr><td>Diferencias de IMU entre relojes (frecuencia, rango, orientación)</td><td>Remuestrear a 15 Hz, normalizar y ajustar por modelo. DoseMate recomienda entrenar con el mismo tipo de IMU.</td></tr>
+      <tr><td>Restricciones de segundo plano (Doze en Android, watchOS)</td><td>Capturar solo en ventanas cortas, iniciadas por el recordatorio o por el NFC.</td></tr>
+      <tr><td>Zepp OS: frecuencia y estabilidad sin validar</td><td>Prueba técnica antes de elegirlo para el piloto.</td></tr>
+      <tr><td>Fin del soporte de la Fitbit Web API heredada</td><td>Usar la Google Health API y aislar la integración en la capa 5.</td></tr>
+      <tr><td>Pesos de fusión mal calibrados</td><td>Aprenderlos con datos del piloto y recalibrar por versión del modelo.</td></tr>
+    </table></div>
+  </section>
+
+  <section id="referencias">
+    <h2>Referencias técnicas</h2>
+    <ol class="refs">
+      <li>Nzeyimana et al. (2024). DoseMate. PMLR 248:566–581. <a href="https://proceedings.mlr.press/v248/nzeyimana24a.html">proceedings.mlr.press</a> · <a href="https://gitlab.com/umass-smelt-lab/dosemate">gitlab.com/umass-smelt-lab/dosemate</a></li>
+      <li>Moccia et al. (2022). <i>Computer Methods and Programs in Biomedicine</i>, 219. <a href="https://www.pubmed.gov/35338885/">PubMed 35338885</a></li>
+      <li>Seegmiller et al. (2023). ActSafe. <a href="https://arxiv.org/abs/2301.07051">arXiv:2301.07051</a></li>
+      <li>Samsung Health Sensor SDK: <a href="https://developer.samsung.com/health/sensor/overview.html">overview</a>, <a href="https://developer.samsung.com/health/sensor/guide/data-specifications.html">data specifications</a>, <a href="https://developer.samsung.com/health/sensor/faq.html">FAQ</a></li>
+      <li>Zepp OS: Accelerometer y Gyroscope, API_LEVEL 3.0. <a href="https://docs-testing.zepp.com/docs/reference/device-app-api/newAPI/sensor/Accelerometer/">docs.zepp.com</a></li>
+      <li>Garmin Connect IQ: Toybox.Sensor. <a href="https://developer.garmin.com/connect-iq/core-topics/sensors">developer.garmin.com</a></li>
+      <li>Google Health API y fin de la Fitbit Web API heredada. <a href="https://developers.google.com/health/about">developers.google.com/health</a> · <a href="https://dev.fitbit.com/build/">dev.fitbit.com</a></li>
+      <li>Fitbit sin apps de terceros en Sense 2 y Versa 4. <a href="https://9to5google.com/2023/02/17/fitbit-studio/">9to5Google, 2023</a></li>
+      <li>Especificaciones oficiales: <a href="https://store.google.com/us/product/fitbit_sense_2_specs">Fitbit Sense 2</a>, <a href="https://store.google.com/us/product/pixel_watch_4_specs">Pixel Watch 4</a>, <a href="https://www.samsung.com/us/watches/galaxy-watch8/">Galaxy Watch8</a>, <a href="https://www.samsungmobilepress.com/press-releases/first-galaxy-watch-fe-empowers-even-more-users-with-samsungs-advanced-health-monitoring-technology/">Galaxy Watch FE</a>, <a href="https://www.apple.com/apple-watch-series-11/specs/">Apple Watch Series 11</a>, <a href="https://us.amazfit.com/products/active-2-square">Amazfit Active 2</a></li>
+      <li>Precios: Android Central (Galaxy Watch8, Pixel Watch 4), TechCrunch (Apple, 09/09/2025), Android Central (Galaxy Watch FE y Amazfit Active 2), the5krunner (Garmin Venu 4).</li>
+    </ol>
+  </section>
+  <p class="foot">MediTrack · Documento técnico v2.0. Precios y APIs cambian: verificar con la documentación del fabricante antes de comprar o implementar.</p>
+</article>
+</div>
+</body>
+</html>

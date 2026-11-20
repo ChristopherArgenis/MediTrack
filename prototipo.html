@@ -4,19 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MediTrack · Prototipo</title>
-<meta name="description" content="Prototipo interactivo de MediTrack: recordatorio en el smartwatch, confirmación por gesto, escalamiento al cuidador y app móvil.">
+<meta name="description" content="Prototipo interactivo de MediTrack: seis modelos de smartwatch, confirmación por fusión de evidencias, escalamiento al cuidador y app móvil.">
 <link rel="icon" href="assets/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
 <link rel="stylesheet" href="assets/tema.css">
 <style>
-/* Distribución: simulador | reloj + sensores | teléfono. En pantallas angostas se apilan. */
+/* Distribución: simulador | reloj + evidencias | teléfono, y debajo la comparativa de relojes. */
 body{font-size:14px;line-height:1.4}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none;padding:0}
 [hidden]{display:none!important}
-.stage{display:grid;grid-template-columns:320px 340px 390px;gap:28px;justify-content:center;align-items:start;padding:24px 16px 48px}
-@media (max-width:1140px){.stage{grid-template-columns:minmax(0,340px) minmax(0,390px)}.col-info{grid-column:1 / -1;max-width:760px;justify-self:center;width:100%}}
+.stage{display:grid;grid-template-columns:320px 350px 390px;gap:28px;justify-content:center;align-items:start;padding:24px 16px 32px}
+@media (max-width:1150px){.stage{grid-template-columns:minmax(0,350px) minmax(0,390px)}.col-info{grid-column:1 / -1;max-width:768px;justify-self:center;width:100%}}
 @media (max-width:760px){.stage{grid-template-columns:minmax(0,1fr)}.col{justify-self:center;width:100%;max-width:390px}}
 .col{display:grid;gap:14px;align-content:start;min-width:0}
 .card{background:var(--card);border-radius:18px;padding:14px;box-shadow:var(--sh)}
@@ -25,6 +25,15 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .col-info h1{margin:0;font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
 .col-info p{margin:0}
 .lead{color:var(--mu)}
+.models{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.models button{text-align:left;border-radius:12px;padding:8px 10px;background:var(--bg);border:1.5px solid transparent;display:grid;gap:1px}
+.models button b{font-size:12.5px;line-height:1.2}
+.models button span{font-size:11px;color:var(--mu);font-family:var(--mono)}
+.models button.on{border-color:var(--ac);background:var(--ac-soft)}
+.mnote{margin-top:10px;font-size:12px;background:var(--bg);border-radius:11px;padding:9px 10px;display:grid;gap:4px}
+.mnote .caps{display:flex;gap:4px;flex-wrap:wrap}
+.cap{font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:999px;background:var(--ok-soft);color:#13703b}
+.cap.no{background:var(--miss-soft);color:#a3261d}
 .clock{display:flex;align-items:center;gap:10px}
 .clock b{font-family:var(--mono);font-size:30px;font-weight:700;letter-spacing:-.02em}
 .clock .ic{width:38px;height:38px;border-radius:12px;background:var(--fg);color:#fff;display:grid;place-items:center;flex:none}
@@ -35,12 +44,12 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .acts{display:grid;gap:7px}
 .act{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center;text-align:left;background:var(--bg);border-radius:13px;padding:9px 10px;border:1.5px solid transparent}
 .act:hover{border-color:var(--line);background:#fff}
+.act.on{border-color:var(--miss);background:var(--miss-soft)}
 .act i{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-style:normal}
 .act i svg{width:18px;height:18px}
 .act b{display:block;font-size:13.5px}
 .act small{color:var(--mu);font-size:12px;display:block;line-height:1.3}
 .act:disabled{opacity:.45;cursor:not-allowed}
-.linkbtn{font-weight:700;color:var(--ac-dk);font-size:12.5px}
 .reset{justify-self:start;background:var(--fg);color:#fff;border-radius:10px;padding:9px 14px;font-weight:700;font-size:13px}
 .feed{display:grid;gap:8px;max-height:240px;overflow:auto}
 .bubble{background:var(--bg);border-radius:12px;padding:9px 11px;font-size:12.5px;border-left:3px solid var(--miss)}
@@ -50,19 +59,27 @@ button{cursor:pointer;border:0;background:none;padding:0}
 
 /* ===== reloj ===== */
 .watchwrap{display:grid;place-items:center;padding:6px 0 2px}
-.watch{position:relative;width:250px;height:376px;display:grid;place-items:center}
-.strap{position:absolute;left:50%;width:150px;margin-left:-75px;height:92px;background:linear-gradient(90deg,#1d2a33,#2c3b46 50%,#1d2a33)}
+.watch{position:relative;width:250px;height:376px;display:grid;place-items:center;--c1:#d9dee2;--c2:#8f979e;--c3:#5e666c;--strap:#2c3b46}
+.strap{position:absolute;left:50%;width:150px;margin-left:-75px;height:92px;background:linear-gradient(90deg,color-mix(in srgb,var(--strap) 70%,#000),var(--strap) 50%,color-mix(in srgb,var(--strap) 70%,#000))}
 .strap.t{top:0;border-radius:22px 22px 6px 6px}
 .strap.b{bottom:0;border-radius:6px 6px 22px 22px}
-.strap.b::after{content:"";position:absolute;left:50%;top:40px;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#121b21;box-shadow:0 18px 0 #121b21}
-.case{position:relative;width:236px;height:250px;border-radius:66px;background:linear-gradient(150deg,#d9dee2,#8f979e 45%,#5e666c);padding:9px;box-shadow:0 26px 50px -24px rgba(10,25,35,.7)}
-.case::before{content:"";position:absolute;left:-5px;top:104px;width:7px;height:44px;border-radius:4px;background:#7d868c}
-.bezel{width:100%;height:100%;border-radius:58px;background:#05080a;padding:12px;position:relative}
-.wscreen{width:100%;height:100%;border-radius:46px;background:#000;color:#fff;overflow:hidden;position:relative;font-size:12px}
+.case{position:relative;width:236px;height:250px;border-radius:66px;background:linear-gradient(150deg,var(--c1),var(--c2) 45%,var(--c3));padding:9px;box-shadow:0 26px 50px -24px rgba(10,25,35,.7);transition:border-radius .3s,width .3s,height .3s}
+.case::before{content:"";position:absolute;left:-5px;top:104px;width:7px;height:44px;border-radius:4px;background:var(--c3)}
+.watch[data-btn=right] .case::before{left:auto;right:-5px;top:80px;height:34px}
+.bezel{width:100%;height:100%;border-radius:58px;background:#05080a;padding:12px;position:relative;transition:border-radius .3s}
+.wscreen{width:100%;height:100%;border-radius:46px;background:#000;color:#fff;overflow:hidden;position:relative;font-size:12px;transition:border-radius .3s}
+.watch[data-shape=round] .case{width:246px;height:246px;border-radius:50%}
+.watch[data-shape=round] .bezel{border-radius:50%;padding:14px}
+.watch[data-shape=round] .wscreen{border-radius:50%}
+.watch[data-shape=round] .wpad{padding:30px 26px 26px}
+.watch[data-shape=apple] .case{width:226px;height:262px;border-radius:58px}
+.watch[data-shape=apple] .bezel{border-radius:50px}
+.watch[data-shape=apple] .wscreen{border-radius:40px}
 .watch.buzz .case{animation:buzz .11s linear 8}
 @keyframes buzz{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px) rotate(-.6deg)}75%{transform:translateX(3px) rotate(.6deg)}}
+.watch.off{opacity:.55;filter:grayscale(.6)}
 .wface{position:absolute;inset:0;display:grid;justify-items:center;align-content:center;gap:3px;text-align:center;cursor:pointer}
-.wface .tm{font-family:var(--mono);font-size:46px;font-weight:700;letter-spacing:-.04em;line-height:1}
+.wface .tm{font-family:var(--mono);font-size:44px;font-weight:700;letter-spacing:-.04em;line-height:1}
 .wface .dt{font-size:11.5px;color:#9fb0bb;font-weight:700;letter-spacing:.04em}
 .wface .stats{display:flex;gap:14px;margin-top:8px;font-size:11.5px;font-weight:700}
 .wface .stats span{display:flex;align-items:center;gap:4px}
@@ -73,7 +90,7 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .ring{position:absolute;inset:6px;pointer-events:none}
 .wpad{position:absolute;inset:0;padding:22px 18px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px}
 .wpad .k{font-size:10.5px;letter-spacing:.08em;color:#8fd8d2;font-weight:800;text-transform:uppercase}
-.wpad .pill-ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;margin:2px 0}
+.wpad .pill-ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;margin:2px 0;flex:none}
 .wpad .pill-ic svg{width:24px;height:24px}
 .wpad .nm{font-size:19px;font-weight:800;line-height:1.1}
 .wpad .ds{font-size:12px;color:#b9c7d0}
@@ -84,8 +101,8 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .wbtn.no{background:#3a2422;color:#ffd5d0}
 .wsense{display:flex;align-items:center;gap:5px;font-size:10.5px;color:#b7a8ff;font-weight:700}
 .wsense i{width:7px;height:7px;border-radius:50%;background:#8c74ff;animation:pulse 1s infinite}
-.wbig{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;margin-top:16px}
-.wbig svg{width:36px;height:36px}
+.wbig{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;margin-top:12px;flex:none}
+.wbig svg{width:34px;height:34px}
 .wsmall{font-size:11.5px;color:#b9c7d0;line-height:1.35}
 .wlist{display:grid;gap:5px;width:100%;margin-top:4px;text-align:left}
 .wlist div{display:grid;grid-template-columns:38px 1fr 10px;gap:6px;align-items:center;font-size:11px;background:#121c22;border-radius:9px;padding:5px 8px}
@@ -93,16 +110,27 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .wlist i{width:8px;height:8px;border-radius:50%}
 .wcap{font-size:11.5px;text-align:center;color:var(--mu);margin-top:4px}
 
-/* sensores */
+/* sensores y evidencias */
 .sig canvas{width:100%;height:132px;display:block;background:#0f1c24;border-radius:12px}
 .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--mu);font-weight:700;margin-top:8px}
 .legend span{display:flex;align-items:center;gap:5px}
 .legend i{width:12px;height:3px;border-radius:2px}
-.clf{margin-top:10px;display:grid;gap:6px}
-.clf .row{display:flex;justify-content:space-between;font-size:12.5px;gap:8px}
-.bar{position:relative;height:12px;background:var(--bg);border-radius:6px;overflow:hidden}
+.ev{display:grid;gap:9px}
+.evr{display:grid;grid-template-columns:1fr 92px;gap:2px 10px;align-items:center}
+.evr .l{font-size:12.5px;font-weight:700;display:flex;gap:6px;align-items:center}
+.evr .l em{font-style:normal;font-size:10px;font-weight:800;padding:1px 6px;border-radius:999px;background:var(--pend-soft);color:#4b5a66}
+.evr .l em.ok{background:var(--ok-soft);color:#13703b}
+.evr .l em.no{background:var(--miss-soft);color:#a3261d}
+.evr .s{font-size:11px;color:var(--mu);grid-column:1}
+.evr .v{grid-column:2;grid-row:1 / span 2;display:grid;gap:3px;justify-items:end}
+.evr .v small{font-family:var(--mono);font-size:11px;color:var(--mu)}
+.evr.na{opacity:.5}
+.bar{position:relative;height:10px;background:var(--bg);border-radius:6px;overflow:hidden;width:100%}
 .bar>i{position:absolute;left:0;top:0;bottom:0;background:var(--pend);border-radius:6px;transition:width .5s ease,background .3s}
 .bar>b{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--fg)}
+.fuse{border-top:1px dashed var(--line);padding-top:10px;display:grid;gap:6px}
+.fuse .row{display:flex;justify-content:space-between;font-size:12.5px;gap:8px}
+.fuse .bar{height:14px}
 .console{font-family:var(--mono);font-size:11px;line-height:1.5;max-height:200px;overflow:auto;display:grid;gap:2px}
 .console div{display:grid;grid-template-columns:44px 1fr;gap:6px}
 .console span{color:var(--mu)}
@@ -114,9 +142,9 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .ptop{flex:none;padding:16px 18px 8px;display:flex;align-items:center;gap:10px}
 .ptop h2{margin:0;font-size:20px;font-weight:800;letter-spacing:-.01em;flex:1;min-width:0}
 .ptop .sub{display:block;font-size:12px;color:var(--mu);font-weight:600}
-.conn{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:800;padding:5px 9px;border-radius:999px;background:var(--ok-soft);color:#13703b;white-space:nowrap}
+.conn{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:800;padding:5px 9px;border-radius:999px;background:var(--ok-soft);color:#13703b;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis}
 .conn.off{background:var(--miss-soft);color:#a3261d}
-.conn svg{width:13px;height:13px}
+.conn svg{width:13px;height:13px;flex:none}
 .pmain{flex:1;overflow-y:auto;padding:4px 14px 20px;display:flex;flex-direction:column;gap:12px}
 .pmain>*{flex-shrink:0}
 .tabs{flex:none;display:grid;grid-template-columns:repeat(5,1fr);background:var(--card);border-top:1px solid var(--line);padding:6px 0 12px}
@@ -138,11 +166,10 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .dose{display:grid;grid-template-columns:52px 1fr;gap:10px;align-items:start;background:var(--card);border-radius:16px;padding:11px 12px;box-shadow:var(--sh);border-left:4px solid var(--pend)}
 .dose.st-confirmed{border-left-color:var(--ok)}.dose.st-delayed{border-left-color:var(--late)}.dose.st-unconfirmed{border-left-color:var(--miss)}.dose.live{border-left-color:var(--ges);box-shadow:0 0 0 2px var(--ges-soft),var(--sh)}
 .dose .h{font-family:var(--mono);font-weight:700;font-size:15px}
-.dose .h small{display:block;font-family:var(--f);font-size:10.5px;color:var(--mu);font-weight:700}
 .dose .nm{font-weight:800;font-size:14px}
 .dose .meta{font-size:12px;color:var(--mu)}
 .dose .chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;align-items:center}
-.minibtn{font-size:12px;font-weight:800;padding:5px 10px;border-radius:9px;background:var(--fg);color:#fff}
+.minibtn{font-size:12px;font-weight:800;padding:5px 10px;border-radius:9px;background:var(--fg);color:#fff;white-space:nowrap}
 .minibtn.ghost{background:var(--bg);color:var(--fg)}
 .cdn{font-family:var(--mono);font-size:11.5px;color:#8a5600;font-weight:700}
 .medcard{background:var(--card);border-radius:16px;padding:12px;box-shadow:var(--sh);display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center}
@@ -180,18 +207,40 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .hbar .v{font-family:var(--mono);text-align:right}
 .insight{background:var(--late-soft);color:#6b4300;border-radius:14px;padding:11px 12px;font-size:12.5px}
 .set{background:var(--card);border-radius:16px;padding:12px;box-shadow:var(--sh);display:grid;gap:8px}
-.set .lbl{display:flex;justify-content:space-between;font-weight:800;font-size:13.5px}
+.set .lbl{display:flex;justify-content:space-between;font-weight:800;font-size:13.5px;gap:8px}
 .set .help{font-size:12px;color:var(--mu)}
 .set input[type=range]{width:100%;accent-color:var(--ac)}
 .tog{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .sw{width:44px;height:26px;border-radius:13px;background:var(--line);position:relative;flex:none;transition:background .2s}
 .sw::after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .2s}
 .sw.on{background:var(--ac)}.sw.on::after{left:21px}
-.banner{position:absolute;left:10px;right:10px;top:10px;z-index:10;background:rgba(15,34,48,.94);color:#fff;border-radius:18px;padding:10px 12px;display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:center;font-size:12.5px;transform:translateY(-130%);transition:transform .35s ease}
+.banner{position:absolute;left:10px;right:10px;top:10px;z-index:10;background:rgba(15,34,48,.95);color:#fff;border-radius:18px;padding:10px 12px;display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:center;font-size:12.5px;transform:translateY(-140%);transition:transform .35s ease}
 .banner.show{transform:none}
 .banner img{width:30px;height:30px}
 .banner b{display:block;font-size:13px}
+.banner .bb{display:flex;gap:6px;margin-top:6px}
+.banner .bb button{background:#1f9d55;color:#fff;font-weight:800;font-size:12px;border-radius:9px;padding:5px 10px}
+.banner .bb button.no{background:rgba(255,255,255,.14)}
 .empty{text-align:center;color:var(--mu);padding:20px 10px;font-size:13px}
+
+/* ===== comparativa ===== */
+.cmp{max-width:1140px;margin:0 auto;padding:0 16px 64px}
+.cmp h2{font-size:24px;letter-spacing:-.01em;margin:8px 0 6px}
+.cmp>p{color:var(--mu);margin:0 0 16px;max-width:820px}
+.tw{overflow-x:auto;border-radius:16px;box-shadow:var(--sh)}
+table.c{border-collapse:collapse;width:100%;min-width:980px;background:var(--card);font-size:13px}
+table.c th,table.c td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+table.c th{background:var(--bg);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);position:sticky;top:0}
+table.c tr.cur td{background:var(--ac-soft)}
+table.c td b{font-size:13.5px}
+table.c .num{white-space:nowrap}
+.y{color:#13703b;font-weight:800}.n{color:#a3261d;font-weight:800}.m{color:#8a5600;font-weight:800}
+.stars{font-family:var(--mono);color:var(--ac-dk);font-weight:700;white-space:nowrap}
+.recs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:16px}
+.recs div{background:var(--card);border-radius:16px;padding:14px;box-shadow:var(--sh);font-size:13px}
+.recs b{display:block;font-size:14.5px;margin-bottom:2px}
+.recs .tag{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ac-dk)}
+.fine{font-size:12px;color:var(--mu);margin-top:12px}
 </style>
 </head>
 <body>
@@ -200,7 +249,8 @@ button{cursor:pointer;border:0;background:none;padding:0}
   <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-hand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-4 0v5"/><path d="M14 10V4a2 2 0 0 0-4 0v6"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></g></symbol>
   <symbol id="i-cup" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14l-1.5 15a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2z"/><path d="M5.5 9h13"/></g></symbol>
-  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 12h3l3-7 4 14 3-7h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-nfc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M10 9a3 3 0 0 1 0 6M13 7a6 6 0 0 1 0 10"/></g></symbol>
+  <symbol id="i-off" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="6" width="12" height="12" rx="4"/><path d="M9 6V2h6v4M9 18v4h6v-4M3 3l18 18"/></g></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5v14l11-7z" fill="currentColor"/></symbol>
   <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></symbol>
@@ -213,6 +263,7 @@ button{cursor:pointer;border:0;background:none;padding:0}
   <symbol id="i-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></g></symbol>
   <symbol id="i-home" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></g></symbol>
   <symbol id="i-watch" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="4"/><path d="M9 6V2h6v4M9 18v4h6v-4"/></g></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></g></symbol>
   <symbol id="i-alert" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 3 2 20h20z" stroke-linejoin="round"/><path d="M12 10v4M12 17h.01"/></g></symbol>
   <symbol id="i-snooze" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M9.5 10.5h5l-5 5h5M5 3 2 6M19 3l3 3"/></g></symbol>
 </svg>
@@ -220,7 +271,7 @@ button{cursor:pointer;border:0;background:none;padding:0}
 <nav class="sitenav">
   <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
   <a class="l on" href="prototipo.html">Prototipo</a>
-  <a class="l" href="documento.html">Documento</a>
+  <a class="l" href="documentos.html">Documentos</a>
   <a class="l" href="presentacion.html">Presentación</a>
   <a class="l" href="flujo.html">Flujo</a>
 </nav>
@@ -230,7 +281,13 @@ button{cursor:pointer;border:0;background:none;padding:0}
   <section class="col col-info">
     <span class="pill ac" style="justify-self:start">Prototipo interactivo · datos simulados</span>
     <h1>Un día con MediTrack</h1>
-    <p class="lead">Rafael, 72 años, toma 5 dosis al día. El reloj le recuerda cada toma, intenta confirmarla sola con el movimiento de su muñeca y, si no hay evidencia, avisa a su hija Laura.</p>
+    <p class="lead">Rafael, 72 años, toma 5 dosis al día. El reloj le recuerda cada toma y junta varias evidencias (movimiento, etiqueta NFC del frasco, horario) para saber si de verdad la tomó. Si no hay evidencia, avisa a su hija Laura.</p>
+
+    <div class="card">
+      <h3>Modelo de smartwatch <a href="#comparativa" class="mu" style="text-transform:none;letter-spacing:0;font-weight:700">comparar ↓</a></h3>
+      <div class="models" id="models" role="group" aria-label="Modelo de reloj"></div>
+      <div class="mnote" id="mnote"></div>
+    </div>
 
     <div class="card">
       <h3>Reloj del simulador <span class="num" id="speedlbl"></span></h3>
@@ -247,38 +304,39 @@ button{cursor:pointer;border:0;background:none;padding:0}
     <div class="card">
       <h3>¿Qué hace Rafael? <span class="mu" id="activefor" style="text-transform:none;letter-spacing:0;font-weight:700"></span></h3>
       <div class="acts">
-        <button class="act" type="button" data-g="ingesta"><i style="background:var(--ges-soft);color:var(--ges)"><svg><use href="#i-pill"/></svg></i><span><b>Se toma la pastilla</b><small>Gesto de ingesta: mano a la boca, inclina, baja.</small></span></button>
-        <button class="act" type="button" data-g="beber"><i style="background:var(--blue-soft);color:var(--blue)"><svg><use href="#i-cup"/></svg></i><span><b>Solo bebe agua</b><small>Gesto parecido: el modelo duda y pregunta.</small></span></button>
-        <button class="act" type="button" data-g="otro"><i style="background:var(--pend-soft);color:var(--pend)"><svg><use href="#i-hand"/></svg></i><span><b>Mueve la mano</b><small>Actividad no relacionada: no confirma nada.</small></span></button>
-        <button class="act" type="button" id="nada"><i style="background:var(--miss-soft);color:var(--miss)"><svg><use href="#i-clock"/></svg></i><span><b>No hace nada</b><small>Adelanta el reloj hasta el fin de la tolerancia.</small></span></button>
+        <button class="act" type="button" data-g="ingesta"><i style="background:var(--ges-soft);color:var(--ges)"><svg><use href="#i-pill"/></svg></i><span><b>Se toma la pastilla</b><small>Abre el frasco, mano a la boca y bebe agua.</small></span></button>
+        <button class="act" type="button" data-g="beber"><i style="background:var(--blue-soft);color:var(--blue)"><svg><use href="#i-cup"/></svg></i><span><b>Solo bebe agua</b><small>Parecido, pero sin abrir el frasco: el sistema duda.</small></span></button>
+        <button class="act" type="button" data-g="otro"><i style="background:var(--pend-soft);color:var(--pend)"><svg><use href="#i-hand"/></svg></i><span><b>Mueve la mano</b><small>Actividad no relacionada.</small></span></button>
+        <button class="act" type="button" id="nfc"><i style="background:var(--ac-soft);color:var(--ac-dk)"><svg><use href="#i-nfc"/></svg></i><span><b>Toca el frasco con el teléfono</b><small>Etiqueta NFC en el frasco (funciona con cualquier reloj).</small></span></button>
+        <button class="act" type="button" id="wrist"><i style="background:var(--late-soft);color:#8a5600"><svg><use href="#i-off"/></svg></i><span><b>Se quita el reloj</b><small>Sin el reloj puesto no hay evidencia de movimiento.</small></span></button>
+        <button class="act" type="button" id="nada"><i style="background:var(--miss-soft);color:var(--miss)"><svg><use href="#i-clock"/></svg></i><span><b>No hace nada</b><small>Adelanta el reloj al fin de la tolerancia.</small></span></button>
       </div>
     </div>
 
     <div class="card">
       <h3>Teléfono de Laura · cuidadora</h3>
-      <div class="feed" id="cgfeed"><p class="mu" style="margin:0;font-size:12.5px">Sin avisos. Laura solo recibe mensajes si una toma queda sin confirmar.</p></div>
+      <div class="feed" id="cgfeed"></div>
     </div>
     <button class="reset" id="reset" type="button">Restablecer el día</button>
   </section>
 
-  <!-- ===== columna 2: reloj y sensores ===== -->
+  <!-- ===== columna 2: reloj, evidencias y sensores ===== -->
   <section class="col">
     <div class="watchwrap">
       <div class="watch" id="watch">
         <div class="strap t"></div><div class="strap b"></div>
         <div class="case"><div class="bezel"><div class="wscreen" id="wscreen"></div></div></div>
       </div>
-      <p class="wcap">Smartwatch tipo Fitbit Sense 2 · toca la pantalla</p>
+      <p class="wcap" id="wcap"></p>
+    </div>
+    <div class="card">
+      <h3>Evidencias de la toma <span class="pill pend" id="evfor">sin toma activa</span></h3>
+      <div class="ev" id="ev"></div>
     </div>
     <div class="card sig">
       <h3>Sensores de muñeca <span class="pill ges" id="sigstate">en reposo</span></h3>
-      <canvas id="sig" width="620" height="264" aria-label="Señal simulada del acelerómetro y giroscopio"></canvas>
+      <canvas id="sig" width="640" height="264" aria-label="Señal simulada del acelerómetro y giroscopio"></canvas>
       <div class="legend"><span><i style="background:#5fd0c8"></i>acc X</span><span><i style="background:#f0b35a"></i>acc Y</span><span><i style="background:#ff7d73"></i>acc Z</span><span><i style="background:#a994ff"></i>giroscopio</span></div>
-      <div class="clf">
-        <div class="row"><span><b>Clasificador CNN-LSTM</b> <span class="mu">(simulado)</span></span><span class="num" id="pval">—</span></div>
-        <div class="bar"><i id="pbar" style="width:0"></i><b id="pthr"></b></div>
-        <div class="row mu" style="font-size:11.5px"><span id="pmsg">Esperando movimiento…</span><span>umbral <span class="num" id="thrlbl"></span></span></div>
-      </div>
     </div>
     <div class="card">
       <h3>Bitácora del sistema</h3>
@@ -297,6 +355,20 @@ button{cursor:pointer;border:0;background:none;padding:0}
   </section>
 </div>
 
+<section class="cmp" id="comparativa">
+  <span class="pill ac">Comparativa · noviembre 2026</span>
+  <h2>¿Qué reloj conviene para MediTrack?</h2>
+  <p>Lo decisivo no es cuántos sensores tiene el reloj, sino si una app propia puede <b>leerlos</b>. Sin acceso al acelerómetro y al giroscopio no hay confirmación automática. Precios de lista en EUA (USD), como referencia: en México varían por tienda y promociones.</p>
+  <div class="tw"><table class="c" id="cmptable"></table></div>
+  <div class="recs">
+    <div><span class="tag">Mejor precio/beneficio</span><b>Galaxy Watch FE · US$199.99</b>App propia en Wear OS, IMU accesible y botón en el reloj por el menor precio con un ecosistema maduro.</div>
+    <div><span class="tag">Investigación multiseñal</span><b>Galaxy Watch8 · US$349.99</b>Único de la lista que abre PPG crudo y EDA continuo a terceros (Samsung Health Sensor SDK).</div>
+    <div><span class="tag">Presupuesto mínimo</span><b>Amazfit Active 2 · US$99.99</b>API de acelerómetro y giroscopio en Zepp OS. Hay que validar la frecuencia de muestreo y la estabilidad antes de un piloto.</div>
+    <div><span class="tag">Usuarios de iPhone</span><b>Apple Watch SE 3 · US$249</b>CoreMotion da acceso maduro a la IMU. Requiere iPhone.</div>
+  </div>
+  <p class="fine">Fuentes: páginas oficiales de especificaciones (Google Store, Samsung, Apple, Amazfit), documentación para desarrolladores (Samsung Health Sensor SDK, Zepp OS, Garmin Connect IQ) y prensa especializada. El detalle y los enlaces están en el <a href="doc-tecnico.html#relojes">documento técnico</a>. Fitbit declaró en 2023 que no planea apps de terceros para Sense 2 y Versa 4.</p>
+</section>
+
 <script>
 /* ===================== utilidades ===================== */
 const $ = s => document.querySelector(s);
@@ -305,6 +377,7 @@ const hm = m => { m = Math.max(0, Math.floor(m)); return String(Math.floor(m/60)
 const toMin = s => { const [h, mi] = s.split(':').map(Number); return h*60 + mi; };
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const icon = (id, cls='') => `<svg class="${cls}"><use href="#${id}"/></svg>`;
+const sig = x => 1/(1+Math.exp(-x));
 function rng(seed){ return () => { seed = (seed*1664525 + 1013904223) % 4294967296; return seed/4294967296; }; }
 const DAYS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 const COLORS = ['#0d8a84','#2f6fd6','#d98a12','#6b4fe0','#d9463b','#1f9d55'];
@@ -312,11 +385,62 @@ const ST = {
   pending:{t:'Pendiente', c:'pend'}, confirmed:{t:'Confirmada', c:'ok'},
   delayed:{t:'Con retraso', c:'late'}, unconfirmed:{t:'Sin confirmar', c:'miss'}
 };
-const SRC = {gesture:'por gesto', manual:'manual', caregiver:'por cuidador'};
+const SRC = {sensor:'automática', manual:'manual', caregiver:'por cuidador'};
+
+/* ===================== catálogo de relojes ===================== */
+// app: una app propia corre en el reloj (botones + lectura de IMU). sim: aparece en el simulador.
+const WATCHES = [
+  {id:'gwfe', sim:true, name:'Galaxy Watch FE', short:'Galaxy FE', os:'Wear OS', price:199.99, shape:'round', btn:'right', c:['#d6d9dc','#9aa0a6','#5b6168'], strap:'#3b4046',
+   app:true, imu:'sí', extra:'Ritmo cardiaco (Health Services), BIA', physio:'Ritmo cardiaco vía Health Services',
+   unique:'Lo esencial de Wear OS al menor precio de Samsung. Sin sensor de temperatura.', needs:'Teléfono Android', score:5, verdict:'Mejor precio/beneficio'},
+  {id:'gw8', sim:true, name:'Galaxy Watch8', short:'Galaxy W8', os:'Wear OS', price:349.99, shape:'round', btn:'right', c:['#e9ecef','#a7adb3','#6c737a'], strap:'#4b5560',
+   app:true, imu:'sí', extra:'PPG crudo (verde, IR, rojo), EDA continuo, temperatura, BIA', physio:'PPG crudo y EDA continuo vía Samsung Health Sensor SDK',
+   unique:'Abre a terceros señales fisiológicas crudas (PPG y EDA desde Watch8).', needs:'Teléfono Android', score:4, verdict:'Mejor para investigación'},
+  {id:'px4', sim:true, name:'Pixel Watch 4', short:'Pixel W4', os:'Wear OS 6', price:349.99, shape:'round', btn:'right', c:['#f0f1f2','#b9bcc0','#7b8086'], strap:'#5b6a73',
+   app:true, imu:'sí', extra:'cEDA, temperatura de piel, barómetro, magnetómetro, SpO2, ECG', physio:'Ritmo cardiaco vía Health Services',
+   unique:'cEDA y temperatura de piel en hardware. Integración directa con la cuenta Google y Fitbit.', needs:'Teléfono Android', score:3, verdict:'Bueno, pero más caro que FE'},
+  {id:'aw3', sim:true, name:'Apple Watch SE 3', short:'Apple SE 3', os:'watchOS', price:249, shape:'apple', btn:'right', c:['#e6e3df','#b3ada6','#77716b'], strap:'#c9c2b8',
+   app:true, imu:'sí', extra:'Temperatura de muñeca. Sin ECG ni SpO2', physio:'Ritmo cardiaco vía HealthKit',
+   unique:'CoreMotion: acceso maduro y documentado a acelerómetro y giroscopio.', needs:'iPhone', score:4, verdict:'Opción para usuarios de iPhone'},
+  {id:'amz', sim:true, name:'Amazfit Active 2', short:'Amazfit A2', os:'Zepp OS 4.5', price:99.99, shape:'round', btn:'right', c:['#3a3f44','#25292d','#15181b'], strap:'#222',
+   app:true, imu:'sí (por validar)', extra:'Temperatura, luz ambiental, geomagnético, barómetro', physio:'Ritmo cardiaco',
+   unique:'API de acelerómetro y giroscopio al menor precio de la lista.', needs:'Android o iPhone', score:4, verdict:'Presupuesto mínimo (validar)'},
+  {id:'fs2', sim:true, name:'Fitbit Sense 2', short:'Sense 2', os:'Fitbit OS', price:249.95, shape:'square', btn:'left', c:['#d9dee2','#8f979e','#5e666c'], strap:'#2c3b46',
+   app:false, imu:'no (sin apps de terceros)', extra:'cEDA, ECG, SpO2, temperatura de piel', physio:'Resúmenes diferidos vía Google Health API',
+   unique:'cEDA continuo (Body Response), aunque no es accesible en tiempo real para terceros.', needs:'Android o iPhone', score:2, verdict:'Solo recordatorio y datos diarios'},
+  {id:'aw11', sim:false, name:'Apple Watch Series 11', os:'watchOS', price:399, app:true, imu:'sí', extra:'SpO2, ECG, temperatura, avisos de hipertensión (algunas regiones)',
+   unique:'Más funciones de salud que SE 3, pero MediTrack no las necesita para confirmar.', needs:'iPhone 11 o posterior con iOS 26', score:3, verdict:'Paga extras que no se usan'},
+  {id:'gv4', sim:false, name:'Garmin Venu 4', os:'Garmin OS + Connect IQ', price:549.99, app:true, imu:'acelerómetro sí; giroscopio limitado', extra:'SpO2, ECG, temperatura de piel, barómetro',
+   unique:'Batería de hasta 12 días (45 mm): menos cargas, menos olvidos del reloj.', needs:'Android o iPhone', score:2, verdict:'Batería excelente, precio alto'},
+];
+const W = () => WATCHES.find(w => w.id === S.watchId);
+
+/* ===================== evidencias ===================== */
+// Cada evidencia aporta log-odds: w * (2v - 1). Lo no observado no suma ni resta.
+const EV = [
+  {k:'imu', l:'Gesto mano-boca', s:'acelerómetro + giroscopio', w:2.2, need:'imu'},
+  {k:'seq', l:'Secuencia abrir → boca → beber', s:'giro de muñeca + inclinación sostenida', w:1.2, need:'imu'},
+  {k:'nfc', l:'Etiqueta NFC del frasco', s:'el teléfono toca el frasco', w:1.6, need:null},
+  {k:'time', l:'Ventana de la toma y rutina', s:'hora programada + historial', w:0.5, need:null},
+  {k:'phy', l:'Pulso / EDA tras el recordatorio', s:'contexto: no confirma la toma', w:0, need:null},
+];
+const BIAS = -0.35, ASK = 0.5;
+function evAvailable(e){
+  const w = W();
+  if (e.need === 'imu') return S.fitbit && w.app && S.onWrist ? 'ok' : (!w.app ? 'no' : 'off');
+  if (e.k === 'phy') return S.fitbit && S.onWrist ? 'ok' : 'off';
+  return 'ok';
+}
+function fuse(r){
+  if (!r || !r.ev) return null;
+  let x = BIAS, any = false;
+  for (const e of EV){ const v = r.ev[e.k]; if (v == null || e.w === 0) continue; if (e.k !== 'time') any = true; x += e.w * (2*v - 1); }
+  return any ? sig(x) : null;
+}
 
 /* ===================== estado ===================== */
 let S, uid = 1;
-function seed(){
+function seed(keepWatch){
   uid = 1;
   const meds = [
     {name:'Omeprazol', dose:'20 mg', times:['07:30'], note:'En ayunas'},
@@ -326,21 +450,19 @@ function seed(){
   ].map((m, i) => ({...m, id: uid++, color: COLORS[i]}));
   S = {
     t: 7*60 + 58, speed: 60, running: true,
-    tol: 30, reremind: 15, thr: 0.80, gestureOn: true,
-    fitbit: true, cgLinked: true,
+    tol: 30, reremind: 15, thr: 0.85,
+    fitbit: true, cgLinked: true, onWrist: true,
+    watchId: keepWatch || 'gwfe',
     caregiver: {name:'Laura', rel:'hija'},
     meds, records: [], notifs: [], log: [], cg: [],
     tab: 'hoy', adding: false,
     watch: {screen:'face', recId:null, until:0, extra:null},
-    hr: 71, steps: 1840,
-    history: [],
+    hr: 71, steps: 1840, history: [],
   };
-  // registros de hoy
   meds.forEach(m => m.times.forEach(tm => addRecord(m, toMin(tm))));
   const om = S.records.find(r => r.sched === 7*60+30);
-  Object.assign(om, {status:'confirmed', source:'gesture', conf:0.93, confAt:7*60+33, reminded:true});
-  S.notifs.push({at:7*60+30, to:'user', ch:'fitbit_notification', text:'Hora de Omeprazol 20 mg', st:'delivered'});
-  // historial de 6 días (determinista)
+  Object.assign(om, {status:'confirmed', source:'sensor', conf:0.94, confAt:7*60+33, reminded:true, ev:{imu:.92, seq:.88, time:.75}});
+  S.notifs.push({at:7*60+30, to:'user', ch:'watch', text:'Hora de Omeprazol 20 mg', st:'delivered'});
   const r = rng(42), today = new Date();
   for (let d = 6; d >= 1; d--){
     const dt = new Date(today); dt.setDate(today.getDate() - d);
@@ -351,60 +473,50 @@ function seed(){
       if (p < (weak ? 0.58 : 0.84)) { status = 'confirmed'; lat = 1 + Math.floor(r()*22); }
       else if (p < (weak ? 0.82 : 0.94)) { status = 'delayed'; lat = 35 + Math.floor(r()*60); }
       else status = 'unconfirmed';
-      if (status !== 'unconfirmed') { const q = r(); source = q < .62 ? 'gesture' : q < .93 ? 'manual' : 'caregiver'; }
+      if (status !== 'unconfirmed') { const q = r(); source = q < .62 ? 'sensor' : q < .93 ? 'manual' : 'caregiver'; }
       recs.push({sched: tm, status, source, lat, medId: m.id});
     }));
     S.history.push({label: DAYS[dt.getDay()], recs});
   }
-  logx('sistema', 'Día simulado iniciado. Fitbit Sense 2 vinculado por Bluetooth.');
+  logx('sistema', `Día simulado iniciado con ${W().name}.`);
 }
 function addRecord(m, sched){
   S.records.push({id: uid++, medId: m.id, sched, status:'pending', source:null, conf:null, confAt:null,
-    reminded:false, second:false, snoozeUntil:null, cgNotified:false});
+    reminded:false, second:false, snoozeUntil:null, cgNotified:false, ev:{}});
   S.records.sort((a, b) => a.sched - b.sched);
 }
 const med = id => S.meds.find(m => m.id === id);
-function logx(tag, msg){
-  S.log.unshift({at: S ? S.t : 0, tag, msg});
-  if (S.log.length > 80) S.log.pop();
-  renderConsole();
-}
-function notify(to, ch, text){ S.notifs.unshift({at: S.t, to, ch, text, st: ch === 'fitbit_notification' && !S.fitbit ? 'failed' : 'delivered'}); }
+function logx(tag, msg){ S.log.unshift({at: S ? S.t : 0, tag, msg}); if (S.log.length > 80) S.log.pop(); renderConsole(); }
+function notify(to, ch, text){ S.notifs.unshift({at: S.t, to, ch, text, st: ch === 'watch' && !S.fitbit ? 'failed' : 'delivered'}); }
 
 /* ===================== reglas del sistema ===================== */
-// toma "activa": ya se recordó, no está confirmada y sigue dentro de la ventana de evidencia (2 h)
 const activeRec = () => S.records.find(r => r.reminded && (r.status === 'pending' || r.status === 'unconfirmed') && S.t <= r.sched + 120);
 
 function remind(rec, kind){
-  const m = med(rec.medId);
+  const m = med(rec.medId), w = W();
   rec.reminded = true;
+  rec.ev.time = rec.ev.time ?? 0.75;
   const label = kind === 'first' ? 'Recordatorio' : kind === 'second' ? 'Segundo recordatorio' : 'Recordatorio pospuesto';
-  if (S.fitbit){
-    notify('user', 'fitbit_notification', `${label}: ${m.name} ${m.dose}`);
-    buzz();
-    setWatch('remind', rec.id);
-  } else {
-    notify('user', 'push', `${label}: ${m.name} ${m.dose}`);
-  }
+  if (S.fitbit){ notify('user', 'watch', `${label}: ${m.name} ${m.dose}`); buzz(); setWatch('remind', rec.id); }
+  else notify('user', 'push', `${label}: ${m.name} ${m.dose}`);
   showBanner(`<b>${esc(m.name)} ${esc(m.dose)}</b>${label} · ${hm(rec.sched)}${S.fitbit ? ' · también en tu reloj' : ''}`);
-  logx('notif', `${label} → ${S.fitbit ? 'reloj + teléfono' : 'solo teléfono (reloj desconectado)'}: ${m.name}.`);
-  if (kind === 'first' && S.fitbit && S.gestureOn) logx('ml', 'Ventana de detección de gesto abierta para esta toma.');
+  logx('notif', `${label} → ${S.fitbit ? (w.app ? 'app del reloj + teléfono' : 'notificación reflejada en el reloj + teléfono') : 'solo teléfono'}: ${m.name}.`);
+  if (kind === 'first') logx('ml', S.fitbit && w.app && S.onWrist ? 'Ventana de evidencias abierta: IMU activa en el reloj.' : 'Ventana abierta. Sin IMU disponible: se esperan NFC o confirmación manual.');
   render();
 }
-
 function confirm(rec, source, conf){
   const m = med(rec.medId), was = rec.status;
   rec.source = source; rec.conf = conf ?? null; rec.confAt = S.t; rec.snoozeUntil = null;
   rec.status = (was === 'pending' && S.t <= rec.sched + S.tol) ? 'confirmed' : 'delayed';
-  logx('estado', `IntakeRecord #${rec.id} ${m.name}: ${was} → ${rec.status} (${SRC[source]}${conf ? ' · ' + conf.toFixed(2) : ''}).`);
+  logx('estado', `IntakeRecord #${rec.id} ${m.name}: ${was} → ${rec.status} (${SRC[source]}${conf ? ' · P=' + conf.toFixed(2) : ''}).`);
   if (was === 'unconfirmed' && S.cgLinked){
-    S.cg.unshift({at:S.t, ok:true, text:`Rafael confirmó ${m.name} ${SRC[source]} (${Math.round(S.t - rec.sched)} min después).`});
+    S.cg.unshift({at:S.t, ok:true, text:`Rafael confirmó ${m.name} (${SRC[source]}, ${Math.round(S.t - rec.sched)} min después).`});
     notify('caregiver', 'push', `Actualización: ${m.name} confirmada tarde`);
   }
   if (S.fitbit && source !== 'caregiver') setWatch('done', rec.id, 3200);
+  else hideBanner();
   render();
 }
-
 function expire(rec){
   const m = med(rec.medId);
   rec.status = 'unconfirmed';
@@ -412,13 +524,12 @@ function expire(rec){
   if (S.cgLinked && !rec.cgNotified){
     rec.cgNotified = true;
     notify('caregiver', 'push', `Sin confirmación: ${m.name} ${m.dose} de las ${hm(rec.sched)}`);
-    S.cg.unshift({at:S.t, ok:false, recId:rec.id, text:`Rafael no ha confirmado <b>${esc(m.name)} ${esc(m.dose)}</b> de las ${hm(rec.sched)}. Ni gesto ni confirmación manual.`});
+    S.cg.unshift({at:S.t, ok:false, recId:rec.id, text:`Rafael no ha confirmado <b>${esc(m.name)} ${esc(m.dose)}</b> de las ${hm(rec.sched)}. No hubo evidencia suficiente.`});
     logx('cuidador', `Aviso escalonado enviado a ${S.caregiver.name} (${S.caregiver.rel}).`);
   }
   if (S.fitbit){ buzz(); setWatch('cg', rec.id); }
   render();
 }
-
 function tickRules(){
   for (const r of S.records){
     if (r.status === 'pending' && !r.reminded && S.t >= r.sched) remind(r, 'first');
@@ -426,9 +537,22 @@ function tickRules(){
       if (r.snoozeUntil && S.t >= r.snoozeUntil){ r.snoozeUntil = null; remind(r, 'snooze'); }
       else if (!r.second && !r.snoozeUntil && S.t >= r.sched + S.reremind && S.t < r.sched + S.tol){ r.second = true; remind(r, 'second'); }
       else if (S.t >= r.sched + S.tol && !r.snoozeUntil) expire(r);
-      else if (S.t >= r.sched + S.tol + 10) expire(r);
     }
   }
+}
+// decide con la probabilidad fusionada
+function decide(r, why){
+  const p = fuse(r);
+  renderEvidence();
+  if (p == null) return;
+  logx('ml', `Fusión de evidencias (${why}): P(tomó) = ${p.toFixed(2)} · umbral ${S.thr.toFixed(2)}.`);
+  if (p >= S.thr) confirm(r, 'sensor', p);
+  else if (p >= ASK){ logx('ml', 'Confianza intermedia → se pregunta al usuario.'); ask(r, p); }
+  else logx('ml', 'Evidencia insuficiente: se sigue esperando.');
+}
+function ask(r, p){
+  if (S.fitbit && W().app){ buzz(); setWatch('ask', r.id, 0, p); }
+  else showBanner(`<b>¿Tomaste tu ${esc(med(r.medId).name)}?</b>Detectamos evidencia parcial (P=${p.toFixed(2)}).<div class="bb"><button data-bconfirm="${r.id}">Sí, la tomé</button><button class="no" data-bno="1">Aún no</button></div>`, 9000);
 }
 
 /* ===================== reloj del simulador ===================== */
@@ -445,93 +569,107 @@ setInterval(() => {
   if (S.watch.until && now > S.watch.until) setWatch('face');
   tickUI();
 }, 200);
-
 function tickUI(){
   $('#simclock').textContent = hm(S.t);
   const a = activeRec();
   $('#activefor').textContent = a ? `toma activa: ${med(a.medId).name}` : 'sin toma activa';
   renderWatch();
   document.querySelectorAll('[data-cd]').forEach(el => {
-    const r = S.records.find(x => x.id === +el.dataset.cd);
-    if (!r) return;
+    const r = S.records.find(x => x.id === +el.dataset.cd); if (!r) return;
     const left = r.sched + S.tol - S.t;
     el.textContent = r.snoozeUntil ? `pospuesta a ${hm(r.snoozeUntil)}` : left > 0 ? `quedan ${Math.ceil(left)} min de tolerancia` : '';
   });
   const pc = $('#ptopclock'); if (pc) pc.textContent = hm(S.t);
+  const lastEv = S.records.filter(x => x.status !== 'pending' && x.ev && Object.keys(x.ev).length).slice(-1)[0];
+  const ef = $('#evfor'), want = a ? med(a.medId).name : lastEv ? 'última: ' + med(lastEv.medId).name : 'sin toma activa';
+  if (ef.textContent !== want){ ef.textContent = want; renderEvidence(); }
 }
 function syncControls(){
   $('#playbtn').innerHTML = icon(S.running ? 'i-pause' : 'i-play');
   document.querySelectorAll('#speeds button').forEach(b => b.classList.toggle('on', +b.dataset.sp === S.speed));
   $('#speedlbl').textContent = S.speed === 1 ? '×1' : `×${S.speed}`;
-  $('#thrlbl').textContent = S.thr.toFixed(2);
-  $('#pthr').style.left = (S.thr*100) + '%';
+  $('#wrist').classList.toggle('on', !S.onWrist);
+  $('#wrist b').textContent = S.onWrist ? 'Se quita el reloj' : 'Se vuelve a poner el reloj';
 }
 
-/* ===================== reloj (smartwatch) ===================== */
-function setWatch(screen, recId = null, ms = 0, extra = null){
-  S.watch = {screen, recId, extra, until: ms ? performance.now() + ms : 0};
-  renderWatch();
+/* ===================== selector de modelo ===================== */
+function renderModels(){
+  $('#models').innerHTML = WATCHES.filter(w => w.sim).map(w => `<button type="button" data-model="${w.id}" class="${w.id === S.watchId ? 'on' : ''}"><b>${w.name}</b><span>US$${w.price} · ${w.os}</span></button>`).join('');
+  const w = W();
+  const caps = [[w.app, 'app propia'], [w.app, 'IMU'], [w.app, 'botones en reloj'], [true, 'notificaciones']];
+  $('#mnote').innerHTML = `<div class="caps">${caps.map(([ok, l]) => `<span class="cap ${ok ? '' : 'no'}">${ok ? '✓' : '✕'} ${l}</span>`).join('')}</div>
+    <span>${esc(w.unique)}</span><span class="mu">Requiere: ${esc(w.needs)} · ${esc(w.verdict)}</span>`;
+  const el = $('#watch');
+  el.dataset.shape = w.shape; el.dataset.btn = w.btn;
+  el.style.setProperty('--c1', w.c[0]); el.style.setProperty('--c2', w.c[1]); el.style.setProperty('--c3', w.c[2]); el.style.setProperty('--strap', w.strap);
+  $('#wcap').textContent = `${w.name} · ${w.app ? 'toca la pantalla' : 'solo muestra la notificación'}`;
+  renderCmp();
 }
+function renderCmp(){
+  const yn = v => /^sí$/.test(v) ? `<span class="y">${v}</span>` : /^no/.test(v) ? `<span class="n">${v}</span>` : `<span class="m">${v}</span>`;
+  $('#cmptable').innerHTML = `<tr><th>Modelo</th><th>Precio lista</th><th>Plataforma</th><th>App propia</th><th>IMU para el gesto</th><th>Otros sensores</th><th>Qué capta que otros no</th><th>Requiere</th><th>Precio / beneficio</th></tr>` +
+    WATCHES.map(w => `<tr class="${w.id === S.watchId ? 'cur' : ''}"><td><b>${w.name}</b>${w.sim ? '' : '<br><span class="mu" style="font-size:11px">solo en tabla</span>'}</td>
+    <td class="num">US$${w.price}</td><td>${w.os}</td><td>${w.app ? '<span class="y">sí</span>' : '<span class="n">no</span>'}</td><td>${yn(w.imu)}</td>
+    <td>${w.extra}</td><td>${w.unique}</td><td>${w.needs}</td><td><span class="stars">${'●'.repeat(w.score)}${'○'.repeat(5 - w.score)}</span><br>${w.verdict}</td></tr>`).join('');
+}
+
+/* ===================== reloj (pantalla) ===================== */
+function setWatch(screen, recId = null, ms = 0, extra = null){ S.watch = {screen, recId, extra, until: ms ? performance.now() + ms : 0}; renderWatch(); }
 function buzz(){ const w = $('#watch'); w.classList.remove('buzz'); void w.offsetWidth; w.classList.add('buzz'); }
 function renderWatch(){
-  const el = $('#wscreen');
-  const html = watchHTML();
+  const el = $('#wscreen'), html = watchHTML();
   if (el._h !== html){ el.innerHTML = html; el._h = html; }
   const set = (id, v) => { const n = document.getElementById(id); if (n) n.textContent = v; };
   set('wtm', hm(S.t)); set('whr', Math.round(S.hr)); set('wst', Math.round(S.steps).toLocaleString('es-MX'));
+  $('#watch').classList.toggle('off', !S.onWrist);
 }
 function watchHTML(){
-  const w = S.watch, r = w.recId ? S.records.find(x => x.id === w.recId) : null, m = r ? med(r.medId) : null;
-  if (!S.fitbit){
-    return `<div class="wpad" style="justify-content:center"><div class="wbig" style="background:#26343d">${icon('i-watch')}</div><div class="wsmall" style="margin-top:8px">Reloj desconectado.<br>Los recordatorios llegan solo al teléfono.</div></div>`;
-  }
+  const w = S.watch, r = w.recId ? S.records.find(x => x.id === w.recId) : null, m = r ? med(r.medId) : null, mw = W();
+  if (!S.fitbit) return `<div class="wpad" style="justify-content:center"><div class="wbig" style="background:#26343d">${icon('i-watch')}</div><div class="wsmall" style="margin-top:8px">Reloj desconectado.<br>Los recordatorios llegan solo al teléfono.</div></div>`;
   if (w.screen === 'remind' && r){
-    const sensing = S.gestureOn && (r.status === 'pending' || r.status === 'unconfirmed');
+    if (!mw.app) return `<div class="wpad"><span class="k">Notificación · <span id="wtm"></span></span>
+      <span class="pill-ic" style="background:${m.color}">${icon('i-pill')}</span>
+      <span class="nm">${esc(m.name)}</span><span class="ds">${esc(m.dose)} · ${esc(m.note || '')}</span>
+      <span class="grow"></span><span class="wsmall">Confirma en tu teléfono.<br>Este reloj no permite apps de terceros.</span></div>`;
+    const sensing = S.onWrist && (r.status === 'pending' || r.status === 'unconfirmed');
     return `<div class="wpad">
       <span class="k">${r.status === 'unconfirmed' ? 'Toma sin confirmar' : 'Hora de tu medicina'} · <span id="wtm"></span></span>
       <span class="pill-ic" style="background:${m.color}">${icon('i-pill')}</span>
       <span class="nm">${esc(m.name)}</span><span class="ds">${esc(m.dose)} · ${esc(m.note || '')}</span>
       <span class="grow"></span>
-      ${sensing ? '<span class="wsense"><i></i>Detectando gesto de ingesta</span>' : ''}
-      <div class="wbtns"><button class="wbtn" data-w="take">Ya la tomé</button><button class="wbtn sec" data-w="snooze">+10</button></div>
-    </div>`;
-  } else if (w.screen === 'ask' && r){
-    return `<div class="wpad"><span class="k">Confirmación</span>
+      ${sensing ? '<span class="wsense"><i></i>Reuniendo evidencias</span>' : ''}
+      <div class="wbtns"><button class="wbtn" data-w="take">Ya la tomé</button><button class="wbtn sec" data-w="snooze">+10</button></div></div>`;
+  }
+  if (w.screen === 'ask' && r) return `<div class="wpad"><span class="k">Confirmación</span>
       <span class="pill-ic" style="background:#2f6fd6">${icon('i-cup')}</span>
       <span class="nm" style="font-size:16px">¿Tomaste tu ${esc(m.name)}?</span>
-      <span class="wsmall">Detectamos un movimiento parecido (${(w.extra||0).toFixed(2)}), pero no estamos seguros.</span>
+      <span class="wsmall">Evidencia parcial (P=${(w.extra||0).toFixed(2)}).</span>
       <span class="grow"></span>
       <div class="wbtns" style="grid-template-columns:1fr 1fr"><button class="wbtn" data-w="take">Sí</button><button class="wbtn no" data-w="notyet">Aún no</button></div></div>`;
-  } else if (w.screen === 'done' && r){
+  if (w.screen === 'done' && r){
     const late = r.status === 'delayed';
     return `<div class="wpad"><span class="k">Registrado</span>
       <span class="wbig" style="background:${late ? '#d98a12' : '#1f9d55'}">${icon('i-check')}</span>
       <span class="nm" style="font-size:17px;margin-top:6px">${esc(m.name)}</span>
-      <span class="wsmall">${r.source === 'gesture' ? `Confirmada por gesto · ${r.conf.toFixed(2)}` : 'Confirmación manual'}${late ? '<br>con retraso' : ''}</span></div>`;
-  } else if (w.screen === 'cg' && r){
-    return `<div class="wpad"><span class="k" style="color:#ffb3ab">Sin confirmación</span>
-      <span class="wbig" style="background:#d9463b;margin-top:6px">${icon('i-alert')}</span>
+      <span class="wsmall">${r.source === 'sensor' ? `Automática · P=${r.conf.toFixed(2)}` : 'Confirmación manual'}${late ? '<br>con retraso' : ''}</span></div>`;
+  }
+  if (w.screen === 'cg' && r) return `<div class="wpad"><span class="k" style="color:#ffb3ab">Sin confirmación</span>
+      <span class="wbig" style="background:#d9463b">${icon('i-alert')}</span>
       <span class="wsmall" style="margin-top:4px">No detectamos tu toma de <b>${esc(m.name)}</b>.${S.cgLinked ? `<br>Avisamos a ${esc(S.caregiver.name)}.` : ''}</span>
       <span class="grow"></span>
-      <div class="wbtns" style="grid-template-columns:1fr"><button class="wbtn" data-w="take">Ya la tomé</button></div></div>`;
-  } else if (w.screen === 'snoozed' && r){
-    return `<div class="wpad" style="justify-content:center"><span class="wbig" style="background:#26343d">${icon('i-snooze')}</span>
+      ${mw.app ? '<div class="wbtns" style="grid-template-columns:1fr"><button class="wbtn" data-w="take">Ya la tomé</button></div>' : '<span class="wsmall">Confirma en tu teléfono.</span>'}</div>`;
+  if (w.screen === 'snoozed' && r) return `<div class="wpad" style="justify-content:center"><span class="wbig" style="background:#26343d">${icon('i-snooze')}</span>
       <span class="wsmall" style="margin-top:8px">Te recuerdo<br><b style="font-size:20px;font-family:var(--mono);color:#fff">${hm(r.snoozeUntil)}</b></span></div>`;
-  } else if (w.screen === 'list'){
-    return `<div class="wpad" style="padding-top:20px"><span class="k">Hoy</span><div class="wlist">${S.records.slice(0,6).map(x => `<div><b>${hm(x.sched)}</b><span>${esc(med(x.medId).name)}</span><i style="background:var(--${ST[x.status].c === 'pend' ? 'pend' : ST[x.status].c})"></i></div>`).join('')}</div></div>`;
-  } else {
-    const done = S.records.filter(x => x.status === 'confirmed' || x.status === 'delayed').length, tot = S.records.length;
-    const a = activeRec(), nx = S.records.find(x => x.status === 'pending' && !x.reminded);
-    const C = 2*Math.PI*96, frac = tot ? done/tot : 0;
-    const d = new Date();
-    return `<svg class="ring" viewBox="0 0 200 212" preserveAspectRatio="none"><rect x="4" y="4" width="192" height="204" rx="44" fill="none" stroke="#16242c" stroke-width="5"/>
-      <rect x="4" y="4" width="192" height="204" rx="44" fill="none" stroke="#2fd1a5" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="${frac*100} 100"/></svg>
-      <div class="wface" data-w="face"><span class="dt">${DAYS[d.getDay()].toUpperCase()} ${d.getDate()}</span>
-      <span class="tm" id="wtm"></span>
-      <span class="dt" style="color:#2fd1a5">${done}/${tot} tomas</span>
+  if (w.screen === 'list') return `<div class="wpad" style="padding-top:28px"><span class="k">Hoy</span><div class="wlist">${S.records.slice(0,5).map(x => `<div><b>${hm(x.sched)}</b><span>${esc(med(x.medId).name)}</span><i style="background:var(--${ST[x.status].c})"></i></div>`).join('')}</div></div>`;
+  const done = S.records.filter(x => x.status === 'confirmed' || x.status === 'delayed').length, tot = S.records.length;
+  const a = activeRec(), nx = S.records.find(x => x.status === 'pending' && !x.reminded), d = new Date();
+  const ring = mw.shape === 'round'
+    ? `<svg class="ring" viewBox="0 0 200 200"><circle cx="100" cy="100" r="94" fill="none" stroke="#16242c" stroke-width="5"/><circle cx="100" cy="100" r="94" fill="none" stroke="#2fd1a5" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="${tot ? done/tot*100 : 0} 100" transform="rotate(-90 100 100)"/></svg>`
+    : `<svg class="ring" viewBox="0 0 200 212" preserveAspectRatio="none"><rect x="4" y="4" width="192" height="204" rx="44" fill="none" stroke="#16242c" stroke-width="5"/><rect x="4" y="4" width="192" height="204" rx="44" fill="none" stroke="#2fd1a5" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="${tot ? done/tot*100 : 0} 100"/></svg>`;
+  return `${ring}<div class="wface" data-w="face"><span class="dt">${DAYS[d.getDay()].toUpperCase()} ${d.getDate()}</span>
+      <span class="tm" id="wtm"></span><span class="dt" style="color:#2fd1a5">${done}/${tot} tomas</span>
       ${a ? `<span class="next alert">Pendiente: ${esc(med(a.medId).name)}</span>` : nx ? `<span class="next">Próxima: ${esc(med(nx.medId).name)} · ${hm(nx.sched)}</span>` : '<span class="next">Sin tomas pendientes</span>'}
       <span class="stats"><span style="color:#ff7d73">${icon('i-heart')}<span class="num" id="whr"></span></span><span style="color:#8fd8d2">${icon('i-steps')}<span class="num" id="wst"></span></span></span></div>`;
-  }
 }
 $('#wscreen').addEventListener('click', e => {
   const b = e.target.closest('[data-w]'); if (!b) return;
@@ -543,91 +681,134 @@ $('#wscreen').addEventListener('click', e => {
   if (act === 'notyet'){ logx('usuario', 'Responde «Aún no». Se mantiene pendiente.'); setWatch('remind', r.id); }
 });
 
-/* ===================== sensores y clasificador ===================== */
+/* ===================== panel de evidencias ===================== */
+function renderEvidence(){
+  const r = activeRec() || S.records.filter(x => x.status !== 'pending' && x.ev && Object.keys(x.ev).length).slice(-1)[0];
+  const rows = EV.map(e => {
+    const av = evAvailable(e), v = r && r.ev ? r.ev[e.k] : null;
+    const tag = av === 'ok' ? '<em class="ok">disponible</em>' : av === 'no' ? '<em class="no">no en este reloj</em>' : '<em>reloj no puesto</em>';
+    let val = '—', bar = '';
+    if (e.k === 'phy'){ val = av === 'ok' ? `${Math.round(S.hr)} lpm` : '—'; bar = '<small>solo contexto</small>'; }
+    else if (v != null){ const c = e.w * (2*v - 1); val = `${v.toFixed(2)} · ${c >= 0 ? '+' : ''}${c.toFixed(2)}`;
+      bar = `<div class="bar"><i style="width:${v*100}%;background:${v >= .6 ? 'var(--ok)' : v >= .4 ? 'var(--late)' : 'var(--pend)'}"></i></div>`; }
+    else bar = '<small>sin observar</small>';
+    return `<div class="evr ${av === 'ok' ? '' : 'na'}"><span class="l">${e.l} ${tag}</span><span class="s">${e.s}${e.k === 'phy' ? ' · ' + esc(W().physio) : ''}</span><span class="v">${bar}<small>${val}</small></span></div>`;
+  }).join('');
+  const p = fuse(r);
+  $('#ev').innerHTML = rows + `<div class="fuse"><div class="row"><b>P(tomó el medicamento)</b><span class="num">${p == null ? 'sin evidencia' : p.toFixed(2)}</span></div>
+    <div class="bar"><i style="width:${(p||0)*100}%;background:${p >= S.thr ? 'var(--ok)' : p >= ASK ? 'var(--late)' : 'var(--pend)'}"></i><b style="left:${ASK*100}%"></b><b style="left:${S.thr*100}%"></b></div>
+    <div class="row mu" style="font-size:11.5px"><span>&lt; ${ASK} esperar · ${ASK}–${S.thr.toFixed(2)} preguntar · ≥ ${S.thr.toFixed(2)} confirmar</span></div></div>`;
+}
+
+/* ===================== sensores ===================== */
 const cv = $('#sig'), cx = cv.getContext('2d');
-const N = 300, buf = {x:[], y:[], z:[], g:[]};
-for (let i = 0; i < N; i++){ buf.x.push(.05); buf.y.push(-.95); buf.z.push(.2); buf.g.push(4); }
-let gest = null; // {kind, t0, dur}
+const N = 300, buf = {x:[], y:[], z:[], g:[], ph:[]};
+for (let i = 0; i < N; i++){ buf.x.push(.05); buf.y.push(-.95); buf.z.push(.2); buf.g.push(4); buf.ph.push(null); }
+let gest = null;
 const bump = (t, c, w) => Math.exp(-((t - c)**2)/(2*w*w));
 const plat = (t, a, b, s) => 1/(1+Math.exp(-(t-a)/s)) - 1/(1+Math.exp(-(t-b)/s));
 const noise = a => (Math.random() + Math.random() + Math.random() - 1.5) * a;
+const PH = {abrir:'#d98a12', boca:'#6b4fe0', beber:'#2f6fd6', otro:'#5b6b78'};
+function phase(k, t){
+  if (k === 'ingesta') return t < 1.4 ? 'abrir' : t < 3.0 ? 'boca' : t < 4.7 ? 'beber' : null;
+  if (k === 'beber') return t > .5 && t < 2.6 ? 'beber' : null;
+  return t > .2 && t < 1.9 ? 'otro' : null;
+}
 function sample(t){
+  if (!S.onWrist || !W().app) return [0, 0, 0, 0];
   if (!gest) return [ .05 + noise(.03), -.95 + noise(.03), .2 + noise(.03), 4 + Math.abs(noise(5)) ];
   const k = gest.kind;
-  if (k === 'ingesta') return [
-    .05 + .75*bump(t,.8,.3) - .55*bump(t,2.5,.28) + noise(.04),
-    -.95 + 1.35*plat(t,.6,2.4,.14) + .25*bump(t,1.55,.1) + noise(.04),
-    .2 - .7*plat(t,.7,2.3,.16) + .45*bump(t,1.5,.12) + noise(.04),
-    6 + 120*bump(t,.65,.16) + 175*bump(t,1.5,.13) + 95*bump(t,2.45,.18) + Math.abs(noise(8)) ];
-  if (k === 'beber') return [
-    .05 + .4*bump(t,.8,.35) + noise(.04),
-    -.95 + 1.1*plat(t,.7,2.1,.22) + noise(.04),
-    .2 - .5*plat(t,.8,2.0,.22) + noise(.04),
-    6 + 80*bump(t,.7,.22) + 70*bump(t,2.0,.25) + Math.abs(noise(8)) ];
+  if (k === 'ingesta'){
+    const tw = plat(t,.2,1.3,.08);         // giro de muñeca al abrir el frasco
+    return [ .05 + .25*Math.sin(t*18)*tw + .7*bump(t,2.0,.3) - .4*bump(t,5.0,.25) + noise(.04),
+      -.95 + 1.3*plat(t,1.6,2.8,.12) + 1.1*plat(t,3.2,4.6,.15) + noise(.04),
+      .2 + .2*Math.cos(t*18)*tw - .6*plat(t,1.7,2.7,.14) - .5*plat(t,3.3,4.5,.15) + noise(.04),
+      6 + 110*tw*Math.abs(Math.sin(t*9)) + 170*bump(t,2.1,.13) + 70*bump(t,3.3,.15) + 60*bump(t,4.7,.2) + Math.abs(noise(8)) ]; }
+  if (k === 'beber') return [ .05 + .4*bump(t,.8,.35) + noise(.04), -.95 + 1.1*plat(t,.7,2.4,.2) + noise(.04),
+    .2 - .5*plat(t,.8,2.3,.2) + noise(.04), 6 + 80*bump(t,.7,.22) + 70*bump(t,2.4,.25) + Math.abs(noise(8)) ];
   return [ .05 + .45*Math.sin(t*15)*plat(t,.2,1.8,.1) + noise(.06), -.9 + .3*Math.sin(t*11)*plat(t,.2,1.8,.1) + noise(.06),
     .2 + .35*Math.cos(t*13)*plat(t,.2,1.8,.1) + noise(.06), 8 + 70*plat(t,.2,1.8,.1)*Math.abs(Math.sin(t*9)) + Math.abs(noise(10)) ];
 }
 let acc = 0, lastF = performance.now();
 function frame(now){
-  acc += (now - lastF) / 20; lastF = now;          // 50 Hz
+  acc += (now - lastF) / 20; lastF = now;
+  if (acc > 60) acc = 60;
   while (acc >= 1){
     acc--;
-    const t = gest ? (now - gest.t0)/1000 : 0;
-    const s = sample(t);
+    const t = gest ? (now - gest.t0)/1000 : 0, s = sample(t);
     buf.x.push(s[0]); buf.y.push(s[1]); buf.z.push(s[2]); buf.g.push(s[3]);
+    buf.ph.push(gest && S.onWrist && W().app ? phase(gest.kind, t) : null);
     for (const k in buf) buf[k].shift();
     if (gest && t > gest.dur) finishGesture();
   }
   draw(); requestAnimationFrame(frame);
 }
 function draw(){
-  const W = cv.width, H = cv.height;
-  cx.clearRect(0,0,W,H);
+  const Wd = cv.width, H = cv.height;
+  cx.clearRect(0,0,Wd,H);
+  // bandas de fase
+  let i0 = null;
+  for (let i = 0; i <= N; i++){
+    const p = buf.ph[i];
+    if (i0 == null && p){ i0 = i; continue; }
+    if (i0 != null && (i === N || buf.ph[i] !== buf.ph[i0])){
+      const x0 = i0/(N-1)*Wd, x1 = (i-1)/(N-1)*Wd;
+      cx.fillStyle = PH[buf.ph[i0]] + '33'; cx.fillRect(x0, 0, x1 - x0, H);
+      cx.fillStyle = '#ffffffb0'; cx.font = '700 17px Manrope, sans-serif'; cx.fillText(buf.ph[i0], x0 + 6, H - 10);
+      i0 = p ? i : null;
+    }
+  }
   cx.strokeStyle = 'rgba(255,255,255,.07)'; cx.lineWidth = 1;
-  for (let i = 1; i < 4; i++){ cx.beginPath(); cx.moveTo(0, H*i/4); cx.lineTo(W, H*i/4); cx.stroke(); }
+  for (let i = 1; i < 4; i++){ cx.beginPath(); cx.moveTo(0, H*i/4); cx.lineTo(Wd, H*i/4); cx.stroke(); }
   const line = (arr, col, f) => { cx.strokeStyle = col; cx.lineWidth = 2.4; cx.beginPath();
-    arr.forEach((v, i) => { const x = i/(N-1)*W, y = f(v); i ? cx.lineTo(x, y) : cx.moveTo(x, y); }); cx.stroke(); };
+    arr.forEach((v, i) => { const x = i/(N-1)*Wd, y = f(v); i ? cx.lineTo(x, y) : cx.moveTo(x, y); }); cx.stroke(); };
   const fa = v => H*.5 - v*(H*.3);
   line(buf.g, 'rgba(169,148,255,.85)', v => H - 8 - v/220*(H-16));
   line(buf.x, '#5fd0c8', fa); line(buf.y, '#f0b35a', fa); line(buf.z, '#ff7d73', fa);
   cx.fillStyle = 'rgba(255,255,255,.45)'; cx.font = '600 18px JetBrains Mono, monospace';
-  cx.fillText('50 Hz · últimos 6 s', 12, 24);
+  cx.fillText('señal simulada · últimos 6 s', 12, 26);
+  const msg = !W().app ? 'IMU no accesible para apps en este reloj' : !S.onWrist ? 'Reloj fuera de la muñeca' : '';
+  if (msg){ cx.fillStyle = 'rgba(15,28,36,.75)'; cx.fillRect(0, H/2 - 26, Wd, 52); cx.fillStyle = '#fff'; cx.font = '700 22px Manrope, sans-serif'; cx.textAlign = 'center'; cx.fillText(msg, Wd/2, H/2 + 8); cx.textAlign = 'left'; }
 }
 function startGesture(kind){
   if (gest) return;
-  const dur = kind === 'ingesta' ? 3.1 : kind === 'beber' ? 2.6 : 2.1;
+  const dur = kind === 'ingesta' ? 5.2 : kind === 'beber' ? 3.0 : 2.1;
   gest = {kind, t0: performance.now(), dur};
-  const names = {ingesta:'mano a la boca + inclinación', beber:'lleva un vaso a la boca', otro:'movimiento sin relación'};
-  logx('usuario', `Movimiento: ${names[kind]}.`);
-  $('#sigstate').textContent = 'capturando'; $('#pmsg').textContent = 'Capturando ventana de 3 s…';
-  $('#pval').textContent = '…'; $('#pbar').style.width = '0';
-  document.querySelectorAll('.act').forEach(b => b.disabled = true);
+  const names = {ingesta:'abre el frasco, se lleva la pastilla a la boca y bebe agua', beber:'bebe agua de un vaso', otro:'mueve la mano sin relación'};
+  logx('usuario', `Rafael ${names[kind]}.`);
+  $('#sigstate').textContent = 'capturando';
+  document.querySelectorAll('.act[data-g]').forEach(b => b.disabled = true);
 }
 function finishGesture(){
   const kind = gest.kind; gest = null;
-  document.querySelectorAll('.act').forEach(b => b.disabled = false);
+  document.querySelectorAll('.act[data-g]').forEach(b => b.disabled = false);
   $('#sigstate').textContent = 'en reposo';
-  const p = kind === 'ingesta' ? .86 + Math.random()*.1 : kind === 'beber' ? .55 + Math.random()*.15 : .08 + Math.random()*.15;
-  const bar = $('#pbar');
-  bar.style.width = (p*100) + '%';
-  bar.style.background = p >= S.thr ? 'var(--ok)' : p >= .5 ? 'var(--late)' : 'var(--pend)';
-  $('#pval').textContent = `P = ${p.toFixed(2)}`;
-  logx('ml', `Clasificador: P(ingesta)=${p.toFixed(2)} (umbral ${S.thr.toFixed(2)}).`);
-  if (!S.fitbit || !S.gestureOn){ $('#pmsg').textContent = 'Detección desactivada: no se usa.'; return; }
+  const w = W();
+  if (!S.fitbit || !w.app){ logx('ml', `${w.name}: la IMU no es accesible para apps → no hay evidencia de movimiento.`); return; }
+  if (!S.onWrist){ logx('ml', 'El reloj no está puesto → no hay evidencia de movimiento.'); return; }
   const r = activeRec();
-  if (!r){ $('#pmsg').textContent = 'Fuera de una ventana de toma: se ignora.'; logx('ml', 'No hay toma activa: el gesto se descarta (evita falsos positivos).'); return; }
-  if (p >= S.thr){ $('#pmsg').textContent = 'Gesto de ingesta: toma confirmada.'; confirm(r, 'gesture', p); }
-  else if (p >= .5){ $('#pmsg').textContent = 'Dudoso: se pide confirmación al usuario.'; buzz(); setWatch('ask', r.id, 0, p); logx('ml', 'Confianza intermedia → se pregunta en el reloj.'); }
-  else { $('#pmsg').textContent = 'No es un gesto de ingesta.'; }
+  const R = (a, b) => a + Math.random()*(b - a);
+  const imu = kind === 'ingesta' ? R(.86,.96) : kind === 'beber' ? R(.66,.74) : R(.1,.25);
+  const seq = kind === 'ingesta' ? R(.8,.9) : kind === 'beber' ? R(.35,.45) : R(.05,.15);
+  logx('ml', `IMU: gesto mano-boca ${imu.toFixed(2)} · secuencia ${seq.toFixed(2)}.`);
+  if (!r){ logx('ml', 'Fuera de una ventana de toma: se descarta (evita falsos positivos).'); return; }
+  r.ev.imu = Math.max(r.ev.imu ?? 0, imu); r.ev.seq = Math.max(r.ev.seq ?? 0, seq);
+  decide(r, 'movimiento');
 }
 document.querySelectorAll('.act[data-g]').forEach(b => b.addEventListener('click', () => startGesture(b.dataset.g)));
+$('#nfc').addEventListener('click', () => {
+  const r = activeRec();
+  logx('usuario', 'Toca la etiqueta NFC del frasco con el teléfono.');
+  if (!r){ logx('ml', 'No hay toma activa: el toque NFC solo se registra, no confirma.'); return; }
+  r.ev.nfc = 1; decide(r, 'NFC');
+});
+$('#wrist').addEventListener('click', () => { S.onWrist = !S.onWrist; logx('usuario', S.onWrist ? 'Se vuelve a poner el reloj.' : 'Se quita el reloj (detección fuera de la muñeca).'); syncControls(); renderEvidence(); });
 $('#nada').addEventListener('click', () => {
   const r = activeRec() || S.records.find(x => x.status === 'pending');
   if (!r) return;
   const target = Math.max(S.t, r.sched + S.tol + .1);
-  if (r.snoozeUntil) r.snoozeUntil = null;
+  r.snoozeUntil = null;
   logx('usuario', `Rafael no hace nada. El reloj avanza a ${hm(target)}.`);
-  // pasa por los recordatorios intermedios
   if (!r.reminded){ S.t = Math.max(S.t, r.sched); tickRules(); }
   if (!r.second && S.t < r.sched + S.reremind){ S.t = r.sched + S.reremind; tickRules(); }
   S.t = target; tickRules(); tickUI();
@@ -635,70 +816,61 @@ $('#nada').addEventListener('click', () => {
 
 /* ===================== teléfono ===================== */
 const TABS = [['hoy','Hoy','i-home'],['meds','Medicinas','i-pill'],['hist','Avisos','i-bell'],['adh','Adherencia','i-chart'],['set','Ajustes','i-gear']];
-function render(){
-  renderTop(); renderTabs(); renderView(); renderWatchIfNeeded(); renderCG(); syncControls();
-}
-function renderWatchIfNeeded(){ if (S.watch.screen !== 'face') renderWatch(); }
+function render(){ renderTop(); renderTabs(); renderView(); renderWatch(); renderCG(); renderEvidence(); syncControls(); }
 function renderTop(){
   const titles = {hoy:'Buenos días, Rafael', meds:'Medicinas', hist:'Avisos', adh:'Adherencia', set:'Ajustes'};
   $('#ptop').innerHTML = `<h2>${titles[S.tab]}<span class="sub">Hoy · <span class="num" id="ptopclock">${hm(S.t)}</span></span></h2>
-    <span class="conn ${S.fitbit ? '' : 'off'}">${icon('i-watch')}${S.fitbit ? 'Sense 2' : 'Sin reloj'}</span>`;
+    <span class="conn ${S.fitbit ? '' : 'off'}">${icon('i-watch')}${S.fitbit ? esc(W().short) : 'Sin reloj'}</span>`;
 }
-function renderTabs(){
-  $('#tabs').innerHTML = TABS.map(([k, l, i]) => `<button type="button" data-tab="${k}" class="${S.tab === k ? 'on' : ''}">${icon(i)}${l}</button>`).join('');
-}
+function renderTabs(){ $('#tabs').innerHTML = TABS.map(([k, l, i]) => `<button type="button" data-tab="${k}" class="${S.tab === k ? 'on' : ''}">${icon(i)}${l}</button>`).join(''); }
 function weekStats(){
   const all = S.history.flatMap(d => d.recs).concat(S.records.filter(r => r.status !== 'pending').map(r => ({...r, lat: r.confAt != null ? r.confAt - r.sched : null})));
   const res = all.length || 1;
-  const ok = all.filter(r => r.status === 'confirmed').length, late = all.filter(r => r.status === 'delayed').length, un = all.filter(r => r.status === 'unconfirmed').length;
+  const ok = all.filter(r => r.status === 'confirmed').length, late = all.filter(r => r.status === 'delayed').length;
   const lats = all.filter(r => r.lat != null).map(r => r.lat);
-  const src = {gesture:0, manual:0, caregiver:0}; all.forEach(r => r.source && src[r.source]++);
-  return {all, ok, late, un, pct: Math.round((ok + late)/res*100), onTime: Math.round(ok/res*100), lat: lats.length ? Math.round(lats.reduce((a,b)=>a+b,0)/lats.length) : 0, src};
+  const src = {sensor:0, manual:0, caregiver:0}; all.forEach(r => r.source && src[r.source]++);
+  return {pct: Math.round((ok + late)/res*100), onTime: Math.round(ok/res*100), lat: lats.length ? Math.round(lats.reduce((a,b)=>a+b,0)/lats.length) : 0, src};
 }
 function doseCard(r){
-  const m = med(r.medId), st = ST[r.status];
-  const live = r.reminded && (r.status === 'pending');
+  const m = med(r.medId), st = ST[r.status], live = r.reminded && r.status === 'pending';
   const chips = [`<span class="pill ${st.c}">${st.t}</span>`];
-  if (r.source) chips.push(`<span class="pill ${r.source === 'gesture' ? 'ges' : 'pend'}">${r.source === 'gesture' ? 'gesto ' + r.conf.toFixed(2) : SRC[r.source]} · ${hm(r.confAt)}</span>`);
+  if (r.source) chips.push(`<span class="pill ${r.source === 'sensor' ? 'ges' : 'pend'}">${r.source === 'sensor' ? 'auto ' + r.conf.toFixed(2) : SRC[r.source]} · ${hm(r.confAt)}</span>`);
+  if (r.ev && r.ev.nfc) chips.push('<span class="pill ac">NFC</span>');
   if (live) chips.push(`<span class="cdn" data-cd="${r.id}"></span>`);
   if (r.status === 'unconfirmed' && r.cgNotified) chips.push(`<span class="pill miss">avisado a ${esc(S.caregiver.name)}</span>`);
-  const canConfirm = r.status === 'pending' || r.status === 'unconfirmed';
-  return `<div class="dose st-${r.status} ${live ? 'live' : ''}">
-    <div class="h">${hm(r.sched)}</div>
-    <div><div class="row" style="display:flex;justify-content:space-between;gap:8px;align-items:start">
+  const can = r.status === 'pending' || r.status === 'unconfirmed';
+  return `<div class="dose st-${r.status} ${live ? 'live' : ''}"><div class="h">${hm(r.sched)}</div>
+    <div><div style="display:flex;justify-content:space-between;gap:8px;align-items:start">
       <div><div class="nm">${esc(m.name)} <span class="mu" style="font-weight:600">${esc(m.dose)}</span></div><div class="meta">${esc(m.note || '')}</div></div>
-      ${canConfirm ? `<button class="minibtn ${r.reminded ? '' : 'ghost'}" data-confirm="${r.id}">${r.reminded ? 'Confirmar' : 'Ya la tomé'}</button>` : ''}
+      ${can ? `<button class="minibtn ${r.reminded ? '' : 'ghost'}" data-confirm="${r.id}">${r.reminded ? 'Confirmar' : 'Ya la tomé'}</button>` : ''}
     </div><div class="chips">${chips.join('')}</div></div></div>`;
 }
 function renderView(){
   const v = $('#pview');
   if (S.tab === 'hoy'){
-    const w = weekStats();
-    const done = S.records.filter(x => x.status === 'confirmed' || x.status === 'delayed').length;
+    const w = weekStats(), done = S.records.filter(x => x.status === 'confirmed' || x.status === 'delayed').length;
     v.innerHTML = `<div class="hero"><span class="k">TOMAS DE HOY</span>
       <div class="big"><b>${done}/${S.records.length}</b><span>confirmadas</span></div>
-      <div class="tiles"><div><b>${w.pct}%</b><span>7 DÍAS</span></div><div><b>${w.src.gesture}</b><span>GESTO · 7D</span></div><div><b>${w.lat}′</b><span>LATENCIA</span></div></div></div>
+      <div class="tiles"><div><b>${w.pct}%</b><span>7 DÍAS</span></div><div><b>${w.src.sensor}</b><span>AUTO · 7D</span></div><div><b>${w.lat}′</b><span>LATENCIA</span></div></div></div>
       <div class="sec">Línea de tiempo <button data-tab="meds">Editar</button></div>
       <div class="tl">${S.records.map(doseCard).join('') || '<div class="empty">Sin medicinas programadas.</div>'}</div>
-      <p class="mu" style="font-size:11.5px;margin:0">«Sin confirmar» no significa «no tomada»: solo que no hubo evidencia dentro de la tolerancia de ${S.tol} min.</p>`;
+      <p class="mu" style="font-size:11.5px;margin:0">«Sin confirmar» no significa «no tomada»: solo que no hubo evidencia suficiente dentro de la tolerancia de ${S.tol} min.</p>`;
   }
   if (S.tab === 'meds'){
-    v.innerHTML = `${S.adding ? `<form class="form" id="addform">
-        <b>Nueva medicina</b>
+    v.innerHTML = `${S.adding ? `<form class="form" id="addform"><b>Nueva medicina</b>
         <label>Nombre<input name="name" required placeholder="Ej. Levotiroxina" maxlength="40"></label>
-        <div class="row2"><label>Dosis<input name="dose" required placeholder="100 mcg" maxlength="20"></label>
-        <label>Indicación<input name="note" placeholder="En ayunas" maxlength="30"></label></div>
+        <div class="row2"><label>Dosis<input name="dose" required placeholder="100 mcg" maxlength="20"></label><label>Indicación<input name="note" placeholder="En ayunas" maxlength="30"></label></div>
         <label>Horarios (HH:MM, separados por coma)<input name="times" required placeholder="10:00, 22:00" pattern="^\\s*\\d{1,2}:\\d{2}(\\s*,\\s*\\d{1,2}:\\d{2})*\\s*$"></label>
-        <div class="row2"><button class="btn ghost" type="button" id="cancel">Cancelar</button><button class="btn" type="submit">Guardar</button></div>
-      </form>` : `<button class="btn" type="button" id="addbtn">+ Agregar medicina</button>`}
+        <div class="row2"><button class="btn ghost" type="button" id="cancel">Cancelar</button><button class="btn" type="submit">Guardar</button></div></form>`
+      : `<button class="btn" type="button" id="addbtn">+ Agregar medicina</button>`}
       ${S.meds.map(m => `<div class="medcard"><span class="ic" style="background:${m.color}22;color:${m.color}">${icon('i-pill')}</span>
         <div><div class="nm">${esc(m.name)} <span class="mu" style="font-weight:600">${esc(m.dose)}</span></div><div class="mu" style="font-size:12px">${esc(m.note || '')}</div>
         <div class="tchips">${m.times.map(t => `<span>${t}</span>`).join('')}</div></div>
         <button class="del" type="button" data-del="${m.id}">Quitar</button></div>`).join('') || '<div class="empty">Agrega tu primera medicina.</div>'}
-      <p class="mu" style="font-size:11.5px;margin:0">Tabla <b>Medication</b> + <b>Schedule</b>. Las tomas futuras de hoy se generan al guardar.</p>`;
+      <p class="mu" style="font-size:11.5px;margin:0">Tablas <b>Medication</b> y <b>Schedule</b>. Al guardar se generan las tomas futuras de hoy.</p>`;
   }
   if (S.tab === 'hist'){
-    const ic = {fitbit_notification:['i-watch','var(--ac-soft)','var(--ac-dk)'], push:['i-bell','var(--blue-soft)','var(--blue)']};
+    const ic = {watch:['i-watch','var(--ac-soft)','var(--ac-dk)'], push:['i-bell','var(--blue-soft)','var(--blue)']};
     v.innerHTML = `<div class="nlist">${S.notifs.map(n => { const [i, bg, c] = n.to === 'caregiver' ? ['i-user','var(--miss-soft)','var(--miss)'] : ic[n.ch];
       return `<div class="nitem"><span class="ic" style="background:${bg};color:${c}">${icon(i)}</span><div><div class="t">${esc(n.text)}</div>
       <div class="m">${hm(n.at)} · ${n.to === 'caregiver' ? 'cuidador' : 'usuario'} · ${n.ch} · ${n.st}</div></div></div>`; }).join('')}</div>
@@ -712,8 +884,7 @@ function renderView(){
     const bars = days.map((d, i) => { const c = s => d.filter(r => r.status === s).length;
       const seg = (n, col) => n ? `<i style="height:${n/maxN*100}%;background:${col}"></i>` : '';
       return `<div class="col7"><div class="stack">${seg(c('confirmed'),'var(--ok)')}${seg(c('delayed'),'var(--late)')}${seg(c('unconfirmed'),'var(--miss)')}</div><small>${labels[i]}</small></div>`; }).join('');
-    const srcTot = (w.src.gesture + w.src.manual + w.src.caregiver) || 1;
-    // horario más problemático
+    const tot = (w.src.sensor + w.src.manual + w.src.caregiver) || 1;
     const byT = {}; S.history.forEach(d => d.recs.forEach(r => { byT[r.sched] = byT[r.sched] || {n:0, bad:0}; byT[r.sched].n++; if (r.status !== 'confirmed') byT[r.sched].bad++; }));
     const worst = Object.entries(byT).sort((a, b) => b[1].bad/b[1].n - a[1].bad/a[1].n)[0];
     const wm = worst && S.meds.find(m => m.times.includes(worst[0]));
@@ -721,7 +892,7 @@ function renderView(){
       <div class="card"><h3>Últimos 7 días</h3><div class="chart">${bars}</div>
       <div class="legend"><span><i style="background:var(--ok)"></i>a tiempo</span><span><i style="background:var(--late)"></i>con retraso</span><span><i style="background:var(--miss)"></i>sin confirmar</span></div></div>
       <div class="card"><h3>¿Cómo se confirmó?</h3><div class="hbar">
-        ${[['Gesto','gesture','var(--ges)'],['Manual','manual','var(--blue)'],['Cuidador','caregiver','var(--late)']].map(([l, k, c]) => `<div class="r"><span>${l}</span><span class="t"><i style="width:${w.src[k]/srcTot*100}%;background:${c}"></i></span><span class="v">${Math.round(w.src[k]/srcTot*100)}%</span></div>`).join('')}
+        ${[['Automática','sensor','var(--ges)'],['Manual','manual','var(--blue)'],['Cuidador','caregiver','var(--late)']].map(([l, k, c]) => `<div class="r"><span>${l}</span><span class="t"><i style="width:${w.src[k]/tot*100}%;background:${c}"></i></span><span class="v">${Math.round(w.src[k]/tot*100)}%</span></div>`).join('')}
       </div></div>
       ${worst ? `<div class="insight"><b>Patrón detectado:</b> la toma de las <b>${worst[0]}</b>${wm ? ` (${esc(wm.name)})` : ''} es la que más se retrasa u olvida (${Math.round(worst[1].bad/worst[1].n*100)}% de las veces). Sugerencia: adelantar el recordatorio o asociarlo a una rutina fija (desayuno, cena).</div>` : ''}`;
   }
@@ -729,13 +900,12 @@ function renderView(){
     v.innerHTML = `<div class="set"><div class="lbl">Tolerancia <span class="num">${S.tol} min</span></div>
         <div class="seg" role="group">${[15,30,45,60].map(n => `<button type="button" data-tol="${n}" class="${S.tol === n ? 'on' : ''}">${n}</button>`).join('')}</div>
         <div class="help">Tiempo para confirmar antes de marcar «sin confirmar» y avisar al cuidador. Segundo recordatorio a los ${S.reremind} min.</div></div>
-      <div class="set"><div class="lbl">Umbral del gesto <span class="num">${S.thr.toFixed(2)}</span></div>
-        <input type="range" min="0.6" max="0.95" step="0.05" value="${S.thr}" id="thr">
-        <div class="help">Más alto = menos falsos positivos, pero más preguntas en el reloj.</div></div>
-      <div class="set"><div class="tog"><div><div class="lbl">Fitbit Sense 2</div><div class="help">${S.fitbit ? 'Conectado por Bluetooth · notificaciones activas' : 'Desconectado · solo notificaciones del teléfono'}</div></div><button type="button" class="sw ${S.fitbit ? 'on' : ''}" data-sw="fitbit" aria-label="Reloj conectado"></button></div>
-        <div class="tog"><div><div class="lbl">Confirmación por gesto</div><div class="help">Usa acelerómetro y giroscopio en la ventana de la toma.</div></div><button type="button" class="sw ${S.gestureOn ? 'on' : ''}" data-sw="gestureOn" aria-label="Confirmación por gesto"></button></div></div>
+      <div class="set"><div class="lbl">Umbral de confirmación automática <span class="num">${S.thr.toFixed(2)}</span></div>
+        <input type="range" min="0.7" max="0.95" step="0.05" value="${S.thr}" id="thr">
+        <div class="help">Probabilidad fusionada mínima para confirmar sin preguntar. Entre ${ASK} y el umbral, se pregunta.</div></div>
+      <div class="set"><div class="tog"><div><div class="lbl">${esc(W().name)}</div><div class="help">${S.fitbit ? (W().app ? 'App MediTrack en el reloj · IMU activa en las ventanas de toma' : 'Solo notificaciones reflejadas · sin app en el reloj') : 'Desconectado · solo notificaciones del teléfono'}</div></div><button type="button" class="sw ${S.fitbit ? 'on' : ''}" data-sw="fitbit" aria-label="Reloj conectado"></button></div></div>
       <div class="set"><div class="tog"><div><div class="lbl">Cuidador: ${esc(S.caregiver.name)} (${esc(S.caregiver.rel)})</div><div class="help">${S.cgLinked ? 'Recibe avisos solo si una toma queda sin confirmar.' : 'Sin cuidador vinculado: no hay escalamiento.'}</div></div><button type="button" class="sw ${S.cgLinked ? 'on' : ''}" data-sw="cgLinked" aria-label="Cuidador vinculado"></button></div></div>
-      <p class="mu" style="font-size:11.5px;margin:0">Los horarios se guardan en UTC y se muestran en tu zona horaria. Tus datos de salud no se comparten sin tu consentimiento.</p>`;
+      <p class="mu" style="font-size:11.5px;margin:0">Los horarios se guardan en UTC. La señal de movimiento se procesa en el dispositivo y solo se guarda el resultado.</p>`;
   }
 }
 function renderCG(){
@@ -743,7 +913,7 @@ function renderCG(){
   if (!S.cg.length){ f.innerHTML = `<p class="mu" style="margin:0;font-size:12.5px">${S.cgLinked ? 'Sin avisos. Laura solo recibe mensajes si una toma queda sin confirmar.' : 'No hay cuidador vinculado.'}</p>`; return; }
   f.innerHTML = S.cg.map(c => { const r = c.recId && S.records.find(x => x.id === c.recId);
     return `<div class="bubble ${c.ok ? 'okb' : ''}"><small>${hm(c.at)} · MediTrack</small>${c.text}
-    ${!c.ok && r && (r.status === 'unconfirmed') ? `<br><button type="button" data-cgok="${r.id}">Le llamé: sí la tomó</button>` : ''}</div>`; }).join('');
+    ${!c.ok && r && r.status === 'unconfirmed' ? `<br><button type="button" data-cgok="${r.id}">Le llamé: sí la tomó</button>` : ''}</div>`; }).join('');
 }
 function renderConsole(){
   const el = $('#console'); if (!el) return;
@@ -751,21 +921,24 @@ function renderConsole(){
   el.innerHTML = S.log.map(l => `<div><span>${hm(l.at)}</span><p style="margin:0"><span class="tag" style="color:${col[l.tag]}">[${l.tag}]</span> ${esc(l.msg)}</p></div>`).join('');
 }
 let bannerT;
-function showBanner(html){ $('#bannertxt').innerHTML = html; const b = $('#banner'); b.classList.add('show'); clearTimeout(bannerT); bannerT = setTimeout(() => b.classList.remove('show'), 3200); }
+function showBanner(html, ms = 3200){ $('#bannertxt').innerHTML = html; const b = $('#banner'); b.classList.add('show'); clearTimeout(bannerT); bannerT = setTimeout(hideBanner, ms); }
+function hideBanner(){ $('#banner').classList.remove('show'); }
 
 /* ===================== eventos ===================== */
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-tab],[data-confirm],[data-del],[data-tol],[data-sw],[data-cgok],#addbtn,#cancel');
+  const t = e.target.closest('[data-tab],[data-confirm],[data-del],[data-tol],[data-sw],[data-cgok],[data-model],[data-bconfirm],[data-bno],#addbtn,#cancel');
   if (!t) return;
   if (t.dataset.tab){ S.tab = t.dataset.tab; S.adding = false; render(); $('#pview').scrollTop = 0; }
+  else if (t.dataset.model){ S.watchId = t.dataset.model; S.onWrist = true; logx('sistema', `Reloj cambiado a ${W().name} (${W().app ? 'app propia con IMU' : 'solo notificaciones'}).`); setWatch('face'); renderModels(); render(); }
   else if (t.dataset.confirm){ const r = S.records.find(x => x.id === +t.dataset.confirm); logx('usuario', 'Confirma desde la app del teléfono.'); confirm(r, 'manual'); }
-  else if (t.dataset.del){ const id = +t.dataset.del; const m = med(id);
-    S.meds = S.meds.filter(x => x.id !== id); S.records = S.records.filter(r => r.medId !== id || r.status !== 'pending');
-    S.records = S.records.filter(r => S.meds.some(mm => mm.id === r.medId));
+  else if (t.dataset.bconfirm){ const r = S.records.find(x => x.id === +t.dataset.bconfirm); logx('usuario', 'Responde «Sí, la tomé» en el teléfono.'); confirm(r, 'manual'); }
+  else if (t.dataset.bno){ hideBanner(); logx('usuario', 'Responde «Aún no».'); }
+  else if (t.dataset.del){ const id = +t.dataset.del, m = med(id);
+    S.meds = S.meds.filter(x => x.id !== id); S.records = S.records.filter(r => S.meds.some(mm => mm.id === r.medId));
     logx('sistema', `Medication «${m.name}» desactivada (is_active = 0).`); render(); }
   else if (t.dataset.tol){ S.tol = +t.dataset.tol; logx('sistema', `Tolerancia = ${S.tol} min.`); render(); }
   else if (t.dataset.sw){ const k = t.dataset.sw; S[k] = !S[k];
-    logx('sistema', {fitbit: S.fitbit ? 'Reloj reconectado.' : 'Reloj desconectado: recordatorios solo en el teléfono.', gestureOn: `Confirmación por gesto ${S.gestureOn ? 'activada' : 'desactivada'}.`, cgLinked: `Cuidador ${S.cgLinked ? 'vinculado' : 'desvinculado'}.`}[k]);
+    logx('sistema', {fitbit: S.fitbit ? 'Reloj reconectado.' : 'Reloj desconectado: recordatorios solo en el teléfono.', cgLinked: `Cuidador ${S.cgLinked ? 'vinculado' : 'desvinculado'}.`}[k]);
     if (k === 'fitbit') setWatch('face'); render(); }
   else if (t.dataset.cgok){ const r = S.records.find(x => x.id === +t.dataset.cgok); S.cg = S.cg.filter(c => c.recId !== r.id || c.ok);
     logx('cuidador', `${S.caregiver.name} confirma la toma tras llamar.`); confirm(r, 'caregiver'); setWatch('face'); }
@@ -780,27 +953,20 @@ document.addEventListener('submit', e => {
     .map(s => { const [h, m] = s.split(':').map(Number); return (h < 24 && m < 60) ? String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') : null; }).filter(Boolean);
   if (!times.length) return;
   const m = {id: uid++, name: String(f.get('name')).trim(), dose: String(f.get('dose')).trim(), note: String(f.get('note') || '').trim(), times, color: COLORS[S.meds.length % COLORS.length]};
-  S.meds.push(m);
-  times.forEach(tm => { if (toMin(tm) > S.t) addRecord(m, toMin(tm)); });
-  S.adding = false;
-  logx('sistema', `Medication «${m.name}» creada con ${times.length} horario(s).`);
-  render();
+  S.meds.push(m); times.forEach(tm => { if (toMin(tm) > S.t) addRecord(m, toMin(tm)); });
+  S.adding = false; logx('sistema', `Medication «${m.name}» creada con ${times.length} horario(s).`); render();
 });
-document.addEventListener('change', e => {
-  if (e.target.id === 'thr'){ S.thr = +e.target.value; logx('sistema', `Umbral del clasificador = ${S.thr.toFixed(2)}.`); render(); }
-});
+document.addEventListener('change', e => { if (e.target.id === 'thr'){ S.thr = +e.target.value; logx('sistema', `Umbral de confirmación = ${S.thr.toFixed(2)}.`); render(); } });
 $('#playbtn').addEventListener('click', () => { S.running = !S.running; syncControls(); });
 document.querySelectorAll('#speeds button').forEach(b => b.addEventListener('click', () => { S.speed = +b.dataset.sp; syncControls(); }));
 $('#skipbtn').addEventListener('click', () => {
-  const nx = S.records.find(x => x.status === 'pending' && !x.reminded);
-  if (!nx) return;
-  S.t = Math.max(S.t, nx.sched - 0.05);
-  logx('sistema', `Salto a ${hm(nx.sched)}.`);
-  tickRules(); tickUI();
+  const nx = S.records.find(x => x.status === 'pending' && !x.reminded); if (!nx) return;
+  S.t = Math.max(S.t, nx.sched - 0.05); logx('sistema', `Salto a ${hm(nx.sched)}.`); tickRules(); tickUI();
 });
-$('#reset').addEventListener('click', () => { seed(); setWatch('face'); render(); });
+$('#reset').addEventListener('click', () => { seed(S.watchId); setWatch('face'); renderModels(); render(); });
 
-seed(); render(); setWatch('face'); requestAnimationFrame(frame);
+const qm = new URLSearchParams(location.search).get('reloj');
+seed(WATCHES.some(w => w.sim && w.id === qm) ? qm : null); renderModels(); render(); setWatch('face'); requestAnimationFrame(frame);
 </script>
 </body>
 </html>

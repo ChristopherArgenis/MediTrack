@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediTrack · Documentos</title>
+<meta name="description" content="Documentos de MediTrack: conceptual/teórico y técnico/tecnológico.">
+<link rel="icon" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/tema.css">
+<style>
+.wrap{max-width:1000px;margin:0 auto;padding:44px 16px 72px}
+h1{font-size:clamp(34px,6vw,52px);letter-spacing:-.03em;line-height:1.05;margin:14px 0 10px}
+.lead{font-size:18px;color:var(--mu);margin:0;max-width:640px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:34px}
+.doc{background:var(--card);border-radius:22px;box-shadow:var(--sh);overflow:hidden;display:flex;flex-direction:column}
+.doc .top{padding:26px;color:#fff}
+.doc .top .k{font-size:11.5px;font-weight:800;letter-spacing:.1em;opacity:.9}
+.doc .top h2{margin:8px 0 4px;font-size:26px;letter-spacing:-.01em}
+.doc .top p{margin:0;opacity:.92}
+.doc .body{padding:20px 26px 24px;display:grid;gap:12px;flex:1;align-content:start}
+.doc ul{margin:0;padding-left:18px;color:#33434f;display:grid;gap:4px;font-size:14.5px}
+.doc .who{font-size:13.5px;color:var(--mu)}
+.doc .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.doc .acts a{text-decoration:none;font-weight:800;padding:10px 16px;border-radius:12px;background:var(--fg);color:#fff;font-size:14px}
+.doc .acts a.sec{background:var(--bg);color:var(--fg)}
+.note{margin-top:28px;background:var(--card);border-left:4px solid var(--late);border-radius:12px;padding:14px 16px;font-size:14px;box-shadow:var(--sh)}
+</style>
+</head>
+<body>
+<nav class="sitenav">
+  <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
+  <a class="l" href="prototipo.html">Prototipo</a>
+  <a class="l on" href="documentos.html">Documentos</a>
+  <a class="l" href="presentacion.html">Presentación</a>
+  <a class="l" href="flujo.html">Flujo</a>
+</nav>
+<main class="wrap">
+  <span class="pill ac">Documentos · v2.0</span>
+  <h1>Dos documentos, según quién lee</h1>
+  <p class="lead">El por qué y el para quién, separados del cómo se construye. Cada lector revisa solo lo que necesita.</p>
+  <div class="two">
+    <article class="doc">
+      <div class="top" style="background:linear-gradient(150deg,#14a39b,#06615d)"><span class="k">DOCUMENTO 1</span><h2>Conceptual / teórico</h2><p>Qué queremos conseguir y por qué.</p></div>
+      <div class="body">
+        <ul><li>Problema y cifras verificadas</li><li>Objetivos y alcance</li><li>Público objetivo y personas</li><li>Cómo sabe que de verdad la tomó</li><li>Lineamientos: accesibilidad, privacidad, ética</li><li>Trabajos relacionados y diferenciación</li><li>Métricas de éxito, validación y hoja de ruta</li><li>Verificación de fuentes</li></ul>
+        <span class="who">Para: docentes, personal de salud, cuidadores, inversionistas.</span>
+        <div class="acts"><a href="doc-conceptual.html">Leer</a><a class="sec" href="doc-conceptual.pdf">PDF</a></div>
+      </div>
+    </article>
+    <article class="doc">
+      <div class="top" style="background:linear-gradient(150deg,#2a3f50,#0f2230)"><span class="k">DOCUMENTO 2</span><h2>Técnico / tecnológico</h2><p>Cómo se construye.</p></div>
+      <div class="body">
+        <ul><li>Arquitectura de 5 capas</li><li>Comparativa de 8 relojes y precio/beneficio</li><li>Plataformas y APIs (Wear OS, Samsung SDK, watchOS, Zepp OS, Google Health API)</li><li>Fusión de evidencias (fórmula y pesos)</li><li>Modelo de gesto basado en DoseMate</li><li>Motor de estados y base de datos</li><li>Código, repositorio y métricas técnicas</li></ul>
+        <span class="who">Para: desarrollo, datos/ML, evaluadores técnicos.</span>
+        <div class="acts"><a href="doc-tecnico.html">Leer</a><a class="sec" href="doc-tecnico.pdf">PDF</a></div>
+      </div>
+    </article>
+  </div>
+  <p class="note"><b>Cambios respecto a la v1:</b> se verificaron todas las cifras contra su fuente. DoseMate sí enviaba recordatorios, el dataset “Glasgow 228 gestos” y el de Kaggle no se pudieron localizar y se retiraron, y la Fitbit Web API heredada dejó de tener soporte el 30/09/2026. El detalle está en la sección <a href="doc-conceptual.html#fuentes">Verificación de fuentes</a>.</p>
+</main>
+</body>
+</html>
