@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediTrack</title>
+<meta name="description" content="MediTrack: recordatorios de medicamentos en el smartwatch, confirmación por gesto y aviso al cuidador.">
+<link rel="icon" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/tema.css">
+<style>
+.wrap{max-width:1120px;margin:0 auto;padding:40px 16px 72px}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+@media (max-width:860px){.hero{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(40px,7vw,68px);line-height:1;letter-spacing:-.03em;margin:14px 0 16px}
+.hero p{font-size:19px;color:var(--mu);margin:0;max-width:560px}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.cta a{text-decoration:none;font-weight:800;padding:12px 18px;border-radius:13px;background:var(--ac);color:#fff}
+.cta a.sec{background:var(--card);color:var(--fg);box-shadow:var(--sh)}
+.hero img{width:100%;border-radius:22px;box-shadow:0 30px 60px -32px rgba(10,25,35,.5);background:#fff}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:56px}
+.card{background:var(--card);border-radius:20px;padding:22px;box-shadow:var(--sh);text-decoration:none;color:var(--fg);display:grid;gap:8px;border:2px solid transparent;transition:border-color .15s,transform .15s}
+.card:hover{border-color:var(--ac-soft);transform:translateY(-2px)}
+.card .n{font-family:var(--mono);color:var(--ac);font-weight:700;font-size:13px}
+.card b{font-size:19px}
+.card span{color:var(--mu);font-size:14.5px}
+.card .dl{font-size:13px;font-weight:700;color:var(--ac-dk)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:40px}
+.facts div{border-left:3px solid var(--ac);padding:4px 0 4px 14px}
+.facts b{display:block;font-size:16px}
+.facts span{font-size:14px;color:var(--mu)}
+footer{margin-top:56px;color:var(--mu);font-size:13px;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<nav class="sitenav">
+  <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
+  <a class="l" href="prototipo.html">Prototipo</a>
+  <a class="l" href="documento.html">Documento</a>
+  <a class="l" href="presentacion.html">Presentación</a>
+  <a class="l" href="flujo.html">Flujo</a>
+</nav>
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <span class="pill ac">Adherencia a medicamentos · smartwatch · ML</span>
+      <h1>Tomar la medicina no debería depender de la memoria.</h1>
+      <p>MediTrack recuerda cada toma en la muñeca, la confirma sola reconociendo el gesto de ingesta y avisa al cuidador solo cuando no hay evidencia.</p>
+      <div class="cta"><a href="prototipo.html">Probar el prototipo</a><a class="sec" href="presentacion.html">Ver la presentación</a></div>
+    </div>
+    <a href="prototipo.html"><img src="img/prototipo.png" alt="Prototipo de MediTrack: reloj con una toma confirmada por gesto y la app con la línea de tiempo"></a>
+  </section>
+
+  <section class="cards">
+    <a class="card" href="prototipo.html"><span class="n">01</span><b>Prototipo interactivo</b><span>Smartwatch y teléfono simulados: recordatorio, gesto, pregunta y escalamiento al cuidador.</span></a>
+    <a class="card" href="documento.html"><span class="n">02</span><b>Documento de proyecto</b><span>Objetivos, público objetivo, lineamientos, arquitectura, datos, modelo, riesgos y hoja de ruta.</span><span class="dl">También en PDF ↓</span></a>
+    <a class="card" href="presentacion.html"><span class="n">03</span><b>Presentación</b><span>16 diapositivas: idea, prototipo, datos usados, modelo y plan. Usa ← → para navegar.</span></a>
+    <a class="card" href="flujo.html"><span class="n">04</span><b>Diagrama de flujo</b><span>Una sola diapositiva con el flujo de una toma y sus conexiones (PNG descargable).</span></a>
+  </section>
+
+  <section class="facts">
+    <div><b>Fitbit Sense 2</b><span>Notificaciones en la muñeca y cEDA continuo</span></div>
+    <div><b>CNN-LSTM</b><span>Reconocimiento del gesto con acelerómetro y giroscopio</span></div>
+    <div><b>DoseMate + Glasgow</b><span>Conjuntos de datos públicos para entrenar y validar</span></div>
+    <div><b>SQLite · UTC</b><span>Cada toma con estado, fuente y confianza</span></div>
+  </section>
+
+  <footer>Descargas: <a href="documento.pdf">documento.pdf</a> · <a href="presentacion.pdf">presentacion.pdf</a> · <a href="img/flujo.png">flujo.png</a> · Código: <a href="https://github.com/ChristopherArgenis/MediTrack">GitHub</a>. Los datos del prototipo son simulados.</footer>
+</main>
+</body>
+</html>

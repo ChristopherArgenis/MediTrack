@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediTrack · Prototipo</title>
+<meta name="description" content="Prototipo interactivo de MediTrack: recordatorio en el smartwatch, confirmación por gesto, escalamiento al cuidador y app móvil.">
+<link rel="icon" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/tema.css">
+<style>
+/* Distribución: simulador | reloj + sensores | teléfono. En pantallas angostas se apilan. */
+body{font-size:14px;line-height:1.4}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+[hidden]{display:none!important}
+.stage{display:grid;grid-template-columns:320px 340px 390px;gap:28px;justify-content:center;align-items:start;padding:24px 16px 48px}
+@media (max-width:1140px){.stage{grid-template-columns:minmax(0,340px) minmax(0,390px)}.col-info{grid-column:1 / -1;max-width:760px;justify-self:center;width:100%}}
+@media (max-width:760px){.stage{grid-template-columns:minmax(0,1fr)}.col{justify-self:center;width:100%;max-width:390px}}
+.col{display:grid;gap:14px;align-content:start;min-width:0}
+.card{background:var(--card);border-radius:18px;padding:14px;box-shadow:var(--sh)}
+.card h3{margin:0 0 10px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);font-weight:800;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.mu{color:var(--mu)}
+.col-info h1{margin:0;font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.col-info p{margin:0}
+.lead{color:var(--mu)}
+.clock{display:flex;align-items:center;gap:10px}
+.clock b{font-family:var(--mono);font-size:30px;font-weight:700;letter-spacing:-.02em}
+.clock .ic{width:38px;height:38px;border-radius:12px;background:var(--fg);color:#fff;display:grid;place-items:center;flex:none}
+.clock .ic svg{width:18px;height:18px}
+.seg{display:flex;background:var(--bg);border-radius:11px;padding:3px;gap:2px}
+.seg button{flex:1;padding:6px 8px;border-radius:9px;font-weight:700;font-size:12.5px;color:var(--mu)}
+.seg button.on{background:var(--card);color:var(--fg);box-shadow:var(--sh)}
+.acts{display:grid;gap:7px}
+.act{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center;text-align:left;background:var(--bg);border-radius:13px;padding:9px 10px;border:1.5px solid transparent}
+.act:hover{border-color:var(--line);background:#fff}
+.act i{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-style:normal}
+.act i svg{width:18px;height:18px}
+.act b{display:block;font-size:13.5px}
+.act small{color:var(--mu);font-size:12px;display:block;line-height:1.3}
+.act:disabled{opacity:.45;cursor:not-allowed}
+.linkbtn{font-weight:700;color:var(--ac-dk);font-size:12.5px}
+.reset{justify-self:start;background:var(--fg);color:#fff;border-radius:10px;padding:9px 14px;font-weight:700;font-size:13px}
+.feed{display:grid;gap:8px;max-height:240px;overflow:auto}
+.bubble{background:var(--bg);border-radius:12px;padding:9px 11px;font-size:12.5px;border-left:3px solid var(--miss)}
+.bubble.okb{border-left-color:var(--ok)}
+.bubble small{display:block;color:var(--mu);font-family:var(--mono);font-size:11px;margin-bottom:2px}
+.bubble button{margin-top:6px;background:var(--fg);color:#fff;font-weight:700;font-size:12px;border-radius:9px;padding:6px 10px}
+
+/* ===== reloj ===== */
+.watchwrap{display:grid;place-items:center;padding:6px 0 2px}
+.watch{position:relative;width:250px;height:376px;display:grid;place-items:center}
+.strap{position:absolute;left:50%;width:150px;margin-left:-75px;height:92px;background:linear-gradient(90deg,#1d2a33,#2c3b46 50%,#1d2a33)}
+.strap.t{top:0;border-radius:22px 22px 6px 6px}
+.strap.b{bottom:0;border-radius:6px 6px 22px 22px}
+.strap.b::after{content:"";position:absolute;left:50%;top:40px;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#121b21;box-shadow:0 18px 0 #121b21}
+.case{position:relative;width:236px;height:250px;border-radius:66px;background:linear-gradient(150deg,#d9dee2,#8f979e 45%,#5e666c);padding:9px;box-shadow:0 26px 50px -24px rgba(10,25,35,.7)}
+.case::before{content:"";position:absolute;left:-5px;top:104px;width:7px;height:44px;border-radius:4px;background:#7d868c}
+.bezel{width:100%;height:100%;border-radius:58px;background:#05080a;padding:12px;position:relative}
+.wscreen{width:100%;height:100%;border-radius:46px;background:#000;color:#fff;overflow:hidden;position:relative;font-size:12px}
+.watch.buzz .case{animation:buzz .11s linear 8}
+@keyframes buzz{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px) rotate(-.6deg)}75%{transform:translateX(3px) rotate(.6deg)}}
+.wface{position:absolute;inset:0;display:grid;justify-items:center;align-content:center;gap:3px;text-align:center;cursor:pointer}
+.wface .tm{font-family:var(--mono);font-size:46px;font-weight:700;letter-spacing:-.04em;line-height:1}
+.wface .dt{font-size:11.5px;color:#9fb0bb;font-weight:700;letter-spacing:.04em}
+.wface .stats{display:flex;gap:14px;margin-top:8px;font-size:11.5px;font-weight:700}
+.wface .stats span{display:flex;align-items:center;gap:4px}
+.wface .stats svg{width:13px;height:13px}
+.wface .next{margin-top:8px;font-size:11px;background:#16242c;border-radius:12px;padding:6px 10px;color:#cfe;max-width:150px}
+.wface .next.alert{background:#e9a23b;color:#1b1200;font-weight:800;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.7}}
+.ring{position:absolute;inset:6px;pointer-events:none}
+.wpad{position:absolute;inset:0;padding:22px 18px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px}
+.wpad .k{font-size:10.5px;letter-spacing:.08em;color:#8fd8d2;font-weight:800;text-transform:uppercase}
+.wpad .pill-ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;margin:2px 0}
+.wpad .pill-ic svg{width:24px;height:24px}
+.wpad .nm{font-size:19px;font-weight:800;line-height:1.1}
+.wpad .ds{font-size:12px;color:#b9c7d0}
+.wpad .grow{flex:1}
+.wbtns{display:grid;grid-template-columns:1fr auto;gap:6px;width:100%}
+.wbtn{border-radius:16px;padding:10px 8px;font-weight:800;font-size:13px;background:#1f9d55;color:#fff}
+.wbtn.sec{background:#26343d;color:#dfe8ee;font-size:12px}
+.wbtn.no{background:#3a2422;color:#ffd5d0}
+.wsense{display:flex;align-items:center;gap:5px;font-size:10.5px;color:#b7a8ff;font-weight:700}
+.wsense i{width:7px;height:7px;border-radius:50%;background:#8c74ff;animation:pulse 1s infinite}
+.wbig{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;margin-top:16px}
+.wbig svg{width:36px;height:36px}
+.wsmall{font-size:11.5px;color:#b9c7d0;line-height:1.35}
+.wlist{display:grid;gap:5px;width:100%;margin-top:4px;text-align:left}
+.wlist div{display:grid;grid-template-columns:38px 1fr 10px;gap:6px;align-items:center;font-size:11px;background:#121c22;border-radius:9px;padding:5px 8px}
+.wlist b{font-family:var(--mono);font-size:10.5px;color:#9fb0bb}
+.wlist i{width:8px;height:8px;border-radius:50%}
+.wcap{font-size:11.5px;text-align:center;color:var(--mu);margin-top:4px}
+
+/* sensores */
+.sig canvas{width:100%;height:132px;display:block;background:#0f1c24;border-radius:12px}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--mu);font-weight:700;margin-top:8px}
+.legend span{display:flex;align-items:center;gap:5px}
+.legend i{width:12px;height:3px;border-radius:2px}
+.clf{margin-top:10px;display:grid;gap:6px}
+.clf .row{display:flex;justify-content:space-between;font-size:12.5px;gap:8px}
+.bar{position:relative;height:12px;background:var(--bg);border-radius:6px;overflow:hidden}
+.bar>i{position:absolute;left:0;top:0;bottom:0;background:var(--pend);border-radius:6px;transition:width .5s ease,background .3s}
+.bar>b{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--fg)}
+.console{font-family:var(--mono);font-size:11px;line-height:1.5;max-height:200px;overflow:auto;display:grid;gap:2px}
+.console div{display:grid;grid-template-columns:44px 1fr;gap:6px}
+.console span{color:var(--mu)}
+.console .tag{font-weight:700}
+
+/* ===== teléfono ===== */
+.phone{width:min(390px,100%);height:min(800px,calc(100vh - 110px));min-height:660px;border-radius:46px;border:10px solid #0b0f12;background:var(--bg);box-shadow:0 30px 60px -30px rgba(10,25,35,.55);position:relative;overflow:hidden;justify-self:center}
+.app{position:absolute;inset:0;display:flex;flex-direction:column}
+.ptop{flex:none;padding:16px 18px 8px;display:flex;align-items:center;gap:10px}
+.ptop h2{margin:0;font-size:20px;font-weight:800;letter-spacing:-.01em;flex:1;min-width:0}
+.ptop .sub{display:block;font-size:12px;color:var(--mu);font-weight:600}
+.conn{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:800;padding:5px 9px;border-radius:999px;background:var(--ok-soft);color:#13703b;white-space:nowrap}
+.conn.off{background:var(--miss-soft);color:#a3261d}
+.conn svg{width:13px;height:13px}
+.pmain{flex:1;overflow-y:auto;padding:4px 14px 20px;display:flex;flex-direction:column;gap:12px}
+.pmain>*{flex-shrink:0}
+.tabs{flex:none;display:grid;grid-template-columns:repeat(5,1fr);background:var(--card);border-top:1px solid var(--line);padding:6px 0 12px}
+.tabs button{display:grid;justify-items:center;gap:2px;font-size:10.5px;font-weight:700;color:var(--mu);padding:4px 0}
+.tabs svg{width:21px;height:21px}
+.tabs button.on{color:var(--ac)}
+.hero{border-radius:22px;padding:16px;color:#fff;background:linear-gradient(150deg,#14a39b,#06615d);display:grid;gap:10px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;border:2px solid rgba(255,255,255,.18)}
+.hero .k{font-size:11px;font-weight:800;letter-spacing:.08em;opacity:.9}
+.hero .big{display:flex;align-items:baseline;gap:8px}
+.hero .big b{font-size:34px;font-weight:800;line-height:1;font-family:var(--mono)}
+.hero .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.hero .tiles div{background:rgba(255,255,255,.15);border-radius:12px;padding:7px 9px}
+.hero .tiles b{display:block;font-family:var(--mono);font-size:15px}
+.hero .tiles span{font-size:10px;font-weight:700;letter-spacing:.05em;opacity:.9}
+.sec{display:flex;justify-content:space-between;align-items:baseline;font-weight:800;font-size:15px;margin-top:2px}
+.sec button{font-size:12.5px;color:var(--ac-dk);font-weight:700}
+.tl{display:grid;gap:8px}
+.dose{display:grid;grid-template-columns:52px 1fr;gap:10px;align-items:start;background:var(--card);border-radius:16px;padding:11px 12px;box-shadow:var(--sh);border-left:4px solid var(--pend)}
+.dose.st-confirmed{border-left-color:var(--ok)}.dose.st-delayed{border-left-color:var(--late)}.dose.st-unconfirmed{border-left-color:var(--miss)}.dose.live{border-left-color:var(--ges);box-shadow:0 0 0 2px var(--ges-soft),var(--sh)}
+.dose .h{font-family:var(--mono);font-weight:700;font-size:15px}
+.dose .h small{display:block;font-family:var(--f);font-size:10.5px;color:var(--mu);font-weight:700}
+.dose .nm{font-weight:800;font-size:14px}
+.dose .meta{font-size:12px;color:var(--mu)}
+.dose .chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.minibtn{font-size:12px;font-weight:800;padding:5px 10px;border-radius:9px;background:var(--fg);color:#fff}
+.minibtn.ghost{background:var(--bg);color:var(--fg)}
+.cdn{font-family:var(--mono);font-size:11.5px;color:#8a5600;font-weight:700}
+.medcard{background:var(--card);border-radius:16px;padding:12px;box-shadow:var(--sh);display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center}
+.medcard .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
+.medcard .ic svg{width:20px;height:20px}
+.medcard .nm{font-weight:800}
+.medcard .tchips{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.medcard .tchips span{font-family:var(--mono);font-size:11px;background:var(--bg);border-radius:7px;padding:2px 6px;font-weight:700}
+.del{color:var(--miss);font-size:12px;font-weight:800;padding:6px}
+.form{background:var(--card);border-radius:16px;padding:12px;box-shadow:var(--sh);display:grid;gap:8px}
+.form label{display:grid;gap:3px;font-size:12px;font-weight:700;color:var(--mu)}
+.form input{border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--bg);color:var(--fg);font-size:14px;width:100%}
+.form .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{border-radius:12px;padding:10px 14px;font-weight:800;font-size:13px;background:var(--ac);color:#fff;text-align:center}
+.btn.ghost{background:var(--bg);color:var(--fg)}
+.nlist{display:grid;gap:7px}
+.nitem{background:var(--card);border-radius:14px;padding:10px 12px;box-shadow:var(--sh);display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start}
+.nitem .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center}
+.nitem .ic svg{width:16px;height:16px}
+.nitem .t{font-size:13px;font-weight:700}
+.nitem .m{font-size:11.5px;color:var(--mu);font-family:var(--mono)}
+.chart{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:130px;padding-top:6px}
+.chart .col7{display:grid;gap:4px;justify-items:center;height:100%;grid-template-rows:1fr auto}
+.chart .stack{width:22px;display:flex;flex-direction:column-reverse;border-radius:6px;overflow:hidden;align-self:end;background:var(--bg);height:100%}
+.chart .stack i{display:block}
+.chart small{font-size:10.5px;color:var(--mu);font-weight:700}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kv div{background:var(--card);border-radius:14px;padding:10px;box-shadow:var(--sh)}
+.kv b{display:block;font-family:var(--mono);font-size:18px}
+.kv span{font-size:10.5px;color:var(--mu);font-weight:700;letter-spacing:.04em}
+.hbar{display:grid;gap:7px}
+.hbar .r{display:grid;grid-template-columns:78px 1fr 38px;gap:8px;align-items:center;font-size:12px;font-weight:700}
+.hbar .t{height:10px;background:var(--bg);border-radius:5px;overflow:hidden}
+.hbar .t i{display:block;height:100%;border-radius:5px}
+.hbar .v{font-family:var(--mono);text-align:right}
+.insight{background:var(--late-soft);color:#6b4300;border-radius:14px;padding:11px 12px;font-size:12.5px}
+.set{background:var(--card);border-radius:16px;padding:12px;box-shadow:var(--sh);display:grid;gap:8px}
+.set .lbl{display:flex;justify-content:space-between;font-weight:800;font-size:13.5px}
+.set .help{font-size:12px;color:var(--mu)}
+.set input[type=range]{width:100%;accent-color:var(--ac)}
+.tog{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.sw{width:44px;height:26px;border-radius:13px;background:var(--line);position:relative;flex:none;transition:background .2s}
+.sw::after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .2s}
+.sw.on{background:var(--ac)}.sw.on::after{left:21px}
+.banner{position:absolute;left:10px;right:10px;top:10px;z-index:10;background:rgba(15,34,48,.94);color:#fff;border-radius:18px;padding:10px 12px;display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:center;font-size:12.5px;transform:translateY(-130%);transition:transform .35s ease}
+.banner.show{transform:none}
+.banner img{width:30px;height:30px}
+.banner b{display:block;font-size:13px}
+.empty{text-align:center;color:var(--mu);padding:20px 10px;font-size:13px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-pill" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 20.5a5 5 0 0 1-7-7l10-10a5 5 0 0 1 7 7z"/><path d="m8.5 8.5 7 7"/></g></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-4 0v5"/><path d="M14 10V4a2 2 0 0 0-4 0v6"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></g></symbol>
+  <symbol id="i-cup" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14l-1.5 15a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2z"/><path d="M5.5 9h13"/></g></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 12h3l3-7 4 14 3-7h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5v14l11-7z" fill="currentColor"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></symbol>
+  <symbol id="i-skip" viewBox="0 0 24 24"><path d="M5 5v14l9-7zM15 5h3v14h-3z" fill="currentColor"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z" fill="currentColor"/></symbol>
+  <symbol id="i-steps" viewBox="0 0 24 24"><g fill="currentColor"><ellipse cx="8" cy="7" rx="3" ry="4.5"/><ellipse cx="16" cy="12" rx="3" ry="4.5"/><rect x="5.5" y="12.5" width="5" height="3" rx="1.5"/><rect x="13.5" y="17.5" width="5" height="3" rx="1.5"/></g></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></g></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></g></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h16"/><path d="M7 16v-5M12 16V6M17 16v-8"/></g></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></g></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></g></symbol>
+  <symbol id="i-watch" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="4"/><path d="M9 6V2h6v4M9 18v4h6v-4"/></g></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 3 2 20h20z" stroke-linejoin="round"/><path d="M12 10v4M12 17h.01"/></g></symbol>
+  <symbol id="i-snooze" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M9.5 10.5h5l-5 5h5M5 3 2 6M19 3l3 3"/></g></symbol>
+</svg>
+
+<nav class="sitenav">
+  <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
+  <a class="l on" href="prototipo.html">Prototipo</a>
+  <a class="l" href="documento.html">Documento</a>
+  <a class="l" href="presentacion.html">Presentación</a>
+  <a class="l" href="flujo.html">Flujo</a>
+</nav>
+
+<div class="stage">
+  <!-- ===== columna 1: simulador ===== -->
+  <section class="col col-info">
+    <span class="pill ac" style="justify-self:start">Prototipo interactivo · datos simulados</span>
+    <h1>Un día con MediTrack</h1>
+    <p class="lead">Rafael, 72 años, toma 5 dosis al día. El reloj le recuerda cada toma, intenta confirmarla sola con el movimiento de su muñeca y, si no hay evidencia, avisa a su hija Laura.</p>
+
+    <div class="card">
+      <h3>Reloj del simulador <span class="num" id="speedlbl"></span></h3>
+      <div class="clock">
+        <button class="ic" id="playbtn" type="button" aria-label="Pausar o reanudar"><svg><use href="#i-pause"/></svg></button>
+        <b id="simclock">07:58</b>
+        <button class="ic" id="skipbtn" type="button" aria-label="Ir a la próxima toma" title="Ir a la próxima toma" style="background:var(--ac)"><svg><use href="#i-skip"/></svg></button>
+      </div>
+      <div class="seg" id="speeds" style="margin-top:10px" role="group" aria-label="Velocidad">
+        <button type="button" data-sp="1">Real</button><button type="button" data-sp="60" class="on">1 min/s</button><button type="button" data-sp="300">5 min/s</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>¿Qué hace Rafael? <span class="mu" id="activefor" style="text-transform:none;letter-spacing:0;font-weight:700"></span></h3>
+      <div class="acts">
+        <button class="act" type="button" data-g="ingesta"><i style="background:var(--ges-soft);color:var(--ges)"><svg><use href="#i-pill"/></svg></i><span><b>Se toma la pastilla</b><small>Gesto de ingesta: mano a la boca, inclina, baja.</small></span></button>
+        <button class="act" type="button" data-g="beber"><i style="background:var(--blue-soft);color:var(--blue)"><svg><use href="#i-cup"/></svg></i><span><b>Solo bebe agua</b><small>Gesto parecido: el modelo duda y pregunta.</small></span></button>
+        <button class="act" type="button" data-g="otro"><i style="background:var(--pend-soft);color:var(--pend)"><svg><use href="#i-hand"/></svg></i><span><b>Mueve la mano</b><small>Actividad no relacionada: no confirma nada.</small></span></button>
+        <button class="act" type="button" id="nada"><i style="background:var(--miss-soft);color:var(--miss)"><svg><use href="#i-clock"/></svg></i><span><b>No hace nada</b><small>Adelanta el reloj hasta el fin de la tolerancia.</small></span></button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Teléfono de Laura · cuidadora</h3>
+      <div class="feed" id="cgfeed"><p class="mu" style="margin:0;font-size:12.5px">Sin avisos. Laura solo recibe mensajes si una toma queda sin confirmar.</p></div>
+    </div>
+    <button class="reset" id="reset" type="button">Restablecer el día</button>
+  </section>
+
+  <!-- ===== columna 2: reloj y sensores ===== -->
+  <section class="col">
+    <div class="watchwrap">
+      <div class="watch" id="watch">
+        <div class="strap t"></div><div class="strap b"></div>
+        <div class="case"><div class="bezel"><div class="wscreen" id="wscreen"></div></div></div>
+      </div>
+      <p class="wcap">Smartwatch tipo Fitbit Sense 2 · toca la pantalla</p>
+    </div>
+    <div class="card sig">
+      <h3>Sensores de muñeca <span class="pill ges" id="sigstate">en reposo</span></h3>
+      <canvas id="sig" width="620" height="264" aria-label="Señal simulada del acelerómetro y giroscopio"></canvas>
+      <div class="legend"><span><i style="background:#5fd0c8"></i>acc X</span><span><i style="background:#f0b35a"></i>acc Y</span><span><i style="background:#ff7d73"></i>acc Z</span><span><i style="background:#a994ff"></i>giroscopio</span></div>
+      <div class="clf">
+        <div class="row"><span><b>Clasificador CNN-LSTM</b> <span class="mu">(simulado)</span></span><span class="num" id="pval">—</span></div>
+        <div class="bar"><i id="pbar" style="width:0"></i><b id="pthr"></b></div>
+        <div class="row mu" style="font-size:11.5px"><span id="pmsg">Esperando movimiento…</span><span>umbral <span class="num" id="thrlbl"></span></span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Bitácora del sistema</h3>
+      <div class="console" id="console"></div>
+    </div>
+  </section>
+
+  <!-- ===== columna 3: teléfono ===== -->
+  <section class="col">
+    <div class="phone"><div class="app">
+      <div class="banner" id="banner"><img src="assets/logo.svg" alt=""><div id="bannertxt"></div></div>
+      <header class="ptop" id="ptop"></header>
+      <main class="pmain" id="pview"></main>
+      <nav class="tabs" id="tabs"></nav>
+    </div></div>
+  </section>
+</div>
+
+<script>
+/* ===================== utilidades ===================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const hm = m => { m = Math.max(0, Math.floor(m)); return String(Math.floor(m/60)%24).padStart(2,'0') + ':' + String(m%60).padStart(2,'0'); };
+const toMin = s => { const [h, mi] = s.split(':').map(Number); return h*60 + mi; };
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const icon = (id, cls='') => `<svg class="${cls}"><use href="#${id}"/></svg>`;
+function rng(seed){ return () => { seed = (seed*1664525 + 1013904223) % 4294967296; return seed/4294967296; }; }
+const DAYS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+const COLORS = ['#0d8a84','#2f6fd6','#d98a12','#6b4fe0','#d9463b','#1f9d55'];
+const ST = {
+  pending:{t:'Pendiente', c:'pend'}, confirmed:{t:'Confirmada', c:'ok'},
+  delayed:{t:'Con retraso', c:'late'}, unconfirmed:{t:'Sin confirmar', c:'miss'}
+};
+const SRC = {gesture:'por gesto', manual:'manual', caregiver:'por cuidador'};
+
+/* ===================== estado ===================== */
+let S, uid = 1;
+function seed(){
+  uid = 1;
+  const meds = [
+    {name:'Omeprazol', dose:'20 mg', times:['07:30'], note:'En ayunas'},
+    {name:'Metformina', dose:'850 mg', times:['08:00','20:00'], note:'Con alimentos'},
+    {name:'Losartán', dose:'50 mg', times:['09:00'], note:'Presión arterial'},
+    {name:'Atorvastatina', dose:'20 mg', times:['21:00'], note:'Por la noche'},
+  ].map((m, i) => ({...m, id: uid++, color: COLORS[i]}));
+  S = {
+    t: 7*60 + 58, speed: 60, running: true,
+    tol: 30, reremind: 15, thr: 0.80, gestureOn: true,
+    fitbit: true, cgLinked: true,
+    caregiver: {name:'Laura', rel:'hija'},
+    meds, records: [], notifs: [], log: [], cg: [],
+    tab: 'hoy', adding: false,
+    watch: {screen:'face', recId:null, until:0, extra:null},
+    hr: 71, steps: 1840,
+    history: [],
+  };
+  // registros de hoy
+  meds.forEach(m => m.times.forEach(tm => addRecord(m, toMin(tm))));
+  const om = S.records.find(r => r.sched === 7*60+30);
+  Object.assign(om, {status:'confirmed', source:'gesture', conf:0.93, confAt:7*60+33, reminded:true});
+  S.notifs.push({at:7*60+30, to:'user', ch:'fitbit_notification', text:'Hora de Omeprazol 20 mg', st:'delivered'});
+  // historial de 6 días (determinista)
+  const r = rng(42), today = new Date();
+  for (let d = 6; d >= 1; d--){
+    const dt = new Date(today); dt.setDate(today.getDate() - d);
+    const recs = [];
+    meds.forEach(m => m.times.forEach(tm => {
+      const p = r(), weak = tm === '20:00';
+      let status, source = null, lat = null;
+      if (p < (weak ? 0.58 : 0.84)) { status = 'confirmed'; lat = 1 + Math.floor(r()*22); }
+      else if (p < (weak ? 0.82 : 0.94)) { status = 'delayed'; lat = 35 + Math.floor(r()*60); }
+      else status = 'unconfirmed';
+      if (status !== 'unconfirmed') { const q = r(); source = q < .62 ? 'gesture' : q < .93 ? 'manual' : 'caregiver'; }
+      recs.push({sched: tm, status, source, lat, medId: m.id});
+    }));
+    S.history.push({label: DAYS[dt.getDay()], recs});
+  }
+  logx('sistema', 'Día simulado iniciado. Fitbit Sense 2 vinculado por Bluetooth.');
+}
+function addRecord(m, sched){
+  S.records.push({id: uid++, medId: m.id, sched, status:'pending', source:null, conf:null, confAt:null,
+    reminded:false, second:false, snoozeUntil:null, cgNotified:false});
+  S.records.sort((a, b) => a.sched - b.sched);
+}
+const med = id => S.meds.find(m => m.id === id);
+function logx(tag, msg){
+  S.log.unshift({at: S ? S.t : 0, tag, msg});
+  if (S.log.length > 80) S.log.pop();
+  renderConsole();
+}
+function notify(to, ch, text){ S.notifs.unshift({at: S.t, to, ch, text, st: ch === 'fitbit_notification' && !S.fitbit ? 'failed' : 'delivered'}); }
+
+/* ===================== reglas del sistema ===================== */
+// toma "activa": ya se recordó, no está confirmada y sigue dentro de la ventana de evidencia (2 h)
+const activeRec = () => S.records.find(r => r.reminded && (r.status === 'pending' || r.status === 'unconfirmed') && S.t <= r.sched + 120);
+
+function remind(rec, kind){
+  const m = med(rec.medId);
+  rec.reminded = true;
+  const label = kind === 'first' ? 'Recordatorio' : kind === 'second' ? 'Segundo recordatorio' : 'Recordatorio pospuesto';
+  if (S.fitbit){
+    notify('user', 'fitbit_notification', `${label}: ${m.name} ${m.dose}`);
+    buzz();
+    setWatch('remind', rec.id);
+  } else {
+    notify('user', 'push', `${label}: ${m.name} ${m.dose}`);
+  }
+  showBanner(`<b>${esc(m.name)} ${esc(m.dose)}</b>${label} · ${hm(rec.sched)}${S.fitbit ? ' · también en tu reloj' : ''}`);
+  logx('notif', `${label} → ${S.fitbit ? 'reloj + teléfono' : 'solo teléfono (reloj desconectado)'}: ${m.name}.`);
+  if (kind === 'first' && S.fitbit && S.gestureOn) logx('ml', 'Ventana de detección de gesto abierta para esta toma.');
+  render();
+}
+
+function confirm(rec, source, conf){
+  const m = med(rec.medId), was = rec.status;
+  rec.source = source; rec.conf = conf ?? null; rec.confAt = S.t; rec.snoozeUntil = null;
+  rec.status = (was === 'pending' && S.t <= rec.sched + S.tol) ? 'confirmed' : 'delayed';
+  logx('estado', `IntakeRecord #${rec.id} ${m.name}: ${was} → ${rec.status} (${SRC[source]}${conf ? ' · ' + conf.toFixed(2) : ''}).`);
+  if (was === 'unconfirmed' && S.cgLinked){
+    S.cg.unshift({at:S.t, ok:true, text:`Rafael confirmó ${m.name} ${SRC[source]} (${Math.round(S.t - rec.sched)} min después).`});
+    notify('caregiver', 'push', `Actualización: ${m.name} confirmada tarde`);
+  }
+  if (S.fitbit && source !== 'caregiver') setWatch('done', rec.id, 3200);
+  render();
+}
+
+function expire(rec){
+  const m = med(rec.medId);
+  rec.status = 'unconfirmed';
+  logx('estado', `IntakeRecord #${rec.id} ${m.name}: pending → unconfirmed (fin de tolerancia ${S.tol} min). No se asume que no se tomó.`);
+  if (S.cgLinked && !rec.cgNotified){
+    rec.cgNotified = true;
+    notify('caregiver', 'push', `Sin confirmación: ${m.name} ${m.dose} de las ${hm(rec.sched)}`);
+    S.cg.unshift({at:S.t, ok:false, recId:rec.id, text:`Rafael no ha confirmado <b>${esc(m.name)} ${esc(m.dose)}</b> de las ${hm(rec.sched)}. Ni gesto ni confirmación manual.`});
+    logx('cuidador', `Aviso escalonado enviado a ${S.caregiver.name} (${S.caregiver.rel}).`);
+  }
+  if (S.fitbit){ buzz(); setWatch('cg', rec.id); }
+  render();
+}
+
+function tickRules(){
+  for (const r of S.records){
+    if (r.status === 'pending' && !r.reminded && S.t >= r.sched) remind(r, 'first');
+    else if (r.status === 'pending' && r.reminded){
+      if (r.snoozeUntil && S.t >= r.snoozeUntil){ r.snoozeUntil = null; remind(r, 'snooze'); }
+      else if (!r.second && !r.snoozeUntil && S.t >= r.sched + S.reremind && S.t < r.sched + S.tol){ r.second = true; remind(r, 'second'); }
+      else if (S.t >= r.sched + S.tol && !r.snoozeUntil) expire(r);
+      else if (S.t >= r.sched + S.tol + 10) expire(r);
+    }
+  }
+}
+
+/* ===================== reloj del simulador ===================== */
+let lastTick = performance.now();
+setInterval(() => {
+  const now = performance.now(), dt = (now - lastTick)/1000; lastTick = now;
+  if (S.running){
+    S.t += dt * S.speed / 60;
+    if (S.t >= 24*60 - 1){ S.t = 24*60 - 1; S.running = false; logx('sistema', 'Fin del día simulado. Restablece para repetir.'); syncControls(); }
+    tickRules();
+    S.hr = clamp(S.hr + (Math.random() - .5) * .6 + (gest ? .25 : (71 - S.hr) * .02), 62, 96);
+    S.steps += dt * S.speed / 60 * (S.t > 9*60 && S.t < 19*60 ? 9 : 2) * Math.random();
+  }
+  if (S.watch.until && now > S.watch.until) setWatch('face');
+  tickUI();
+}, 200);
+
+function tickUI(){
+  $('#simclock').textContent = hm(S.t);
+  const a = activeRec();
+  $('#activefor').textContent = a ? `toma activa: ${med(a.medId).name}` : 'sin toma activa';
+  renderWatch();
+  document.querySelectorAll('[data-cd]').forEach(el => {
+    const r = S.records.find(x => x.id === +el.dataset.cd);
+    if (!r) return;
+    const left = r.sched + S.tol - S.t;
+    el.textContent = r.snoozeUntil ? `pospuesta a ${hm(r.snoozeUntil)}` : left > 0 ? `quedan ${Math.ceil(left)} min de tolerancia` : '';
+  });
+  const pc = $('#ptopclock'); if (pc) pc.textContent = hm(S.t);
+}
+function syncControls(){
+  $('#playbtn').innerHTML = icon(S.running ? 'i-pause' : 'i-play');
+  document.querySelectorAll('#speeds button').forEach(b => b.classList.toggle('on', +b.dataset.sp === S.speed));
+  $('#speedlbl').textContent = S.speed === 1 ? '×1' : `×${S.speed}`;
+  $('#thrlbl').textContent = S.thr.toFixed(2);
+  $('#pthr').style.left = (S.thr*100) + '%';
+}
+
+/* ===================== reloj (smartwatch) ===================== */
+function setWatch(screen, recId = null, ms = 0, extra = null){
+  S.watch = {screen, recId, extra, until: ms ? performance.now() + ms : 0};
+  renderWatch();
+}
+function buzz(){ const w = $('#watch'); w.classList.remove('buzz'); void w.offsetWidth; w.classList.add('buzz'); }
+function renderWatch(){
+  const el = $('#wscreen');
+  const html = watchHTML();
+  if (el._h !== html){ el.innerHTML = html; el._h = html; }
+  const set = (id, v) => { const n = document.getElementById(id); if (n) n.textContent = v; };
+  set('wtm', hm(S.t)); set('whr', Math.round(S.hr)); set('wst', Math.round(S.steps).toLocaleString('es-MX'));
+}
+function watchHTML(){
+  const w = S.watch, r = w.recId ? S.records.find(x => x.id === w.recId) : null, m = r ? med(r.medId) : null;
+  if (!S.fitbit){
+    return `<div class="wpad" style="justify-content:center"><div class="wbig" style="background:#26343d">${icon('i-watch')}</div><div class="wsmall" style="margin-top:8px">Reloj desconectado.<br>Los recordatorios llegan solo al teléfono.</div></div>`;
+  }
+  if (w.screen === 'remind' && r){
+    const sensing = S.gestureOn && (r.status === 'pending' || r.status === 'unconfirmed');
+    return `<div class="wpad">
+      <span class="k">${r.status === 'unconfirmed' ? 'Toma sin confirmar' : 'Hora de tu medicina'} · <span id="wtm"></span></span>
+      <span class="pill-ic" style="background:${m.color}">${icon('i-pill')}</span>
+      <span class="nm">${esc(m.name)}</span><span class="ds">${esc(m.dose)} · ${esc(m.note || '')}</span>
+      <span class="grow"></span>
+      ${sensing ? '<span class="wsense"><i></i>Detectando gesto de ingesta</span>' : ''}
+      <div class="wbtns"><button class="wbtn" data-w="take">Ya la tomé</button><button class="wbtn sec" data-w="snooze">+10</button></div>
+    </div>`;
+  } else if (w.screen === 'ask' && r){
+    return `<div class="wpad"><span class="k">Confirmación</span>
+      <span class="pill-ic" style="background:#2f6fd6">${icon('i-cup')}</span>
+      <span class="nm" style="font-size:16px">¿Tomaste tu ${esc(m.name)}?</span>
+      <span class="wsmall">Detectamos un movimiento parecido (${(w.extra||0).toFixed(2)}), pero no estamos seguros.</span>
+      <span class="grow"></span>
+      <div class="wbtns" style="grid-template-columns:1fr 1fr"><button class="wbtn" data-w="take">Sí</button><button class="wbtn no" data-w="notyet">Aún no</button></div></div>`;
+  } else if (w.screen === 'done' && r){
+    const late = r.status === 'delayed';
+    return `<div class="wpad"><span class="k">Registrado</span>
+      <span class="wbig" style="background:${late ? '#d98a12' : '#1f9d55'}">${icon('i-check')}</span>
+      <span class="nm" style="font-size:17px;margin-top:6px">${esc(m.name)}</span>
+      <span class="wsmall">${r.source === 'gesture' ? `Confirmada por gesto · ${r.conf.toFixed(2)}` : 'Confirmación manual'}${late ? '<br>con retraso' : ''}</span></div>`;
+  } else if (w.screen === 'cg' && r){
+    return `<div class="wpad"><span class="k" style="color:#ffb3ab">Sin confirmación</span>
+      <span class="wbig" style="background:#d9463b;margin-top:6px">${icon('i-alert')}</span>
+      <span class="wsmall" style="margin-top:4px">No detectamos tu toma de <b>${esc(m.name)}</b>.${S.cgLinked ? `<br>Avisamos a ${esc(S.caregiver.name)}.` : ''}</span>
+      <span class="grow"></span>
+      <div class="wbtns" style="grid-template-columns:1fr"><button class="wbtn" data-w="take">Ya la tomé</button></div></div>`;
+  } else if (w.screen === 'snoozed' && r){
+    return `<div class="wpad" style="justify-content:center"><span class="wbig" style="background:#26343d">${icon('i-snooze')}</span>
+      <span class="wsmall" style="margin-top:8px">Te recuerdo<br><b style="font-size:20px;font-family:var(--mono);color:#fff">${hm(r.snoozeUntil)}</b></span></div>`;
+  } else if (w.screen === 'list'){
+    return `<div class="wpad" style="padding-top:20px"><span class="k">Hoy</span><div class="wlist">${S.records.slice(0,6).map(x => `<div><b>${hm(x.sched)}</b><span>${esc(med(x.medId).name)}</span><i style="background:var(--${ST[x.status].c === 'pend' ? 'pend' : ST[x.status].c})"></i></div>`).join('')}</div></div>`;
+  } else {
+    const done = S.records.filter(x => x.status === 'confirmed' || x.status === 'delayed').length, tot = S.records.length;
+    const a = activeRec(), nx = S.records.find(x => x.status === 'pending' && !x.reminded);
+    const C = 2*Math.PI*96, frac = tot ? done/tot : 0;
+    const d = new Date();
+    return `<svg class="ring" viewBox="0 0 200 212" preserveAspectRatio="none"><rect x="4" y="4" width="192" height="204" rx="44" fill="none" stroke="#16242c" stroke-width="5"/>
+      <rect x="4" y="4" width="192" height="204" rx="44" fill="none" stroke="#2fd1a5" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="${frac*100} 100"/></svg>
+      <div class="wface" data-w="face"><span class="dt">${DAYS[d.getDay()].toUpperCase()} ${d.getDate()}</span>
+      <span class="tm" id="wtm"></span>
+      <span class="dt" style="color:#2fd1a5">${done}/${tot} tomas</span>
+      ${a ? `<span class="next alert">Pendiente: ${esc(med(a.medId).name)}</span>` : nx ? `<span class="next">Próxima: ${esc(med(nx.medId).name)} · ${hm(nx.sched)}</span>` : '<span class="next">Sin tomas pendientes</span>'}
+      <span class="stats"><span style="color:#ff7d73">${icon('i-heart')}<span class="num" id="whr"></span></span><span style="color:#8fd8d2">${icon('i-steps')}<span class="num" id="wst"></span></span></span></div>`;
+  }
+}
+$('#wscreen').addEventListener('click', e => {
+  const b = e.target.closest('[data-w]'); if (!b) return;
+  const act = b.dataset.w, r = S.records.find(x => x.id === S.watch.recId);
+  if (act === 'face'){ const a = activeRec(); a ? setWatch('remind', a.id) : setWatch('list', null, 4000); return; }
+  if (!r) return;
+  if (act === 'take'){ logx('usuario', 'Pulsa «Ya la tomé» en el reloj.'); confirm(r, 'manual'); }
+  if (act === 'snooze'){ r.snoozeUntil = S.t + 10; logx('usuario', `Pospone ${med(r.medId).name} 10 min.`); setWatch('snoozed', r.id, 2400); render(); }
+  if (act === 'notyet'){ logx('usuario', 'Responde «Aún no». Se mantiene pendiente.'); setWatch('remind', r.id); }
+});
+
+/* ===================== sensores y clasificador ===================== */
+const cv = $('#sig'), cx = cv.getContext('2d');
+const N = 300, buf = {x:[], y:[], z:[], g:[]};
+for (let i = 0; i < N; i++){ buf.x.push(.05); buf.y.push(-.95); buf.z.push(.2); buf.g.push(4); }
+let gest = null; // {kind, t0, dur}
+const bump = (t, c, w) => Math.exp(-((t - c)**2)/(2*w*w));
+const plat = (t, a, b, s) => 1/(1+Math.exp(-(t-a)/s)) - 1/(1+Math.exp(-(t-b)/s));
+const noise = a => (Math.random() + Math.random() + Math.random() - 1.5) * a;
+function sample(t){
+  if (!gest) return [ .05 + noise(.03), -.95 + noise(.03), .2 + noise(.03), 4 + Math.abs(noise(5)) ];
+  const k = gest.kind;
+  if (k === 'ingesta') return [
+    .05 + .75*bump(t,.8,.3) - .55*bump(t,2.5,.28) + noise(.04),
+    -.95 + 1.35*plat(t,.6,2.4,.14) + .25*bump(t,1.55,.1) + noise(.04),
+    .2 - .7*plat(t,.7,2.3,.16) + .45*bump(t,1.5,.12) + noise(.04),
+    6 + 120*bump(t,.65,.16) + 175*bump(t,1.5,.13) + 95*bump(t,2.45,.18) + Math.abs(noise(8)) ];
+  if (k === 'beber') return [
+    .05 + .4*bump(t,.8,.35) + noise(.04),
+    -.95 + 1.1*plat(t,.7,2.1,.22) + noise(.04),
+    .2 - .5*plat(t,.8,2.0,.22) + noise(.04),
+    6 + 80*bump(t,.7,.22) + 70*bump(t,2.0,.25) + Math.abs(noise(8)) ];
+  return [ .05 + .45*Math.sin(t*15)*plat(t,.2,1.8,.1) + noise(.06), -.9 + .3*Math.sin(t*11)*plat(t,.2,1.8,.1) + noise(.06),
+    .2 + .35*Math.cos(t*13)*plat(t,.2,1.8,.1) + noise(.06), 8 + 70*plat(t,.2,1.8,.1)*Math.abs(Math.sin(t*9)) + Math.abs(noise(10)) ];
+}
+let acc = 0, lastF = performance.now();
+function frame(now){
+  acc += (now - lastF) / 20; lastF = now;          // 50 Hz
+  while (acc >= 1){
+    acc--;
+    const t = gest ? (now - gest.t0)/1000 : 0;
+    const s = sample(t);
+    buf.x.push(s[0]); buf.y.push(s[1]); buf.z.push(s[2]); buf.g.push(s[3]);
+    for (const k in buf) buf[k].shift();
+    if (gest && t > gest.dur) finishGesture();
+  }
+  draw(); requestAnimationFrame(frame);
+}
+function draw(){
+  const W = cv.width, H = cv.height;
+  cx.clearRect(0,0,W,H);
+  cx.strokeStyle = 'rgba(255,255,255,.07)'; cx.lineWidth = 1;
+  for (let i = 1; i < 4; i++){ cx.beginPath(); cx.moveTo(0, H*i/4); cx.lineTo(W, H*i/4); cx.stroke(); }
+  const line = (arr, col, f) => { cx.strokeStyle = col; cx.lineWidth = 2.4; cx.beginPath();
+    arr.forEach((v, i) => { const x = i/(N-1)*W, y = f(v); i ? cx.lineTo(x, y) : cx.moveTo(x, y); }); cx.stroke(); };
+  const fa = v => H*.5 - v*(H*.3);
+  line(buf.g, 'rgba(169,148,255,.85)', v => H - 8 - v/220*(H-16));
+  line(buf.x, '#5fd0c8', fa); line(buf.y, '#f0b35a', fa); line(buf.z, '#ff7d73', fa);
+  cx.fillStyle = 'rgba(255,255,255,.45)'; cx.font = '600 18px JetBrains Mono, monospace';
+  cx.fillText('50 Hz · últimos 6 s', 12, 24);
+}
+function startGesture(kind){
+  if (gest) return;
+  const dur = kind === 'ingesta' ? 3.1 : kind === 'beber' ? 2.6 : 2.1;
+  gest = {kind, t0: performance.now(), dur};
+  const names = {ingesta:'mano a la boca + inclinación', beber:'lleva un vaso a la boca', otro:'movimiento sin relación'};
+  logx('usuario', `Movimiento: ${names[kind]}.`);
+  $('#sigstate').textContent = 'capturando'; $('#pmsg').textContent = 'Capturando ventana de 3 s…';
+  $('#pval').textContent = '…'; $('#pbar').style.width = '0';
+  document.querySelectorAll('.act').forEach(b => b.disabled = true);
+}
+function finishGesture(){
+  const kind = gest.kind; gest = null;
+  document.querySelectorAll('.act').forEach(b => b.disabled = false);
+  $('#sigstate').textContent = 'en reposo';
+  const p = kind === 'ingesta' ? .86 + Math.random()*.1 : kind === 'beber' ? .55 + Math.random()*.15 : .08 + Math.random()*.15;
+  const bar = $('#pbar');
+  bar.style.width = (p*100) + '%';
+  bar.style.background = p >= S.thr ? 'var(--ok)' : p >= .5 ? 'var(--late)' : 'var(--pend)';
+  $('#pval').textContent = `P = ${p.toFixed(2)}`;
+  logx('ml', `Clasificador: P(ingesta)=${p.toFixed(2)} (umbral ${S.thr.toFixed(2)}).`);
+  if (!S.fitbit || !S.gestureOn){ $('#pmsg').textContent = 'Detección desactivada: no se usa.'; return; }
+  const r = activeRec();
+  if (!r){ $('#pmsg').textContent = 'Fuera de una ventana de toma: se ignora.'; logx('ml', 'No hay toma activa: el gesto se descarta (evita falsos positivos).'); return; }
+  if (p >= S.thr){ $('#pmsg').textContent = 'Gesto de ingesta: toma confirmada.'; confirm(r, 'gesture', p); }
+  else if (p >= .5){ $('#pmsg').textContent = 'Dudoso: se pide confirmación al usuario.'; buzz(); setWatch('ask', r.id, 0, p); logx('ml', 'Confianza intermedia → se pregunta en el reloj.'); }
+  else { $('#pmsg').textContent = 'No es un gesto de ingesta.'; }
+}
+document.querySelectorAll('.act[data-g]').forEach(b => b.addEventListener('click', () => startGesture(b.dataset.g)));
+$('#nada').addEventListener('click', () => {
+  const r = activeRec() || S.records.find(x => x.status === 'pending');
+  if (!r) return;
+  const target = Math.max(S.t, r.sched + S.tol + .1);
+  if (r.snoozeUntil) r.snoozeUntil = null;
+  logx('usuario', `Rafael no hace nada. El reloj avanza a ${hm(target)}.`);
+  // pasa por los recordatorios intermedios
+  if (!r.reminded){ S.t = Math.max(S.t, r.sched); tickRules(); }
+  if (!r.second && S.t < r.sched + S.reremind){ S.t = r.sched + S.reremind; tickRules(); }
+  S.t = target; tickRules(); tickUI();
+});
+
+/* ===================== teléfono ===================== */
+const TABS = [['hoy','Hoy','i-home'],['meds','Medicinas','i-pill'],['hist','Avisos','i-bell'],['adh','Adherencia','i-chart'],['set','Ajustes','i-gear']];
+function render(){
+  renderTop(); renderTabs(); renderView(); renderWatchIfNeeded(); renderCG(); syncControls();
+}
+function renderWatchIfNeeded(){ if (S.watch.screen !== 'face') renderWatch(); }
+function renderTop(){
+  const titles = {hoy:'Buenos días, Rafael', meds:'Medicinas', hist:'Avisos', adh:'Adherencia', set:'Ajustes'};
+  $('#ptop').innerHTML = `<h2>${titles[S.tab]}<span class="sub">Hoy · <span class="num" id="ptopclock">${hm(S.t)}</span></span></h2>
+    <span class="conn ${S.fitbit ? '' : 'off'}">${icon('i-watch')}${S.fitbit ? 'Sense 2' : 'Sin reloj'}</span>`;
+}
+function renderTabs(){
+  $('#tabs').innerHTML = TABS.map(([k, l, i]) => `<button type="button" data-tab="${k}" class="${S.tab === k ? 'on' : ''}">${icon(i)}${l}</button>`).join('');
+}
+function weekStats(){
+  const all = S.history.flatMap(d => d.recs).concat(S.records.filter(r => r.status !== 'pending').map(r => ({...r, lat: r.confAt != null ? r.confAt - r.sched : null})));
+  const res = all.length || 1;
+  const ok = all.filter(r => r.status === 'confirmed').length, late = all.filter(r => r.status === 'delayed').length, un = all.filter(r => r.status === 'unconfirmed').length;
+  const lats = all.filter(r => r.lat != null).map(r => r.lat);
+  const src = {gesture:0, manual:0, caregiver:0}; all.forEach(r => r.source && src[r.source]++);
+  return {all, ok, late, un, pct: Math.round((ok + late)/res*100), onTime: Math.round(ok/res*100), lat: lats.length ? Math.round(lats.reduce((a,b)=>a+b,0)/lats.length) : 0, src};
+}
+function doseCard(r){
+  const m = med(r.medId), st = ST[r.status];
+  const live = r.reminded && (r.status === 'pending');
+  const chips = [`<span class="pill ${st.c}">${st.t}</span>`];
+  if (r.source) chips.push(`<span class="pill ${r.source === 'gesture' ? 'ges' : 'pend'}">${r.source === 'gesture' ? 'gesto ' + r.conf.toFixed(2) : SRC[r.source]} · ${hm(r.confAt)}</span>`);
+  if (live) chips.push(`<span class="cdn" data-cd="${r.id}"></span>`);
+  if (r.status === 'unconfirmed' && r.cgNotified) chips.push(`<span class="pill miss">avisado a ${esc(S.caregiver.name)}</span>`);
+  const canConfirm = r.status === 'pending' || r.status === 'unconfirmed';
+  return `<div class="dose st-${r.status} ${live ? 'live' : ''}">
+    <div class="h">${hm(r.sched)}</div>
+    <div><div class="row" style="display:flex;justify-content:space-between;gap:8px;align-items:start">
+      <div><div class="nm">${esc(m.name)} <span class="mu" style="font-weight:600">${esc(m.dose)}</span></div><div class="meta">${esc(m.note || '')}</div></div>
+      ${canConfirm ? `<button class="minibtn ${r.reminded ? '' : 'ghost'}" data-confirm="${r.id}">${r.reminded ? 'Confirmar' : 'Ya la tomé'}</button>` : ''}
+    </div><div class="chips">${chips.join('')}</div></div></div>`;
+}
+function renderView(){
+  const v = $('#pview');
+  if (S.tab === 'hoy'){
+    const w = weekStats();
+    const done = S.records.filter(x => x.status === 'confirmed' || x.status === 'delayed').length;
+    v.innerHTML = `<div class="hero"><span class="k">TOMAS DE HOY</span>
+      <div class="big"><b>${done}/${S.records.length}</b><span>confirmadas</span></div>
+      <div class="tiles"><div><b>${w.pct}%</b><span>7 DÍAS</span></div><div><b>${w.src.gesture}</b><span>GESTO · 7D</span></div><div><b>${w.lat}′</b><span>LATENCIA</span></div></div></div>
+      <div class="sec">Línea de tiempo <button data-tab="meds">Editar</button></div>
+      <div class="tl">${S.records.map(doseCard).join('') || '<div class="empty">Sin medicinas programadas.</div>'}</div>
+      <p class="mu" style="font-size:11.5px;margin:0">«Sin confirmar» no significa «no tomada»: solo que no hubo evidencia dentro de la tolerancia de ${S.tol} min.</p>`;
+  }
+  if (S.tab === 'meds'){
+    v.innerHTML = `${S.adding ? `<form class="form" id="addform">
+        <b>Nueva medicina</b>
+        <label>Nombre<input name="name" required placeholder="Ej. Levotiroxina" maxlength="40"></label>
+        <div class="row2"><label>Dosis<input name="dose" required placeholder="100 mcg" maxlength="20"></label>
+        <label>Indicación<input name="note" placeholder="En ayunas" maxlength="30"></label></div>
+        <label>Horarios (HH:MM, separados por coma)<input name="times" required placeholder="10:00, 22:00" pattern="^\\s*\\d{1,2}:\\d{2}(\\s*,\\s*\\d{1,2}:\\d{2})*\\s*$"></label>
+        <div class="row2"><button class="btn ghost" type="button" id="cancel">Cancelar</button><button class="btn" type="submit">Guardar</button></div>
+      </form>` : `<button class="btn" type="button" id="addbtn">+ Agregar medicina</button>`}
+      ${S.meds.map(m => `<div class="medcard"><span class="ic" style="background:${m.color}22;color:${m.color}">${icon('i-pill')}</span>
+        <div><div class="nm">${esc(m.name)} <span class="mu" style="font-weight:600">${esc(m.dose)}</span></div><div class="mu" style="font-size:12px">${esc(m.note || '')}</div>
+        <div class="tchips">${m.times.map(t => `<span>${t}</span>`).join('')}</div></div>
+        <button class="del" type="button" data-del="${m.id}">Quitar</button></div>`).join('') || '<div class="empty">Agrega tu primera medicina.</div>'}
+      <p class="mu" style="font-size:11.5px;margin:0">Tabla <b>Medication</b> + <b>Schedule</b>. Las tomas futuras de hoy se generan al guardar.</p>`;
+  }
+  if (S.tab === 'hist'){
+    const ic = {fitbit_notification:['i-watch','var(--ac-soft)','var(--ac-dk)'], push:['i-bell','var(--blue-soft)','var(--blue)']};
+    v.innerHTML = `<div class="nlist">${S.notifs.map(n => { const [i, bg, c] = n.to === 'caregiver' ? ['i-user','var(--miss-soft)','var(--miss)'] : ic[n.ch];
+      return `<div class="nitem"><span class="ic" style="background:${bg};color:${c}">${icon(i)}</span><div><div class="t">${esc(n.text)}</div>
+      <div class="m">${hm(n.at)} · ${n.to === 'caregiver' ? 'cuidador' : 'usuario'} · ${n.ch} · ${n.st}</div></div></div>`; }).join('')}</div>
+      <p class="mu" style="font-size:11.5px;margin:0">Tabla <b>Notification</b>: destinatario, canal y estado de entrega.</p>`;
+  }
+  if (S.tab === 'adh'){
+    const w = weekStats();
+    const days = S.history.map(d => d.recs).concat([S.records.filter(r => r.status !== 'pending')]);
+    const labels = S.history.map(d => d.label).concat(['Hoy']);
+    const maxN = Math.max(...days.map(d => d.length), 5);
+    const bars = days.map((d, i) => { const c = s => d.filter(r => r.status === s).length;
+      const seg = (n, col) => n ? `<i style="height:${n/maxN*100}%;background:${col}"></i>` : '';
+      return `<div class="col7"><div class="stack">${seg(c('confirmed'),'var(--ok)')}${seg(c('delayed'),'var(--late)')}${seg(c('unconfirmed'),'var(--miss)')}</div><small>${labels[i]}</small></div>`; }).join('');
+    const srcTot = (w.src.gesture + w.src.manual + w.src.caregiver) || 1;
+    // horario más problemático
+    const byT = {}; S.history.forEach(d => d.recs.forEach(r => { byT[r.sched] = byT[r.sched] || {n:0, bad:0}; byT[r.sched].n++; if (r.status !== 'confirmed') byT[r.sched].bad++; }));
+    const worst = Object.entries(byT).sort((a, b) => b[1].bad/b[1].n - a[1].bad/a[1].n)[0];
+    const wm = worst && S.meds.find(m => m.times.includes(worst[0]));
+    v.innerHTML = `<div class="kv"><div><b>${w.pct}%</b><span>CONFIRMADAS</span></div><div><b>${w.onTime}%</b><span>A TIEMPO</span></div><div><b>${w.lat}′</b><span>LATENCIA</span></div></div>
+      <div class="card"><h3>Últimos 7 días</h3><div class="chart">${bars}</div>
+      <div class="legend"><span><i style="background:var(--ok)"></i>a tiempo</span><span><i style="background:var(--late)"></i>con retraso</span><span><i style="background:var(--miss)"></i>sin confirmar</span></div></div>
+      <div class="card"><h3>¿Cómo se confirmó?</h3><div class="hbar">
+        ${[['Gesto','gesture','var(--ges)'],['Manual','manual','var(--blue)'],['Cuidador','caregiver','var(--late)']].map(([l, k, c]) => `<div class="r"><span>${l}</span><span class="t"><i style="width:${w.src[k]/srcTot*100}%;background:${c}"></i></span><span class="v">${Math.round(w.src[k]/srcTot*100)}%</span></div>`).join('')}
+      </div></div>
+      ${worst ? `<div class="insight"><b>Patrón detectado:</b> la toma de las <b>${worst[0]}</b>${wm ? ` (${esc(wm.name)})` : ''} es la que más se retrasa u olvida (${Math.round(worst[1].bad/worst[1].n*100)}% de las veces). Sugerencia: adelantar el recordatorio o asociarlo a una rutina fija (desayuno, cena).</div>` : ''}`;
+  }
+  if (S.tab === 'set'){
+    v.innerHTML = `<div class="set"><div class="lbl">Tolerancia <span class="num">${S.tol} min</span></div>
+        <div class="seg" role="group">${[15,30,45,60].map(n => `<button type="button" data-tol="${n}" class="${S.tol === n ? 'on' : ''}">${n}</button>`).join('')}</div>
+        <div class="help">Tiempo para confirmar antes de marcar «sin confirmar» y avisar al cuidador. Segundo recordatorio a los ${S.reremind} min.</div></div>
+      <div class="set"><div class="lbl">Umbral del gesto <span class="num">${S.thr.toFixed(2)}</span></div>
+        <input type="range" min="0.6" max="0.95" step="0.05" value="${S.thr}" id="thr">
+        <div class="help">Más alto = menos falsos positivos, pero más preguntas en el reloj.</div></div>
+      <div class="set"><div class="tog"><div><div class="lbl">Fitbit Sense 2</div><div class="help">${S.fitbit ? 'Conectado por Bluetooth · notificaciones activas' : 'Desconectado · solo notificaciones del teléfono'}</div></div><button type="button" class="sw ${S.fitbit ? 'on' : ''}" data-sw="fitbit" aria-label="Reloj conectado"></button></div>
+        <div class="tog"><div><div class="lbl">Confirmación por gesto</div><div class="help">Usa acelerómetro y giroscopio en la ventana de la toma.</div></div><button type="button" class="sw ${S.gestureOn ? 'on' : ''}" data-sw="gestureOn" aria-label="Confirmación por gesto"></button></div></div>
+      <div class="set"><div class="tog"><div><div class="lbl">Cuidador: ${esc(S.caregiver.name)} (${esc(S.caregiver.rel)})</div><div class="help">${S.cgLinked ? 'Recibe avisos solo si una toma queda sin confirmar.' : 'Sin cuidador vinculado: no hay escalamiento.'}</div></div><button type="button" class="sw ${S.cgLinked ? 'on' : ''}" data-sw="cgLinked" aria-label="Cuidador vinculado"></button></div></div>
+      <p class="mu" style="font-size:11.5px;margin:0">Los horarios se guardan en UTC y se muestran en tu zona horaria. Tus datos de salud no se comparten sin tu consentimiento.</p>`;
+  }
+}
+function renderCG(){
+  const f = $('#cgfeed');
+  if (!S.cg.length){ f.innerHTML = `<p class="mu" style="margin:0;font-size:12.5px">${S.cgLinked ? 'Sin avisos. Laura solo recibe mensajes si una toma queda sin confirmar.' : 'No hay cuidador vinculado.'}</p>`; return; }
+  f.innerHTML = S.cg.map(c => { const r = c.recId && S.records.find(x => x.id === c.recId);
+    return `<div class="bubble ${c.ok ? 'okb' : ''}"><small>${hm(c.at)} · MediTrack</small>${c.text}
+    ${!c.ok && r && (r.status === 'unconfirmed') ? `<br><button type="button" data-cgok="${r.id}">Le llamé: sí la tomó</button>` : ''}</div>`; }).join('');
+}
+function renderConsole(){
+  const el = $('#console'); if (!el) return;
+  const col = {sistema:'var(--mu)', notif:'var(--ac-dk)', ml:'var(--ges)', estado:'var(--blue)', cuidador:'var(--miss)', usuario:'#8a5600'};
+  el.innerHTML = S.log.map(l => `<div><span>${hm(l.at)}</span><p style="margin:0"><span class="tag" style="color:${col[l.tag]}">[${l.tag}]</span> ${esc(l.msg)}</p></div>`).join('');
+}
+let bannerT;
+function showBanner(html){ $('#bannertxt').innerHTML = html; const b = $('#banner'); b.classList.add('show'); clearTimeout(bannerT); bannerT = setTimeout(() => b.classList.remove('show'), 3200); }
+
+/* ===================== eventos ===================== */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-tab],[data-confirm],[data-del],[data-tol],[data-sw],[data-cgok],#addbtn,#cancel');
+  if (!t) return;
+  if (t.dataset.tab){ S.tab = t.dataset.tab; S.adding = false; render(); $('#pview').scrollTop = 0; }
+  else if (t.dataset.confirm){ const r = S.records.find(x => x.id === +t.dataset.confirm); logx('usuario', 'Confirma desde la app del teléfono.'); confirm(r, 'manual'); }
+  else if (t.dataset.del){ const id = +t.dataset.del; const m = med(id);
+    S.meds = S.meds.filter(x => x.id !== id); S.records = S.records.filter(r => r.medId !== id || r.status !== 'pending');
+    S.records = S.records.filter(r => S.meds.some(mm => mm.id === r.medId));
+    logx('sistema', `Medication «${m.name}» desactivada (is_active = 0).`); render(); }
+  else if (t.dataset.tol){ S.tol = +t.dataset.tol; logx('sistema', `Tolerancia = ${S.tol} min.`); render(); }
+  else if (t.dataset.sw){ const k = t.dataset.sw; S[k] = !S[k];
+    logx('sistema', {fitbit: S.fitbit ? 'Reloj reconectado.' : 'Reloj desconectado: recordatorios solo en el teléfono.', gestureOn: `Confirmación por gesto ${S.gestureOn ? 'activada' : 'desactivada'}.`, cgLinked: `Cuidador ${S.cgLinked ? 'vinculado' : 'desvinculado'}.`}[k]);
+    if (k === 'fitbit') setWatch('face'); render(); }
+  else if (t.dataset.cgok){ const r = S.records.find(x => x.id === +t.dataset.cgok); S.cg = S.cg.filter(c => c.recId !== r.id || c.ok);
+    logx('cuidador', `${S.caregiver.name} confirma la toma tras llamar.`); confirm(r, 'caregiver'); setWatch('face'); }
+  else if (t.id === 'addbtn'){ S.adding = true; render(); }
+  else if (t.id === 'cancel'){ S.adding = false; render(); }
+});
+document.addEventListener('submit', e => {
+  if (e.target.id !== 'addform') return;
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const times = String(f.get('times')).split(',').map(s => s.trim()).filter(Boolean)
+    .map(s => { const [h, m] = s.split(':').map(Number); return (h < 24 && m < 60) ? String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') : null; }).filter(Boolean);
+  if (!times.length) return;
+  const m = {id: uid++, name: String(f.get('name')).trim(), dose: String(f.get('dose')).trim(), note: String(f.get('note') || '').trim(), times, color: COLORS[S.meds.length % COLORS.length]};
+  S.meds.push(m);
+  times.forEach(tm => { if (toMin(tm) > S.t) addRecord(m, toMin(tm)); });
+  S.adding = false;
+  logx('sistema', `Medication «${m.name}» creada con ${times.length} horario(s).`);
+  render();
+});
+document.addEventListener('change', e => {
+  if (e.target.id === 'thr'){ S.thr = +e.target.value; logx('sistema', `Umbral del clasificador = ${S.thr.toFixed(2)}.`); render(); }
+});
+$('#playbtn').addEventListener('click', () => { S.running = !S.running; syncControls(); });
+document.querySelectorAll('#speeds button').forEach(b => b.addEventListener('click', () => { S.speed = +b.dataset.sp; syncControls(); }));
+$('#skipbtn').addEventListener('click', () => {
+  const nx = S.records.find(x => x.status === 'pending' && !x.reminded);
+  if (!nx) return;
+  S.t = Math.max(S.t, nx.sched - 0.05);
+  logx('sistema', `Salto a ${hm(nx.sched)}.`);
+  tickRules(); tickUI();
+});
+$('#reset').addEventListener('click', () => { seed(); setWatch('face'); render(); });
+
+seed(); render(); setWatch('face'); requestAnimationFrame(frame);
+</script>
+</body>
+</html>
