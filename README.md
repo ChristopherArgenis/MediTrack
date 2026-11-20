@@ -13,12 +13,16 @@ automática por gesto de ingesta (ML) y aviso escalonado al cuidador.
 | `documentos.html` | Índice de los dos documentos |
 | `doc-conceptual.html` / `.pdf` | Documento 1, conceptual/teórico: problema, objetivos, público, lineamientos, trabajos relacionados, validación y verificación de fuentes |
 | `doc-tecnico.html` / `.pdf` | Documento 2, técnico/tecnológico: arquitectura, comparativa de relojes, APIs, fusión de evidencias, modelo, motor de estados, BD y código |
-| `presentacion.html` / `.pdf` | Presentación de 17 diapositivas (← → para navegar, F para pantalla completa, `#n` abre la diapositiva n) |
+| `presentaciones.html` | Índice de las 4 presentaciones por público |
+| `pres-academica.html` / `.pdf` | Académico: estado del arte, metodología, datos, BD, validación y verificación de fuentes (18 diapositivas) |
+| `pres-medica.html` / `.pdf` | Médicos: reporte de consulta, alcance clínico, evidencia, privacidad y piloto (9) |
+| `pres-inversion.html` / `.pdf` | Inversionistas: costo del problema, mercado, ventaja, costo de entrada, modelo de negocio (hipótesis), riesgos (10) |
+| `pres-general.html` / `.pdf` | Público general: lenguaje sencillo, 3 pasos, familia, privacidad y qué reloj necesito (9) |
 | `flujo.html` / `img/flujo.png` | Diapositiva única con el flujo de una toma y sus conexiones |
-| `documento.html` | Redirección a `documentos.html` (enlace antiguo) |
+| `documento.html`, `presentacion.html` | Redirecciones de los enlaces antiguos |
 | `db/schema.sql` | Esquema SQLite (Device, IntakeRecord, Evidence, FusionDecision, ...) |
 | `db/test_schema.py` | Prueba del esquema y de la fusión de evidencias |
-| `assets/` | Tema visual, estilos de documentos y logo |
+| `assets/` | Tema visual, estilos de documentos, motor de presentaciones (`deck.css`, `deck.js`), `nav.js` y logo |
 
 ## Publicar en GitHub Pages
 
@@ -33,4 +37,4 @@ python3 db/test_schema.py
 ## Regenerar PDF y PNG
 
 Las exportaciones se hacen con Playwright (Chromium): `flujo.html?raw=1` a 1920×1080 para el PNG
-y la vista de impresión de `presentacion.html`, `doc-conceptual.html` y `doc-tecnico.html` para los PDF.
+y la vista de impresión de `pres-*.html`, `doc-conceptual.html` y `doc-tecnico.html` para los PDF.

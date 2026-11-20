@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediTrack · Presentación médicos</title>
+<meta name="description" content="Presentación de MediTrack para médicos, enfermería y farmacéuticos.">
+<link rel="icon" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/tema.css">
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body>
+<!-- Presentación para personal de salud -->
+<nav class="sitenav">
+  <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
+  <a class="l" href="prototipo.html">Prototipo</a>
+  <a class="l" href="documentos.html">Documentos</a>
+  <a class="l on" href="presentaciones.html">Presentaciones</a>
+  <a class="l" href="flujo.html">Flujo</a>
+</nav>
+<div class="bar" id="bar"></div>
+<div class="viewer" id="viewer"><div class="deck" id="deck">
+<section class="s cover">
+  <div class="logo"><img src="assets/logo.svg" alt="">MEDITRACK</div>
+  <span class="aud">🩺 Presentación para médicos</span>
+  <h1>MediTrack</h1>
+  <p class="lead">Saber si su paciente tomó el medicamento, a qué hora y con qué evidencia, sin depender de su memoria.</p>
+  <div class="meta"><span>Médicos, enfermería y farmacéuticos</span><span>Noviembre 2026</span></div>
+</section>
+<section class="s">
+  <span class="k">El problema</span>
+  <h2>La mitad de los pacientes crónicos no sigue el tratamiento como se indicó</h2>
+  <div class="body"><div class="split">
+    <div><div class="big">≈50<small>%</small></div><p class="sub" style="margin-top:24px">de adherencia a tratamientos de largo plazo en enfermedades crónicas, en países desarrollados (OMS, 2003). En países en desarrollo es menor.</p></div>
+    <div class="reasons"><div class="reason"><i style="background:var(--miss-soft);color:var(--miss)">1</i><div><b>Polifarmacia</b><span>Varios medicamentos y horarios en adultos mayores.</span></div></div><div class="reason"><i style="background:var(--late-soft);color:#8a5600">2</i><div><b>Duda</b><span>“¿Ya me la tomé?” lleva a omitir o a duplicar.</span></div></div><div class="reason"><i style="background:var(--blue-soft);color:var(--blue)">3</i><div><b>Sin datos en consulta</b><span>Solo el autorreporte del paciente.</span></div></div><div class="reason"><i style="background:var(--ges-soft);color:var(--ges)">4</i><div><b>Ajustes a ciegas</b><span>Subir la dosis cuando el problema es la toma.</span></div></div></div>
+  </div></div>
+</section>
+<section class="s">
+  <span class="k">Qué recibe usted</span>
+  <h2>Un historial de tomas con evidencia</h2>
+  <p class="sub">Ejemplo ficticio de lo que vería en consulta: cada dosis con hora real, retraso, fuente y confianza.</p>
+  <div class="body"><table class="tsm">
+    <tr><th>Día</th><th>Programada</th><th>Medicamento</th><th>Estado</th><th>Confirmación</th><th>Fuente · confianza</th></tr>
+    <tr><td>Lun</td><td class="num">08:00</td><td>Metformina 850 mg</td><td class="y">a tiempo</td><td class="num">08:06</td><td>automática · 0.93</td></tr>
+    <tr><td>Lun</td><td class="num">20:00</td><td>Metformina 850 mg</td><td class="m">con retraso</td><td class="num">21:10</td><td>manual</td></tr>
+    <tr><td>Mar</td><td class="num">09:00</td><td>Losartán 50 mg</td><td class="y">a tiempo</td><td class="num">09:12</td><td>NFC + gesto · 0.98</td></tr>
+    <tr><td>Mar</td><td class="num">20:00</td><td>Metformina 850 mg</td><td class="n">sin confirmar</td><td class="num">—</td><td>se avisó a la cuidadora</td></tr>
+  </table>
+  <p class="sub" style="font-size:22px">Resumen: % de tomas confirmadas, % a tiempo, latencia y horario más problemático (por ejemplo, “la dosis de las 20:00 falla con más frecuencia”).</p></div>
+</section>
+<section class="s">
+  <span class="k">Cómo funciona para el paciente</span>
+  <h2>Recordar, confirmar con evidencia, escalar</h2>
+  <div class="body"><div class="layers3">
+    <div class="card" style="border-top:10px solid var(--ac)"><span class="tag" style="background:var(--ac-soft);color:var(--ac-dk)">1 · Recordatorio</span><h3>En la muñeca</h3><p>El reloj vibra a la hora exacta, con segundo aviso a los 15 min.</p></div>
+    <div class="arr">→</div>
+    <div class="card" style="border-top:10px solid var(--ges)"><span class="tag" style="background:var(--ges-soft);color:#4a32b0">2 · Evidencia</span><h3>¿La tomó?</h3><p>Movimiento de la muñeca, toque NFC del frasco y horario se combinan. Si hay duda, pregunta.</p></div>
+    <div class="arr">→</div>
+    <div class="card" style="border-top:10px solid var(--miss)"><span class="tag" style="background:var(--miss-soft);color:#a3261d">3 · Cuidador</span><h3>Solo si falta evidencia</h3><p>A los 30 min sin evidencia, se avisa al familiar.</p></div>
+  </div></div>
+</section>
+<section class="s">
+  <span class="k">Alcance clínico</span>
+  <h2>Lo que es, y lo que no es</h2>
+  <div class="body"><div class="cols c2">
+    <div class="card"><h3>Sí es</h3><ul><li>Una herramienta de apoyo a la adherencia</li><li>Un registro con evidencia y nivel de confianza</li><li>Un canal para el cuidador familiar</li><li>Tolerancia y umbral configurables por medicamento</li></ul></div>
+    <div class="card"><h3>No es</h3><ul><li>Un dispositivo médico ni un diagnóstico</li><li>Prueba de ingestión: “sin confirmar” ≠ “no tomada”</li><li>Un sistema que recomiende dosis atrasadas</li><li>Un sustituto de la indicación médica</li></ul></div>
+  </div></div>
+</section>
+<section class="s">
+  <span class="k">Evidencia científica</span>
+  <h2>El movimiento de la muñeca sí aporta evidencia</h2>
+  <div class="body"><div class="cols c3">
+    <div class="card"><span class="tag" style="background:var(--ac-soft);color:var(--ac-dk)">DoseMate · 2024</span><h3>Estudio en vida real</h3><p>20 participantes, 1,154 eventos con smartwatch. 94–95 % de exactitud balanceada al reconocer la toma.</p></div>
+    <div class="card"><span class="tag" style="background:var(--blue-soft);color:#1f4fa8">Odhiambo · 2023</span><h3>Smartwatch</h3><p>2,800 gestos: 96.5 % de verdaderos positivos y 94.5 % de verdaderos negativos.</p></div>
+    <div class="card"><span class="tag" style="background:var(--ges-soft);color:#4a32b0">Moccia · 2022</span><h3>Laboratorio</h3><p>CNN-LSTM con pulsera inercial: F1 mediana de 90.5 % (multiclase) y 92.5 % (binaria).</p></div>
+  </div>
+  <p class="sub" style="font-size:22px">Límite conocido: comer, beber o fumar se parecen al gesto. Por eso MediTrack no confía en una sola señal.</p></div>
+</section>
+<section class="s">
+  <span class="k">Privacidad y ética</span>
+  <h2>Datos sensibles, tratados como tales</h2>
+  <div class="body"><div class="cols c3">
+    <div class="card"><div class="ic" style="background:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><h3>Consentimiento</h3><p>Los datos de salud son sensibles: requieren consentimiento expreso y por escrito (LFPDPPP, DOF 20/03/2025).</p></div>
+    <div class="card"><div class="ic" style="background:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="4"/><path d="M9 6V2h6v4M9 18v4h6v-4"/></svg></div><h3>Procesamiento local</h3><p>La señal de movimiento se analiza en el dispositivo y solo se guarda el resultado.</p></div>
+    <div class="card"><div class="ic" style="background:var(--ges)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3v6a5 5 0 0 0 10 0V3"/><path d="M11 14v2a5 5 0 0 0 10 0v-2"/><circle cx="21" cy="12" r="2"/></svg></div><h3>Estudio con comité</h3><p>Piloto con protocolo aprobado por un comité de ética y consentimiento informado.</p></div>
+  </div></div>
+</section>
+<section class="s">
+  <span class="k">Cómo puede participar</span>
+  <h2>Piloto de 4 semanas</h2>
+  <div class="body"><div class="cols c2" style="align-items:start">
+    <div class="card"><h3>Diseño propuesto</h3><ul><li>2 semanas de línea base (solo registro)</li><li>2 semanas con MediTrack completo</li><li>Adultos de 60+ con ≥ 3 tomas diarias</li><li>Medidas: % confirmadas, latencia, carga del cuidador y usabilidad (SUS)</li></ul></div>
+    <div class="ask"><h3>Lo que necesitamos de usted</h3><ul><li>Sugerir pacientes candidatos</li><li>Revisar el protocolo y los criterios</li><li>Opinar sobre el reporte de consulta</li><li>Definir tolerancias por medicamento</li></ul></div>
+  </div>
+  <p class="sub" style="font-size:21px">Referencia: la Pharmacy Quality Alliance usa 80 % de días cubiertos (PDC) como umbral en diabetes y cardiovasculares. Nuestra meta es ≥ 80 % de dosis confirmadas.</p></div>
+</section>
+<section class="s end">
+  <span class="k" style="color:#5fd0c8">Gracias</span>
+  <h2>¿Preguntas?</h2>
+  <div class="links"><div><b>Prototipo</b><span>christopherargenis.github.io/MediTrack/prototipo.html</span></div><div><b>Documentos</b><span>christopherargenis.github.io/MediTrack/documentos.html</span></div><div><b>Repositorio</b><span>github.com/ChristopherArgenis/MediTrack</span></div></div>
+</section>
+</div></div>
+<div class="ctrl"><a href="presentaciones.html" style="color:#fff;font:700 13px var(--f);padding:8px 10px;text-decoration:none">🩺 Médicos</a><button id="prev" type="button" aria-label="Anterior">←</button><span id="cnt"></span><button id="next" type="button" aria-label="Siguiente">→</button><button id="fs" type="button">Pantalla completa</button></div>
+<script src="assets/deck.js"></script>
+</body>
+</html>

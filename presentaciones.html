@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediTrack · Presentaciones</title>
+<meta name="description" content="Presentaciones de MediTrack para cuatro públicos: académico, médicos, inversionistas y público general.">
+<link rel="icon" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/tema.css">
+<style>
+.wrap{max-width:1080px;margin:0 auto;padding:44px 16px 72px}
+h1{font-size:clamp(34px,6vw,52px);letter-spacing:-.03em;line-height:1.05;margin:14px 0 10px}
+.lead{font-size:18px;color:var(--mu);margin:0;max-width:680px}
+.four{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:34px}
+.p{background:var(--card);border-radius:22px;box-shadow:var(--sh);overflow:hidden;display:flex;flex-direction:column}
+.p .top{padding:22px;color:#fff}
+.p .top .e{font-size:30px}
+.p .top h2{margin:6px 0 2px;font-size:22px}
+.p .top p{margin:0;opacity:.92;font-size:14px}
+.p .body{padding:18px 22px 22px;display:grid;gap:10px;flex:1;align-content:start}
+.p ul{margin:0;padding-left:18px;color:#33434f;display:grid;gap:3px;font-size:14px}
+.p .meta{font-size:12.5px;color:var(--mu);font-family:var(--mono)}
+.p .acts{display:flex;gap:8px;margin-top:4px}
+.p .acts a{text-decoration:none;font-weight:800;padding:9px 14px;border-radius:11px;background:var(--fg);color:#fff;font-size:13.5px}
+.p .acts a.sec{background:var(--bg);color:var(--fg)}
+.tip{margin-top:26px;font-size:14px;color:var(--mu)}
+.tip kbd{font-family:var(--mono);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:12px}
+</style>
+</head>
+<body>
+<nav class="sitenav">
+  <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="26" height="26">MediTrack</a>
+  <a class="l" href="prototipo.html">Prototipo</a>
+  <a class="l" href="documentos.html">Documentos</a>
+  <a class="l on" href="presentaciones.html">Presentaciones</a>
+  <a class="l" href="flujo.html">Flujo</a>
+</nav>
+<main class="wrap">
+  <span class="pill ac">Presentaciones · 4 públicos</span>
+  <h1>Una presentación para cada público</h1>
+  <p class="lead">El mismo proyecto contado de cuatro formas. Cada una tiene el nivel de detalle y el lenguaje que su público necesita.</p>
+  <div class="four">
+    <article class="p">
+      <div class="top" style="background:linear-gradient(150deg,#2a3f50,#0f2230)"><span class="e">🎓</span><h2>Académico</h2><p>Docentes, sinodales, comunidad científica</p></div>
+      <div class="body"><ul><li>Estado del arte y verificación de fuentes</li><li>Fusión de evidencias y modelo</li><li>Comparativa de relojes, datos y base de datos</li><li>Validación y métricas</li></ul><span class="meta">18 diapositivas</span>
+      <div class="acts"><a href="pres-academica.html">Abrir</a><a class="sec" href="pres-academica.pdf">PDF</a></div></div>
+    </article>
+    <article class="p">
+      <div class="top" style="background:linear-gradient(150deg,#6b4fe0,#3f2ea0)"><span class="e">🩺</span><h2>Médicos</h2><p>Médicos, enfermería, farmacéuticos</p></div>
+      <div class="body"><ul><li>Qué ve el médico en consulta</li><li>Alcance clínico: qué es y qué no es</li><li>Evidencia científica y sus límites</li><li>Privacidad y cómo participar en el piloto</li></ul><span class="meta">9 diapositivas</span>
+      <div class="acts"><a href="pres-medica.html">Abrir</a><a class="sec" href="pres-medica.pdf">PDF</a></div></div>
+    </article>
+    <article class="p">
+      <div class="top" style="background:linear-gradient(150deg,#d98a12,#9a5b00)"><span class="e">📈</span><h2>Inversionistas</h2><p>Inversionistas, aceleradoras, aliados</p></div>
+      <div class="body"><ul><li>Costo del problema y mercado</li><li>Solución, demo y ventaja</li><li>Costo de entrada y modelo de negocio (hipótesis)</li><li>Riesgos y hoja de ruta</li></ul><span class="meta">10 diapositivas</span>
+      <div class="acts"><a href="pres-inversion.html">Abrir</a><a class="sec" href="pres-inversion.pdf">PDF</a></div></div>
+    </article>
+    <article class="p">
+      <div class="top" style="background:linear-gradient(150deg,#14a39b,#06615d)"><span class="e">👪</span><h2>Público general</h2><p>Pacientes, familias, cuidadores</p></div>
+      <div class="body"><ul><li>Lenguaje sencillo y letra grande</li><li>Cómo funciona en 3 pasos</li><li>Qué recibe la familia</li><li>Privacidad y qué reloj necesito</li></ul><span class="meta">9 diapositivas</span>
+      <div class="acts"><a href="pres-general.html">Abrir</a><a class="sec" href="pres-general.pdf">PDF</a></div></div>
+    </article>
+  </div>
+  <p class="tip">Navega con <kbd>←</kbd> <kbd>→</kbd> o tocando los lados, <kbd>F</kbd> para pantalla completa. Agrega <kbd>#5</kbd> a la dirección para abrir la diapositiva 5. Las cifras citadas están verificadas en el <a href="doc-conceptual.html#fuentes">documento conceptual</a>.</p>
+</main>
+</body>
+</html>
