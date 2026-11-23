@@ -25,6 +25,14 @@ h1{font-size:clamp(34px,6vw,52px);letter-spacing:-.03em;line-height:1.05;margin:
 .p .acts{display:flex;gap:8px;margin-top:4px}
 .p .acts a{text-decoration:none;font-weight:800;padding:9px 14px;border-radius:11px;background:var(--fg);color:#fff;font-size:13.5px}
 .p .acts a.sec{background:var(--bg);color:var(--fg)}
+.vids{margin-top:40px;display:grid;gap:14px}
+.vids h2{margin:0;font-size:26px;letter-spacing:-.01em}
+.vids p{margin:0;color:var(--mu);max-width:760px}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.vgrid figure{margin:0;background:var(--card);border-radius:18px;box-shadow:var(--sh);overflow:hidden}
+.vgrid video{width:100%;display:block;background:#000;aspect-ratio:16/9}
+.vgrid figcaption{padding:12px 16px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px;font-weight:700}
+.vgrid figcaption a{color:var(--ac-dk)}
 .tip{margin-top:26px;font-size:14px;color:var(--mu)}
 .tip kbd{font-family:var(--mono);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:12px}
 </style>
@@ -63,6 +71,17 @@ h1{font-size:clamp(34px,6vw,52px);letter-spacing:-.03em;line-height:1.05;margin:
       <div class="acts"><a href="pres-general.html">Abrir</a><a class="sec" href="pres-general.pdf">PDF</a></div></div>
     </article>
   </div>
+  <section class="vids" id="video">
+    <span class="pill ac" style="justify-self:start">Video para médicos · 2:20</span>
+    <h2>MediTrack en video</h2>
+    <p>Rafael toma su medicamento, el reloj reúne las evidencias y Laura recibe la confirmación. Hecho con Three.js y voces generadas localmente. Los subtítulos ya vienen en el video y también se pueden descargar en <code>.srt</code>.</p>
+    <div class="vgrid">
+      <figure><video controls preload="none" poster="video/out/poster-es.jpg"><source src="video/out/meditrack-medicos-es.mp4" type="video/mp4"><track kind="subtitles" srclang="es" label="Español" src="video/out/meditrack-medicos-es.vtt"></video>
+        <figcaption><span>🇲🇽 Español · voz Alex</span><a href="video/out/meditrack-medicos-es.srt" download>Subtítulos .srt</a></figcaption></figure>
+      <figure><video controls preload="none" poster="video/out/poster-en.jpg"><source src="video/out/meditrack-medicos-en.mp4" type="video/mp4"><track kind="subtitles" srclang="en" label="English" src="video/out/meditrack-medicos-en.vtt"></video>
+        <figcaption><span>🇺🇸 English · voice Fenrir</span><a href="video/out/meditrack-medicos-en.srt" download>Subtitles .srt</a></figcaption></figure>
+    </div>
+  </section>
   <p class="tip">Navega con <kbd>←</kbd> <kbd>→</kbd> o tocando los lados, <kbd>F</kbd> para pantalla completa. Agrega <kbd>#5</kbd> a la dirección para abrir la diapositiva 5. Las cifras citadas están verificadas en el <a href="doc-conceptual.html#fuentes">documento conceptual</a>.</p>
 </main>
 </body>
