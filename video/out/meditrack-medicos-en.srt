@@ -1,0 +1,83 @@
+1
+00:00:00,500 --> 00:00:04,468
+Doctor, how do you know if your patient actually took their medication?
+
+2
+00:00:04,918 --> 00:00:10,038
+According to the WHO, adherence in chronic diseases is only around 50%.
+
+3
+00:00:11,338 --> 00:00:14,901
+With several medications and schedules, it's easy to forget.
+
+4
+00:00:15,351 --> 00:00:20,684
+Patients doubt whether they already took a dose, and in clinic, all you have is self-report.
+
+5
+00:00:21,134 --> 00:00:25,379
+Sometimes a dose is increased, when the real problem was adherence.
+
+6
+00:00:26,679 --> 00:00:33,293
+That's why we built MediTrack: reminders on the watch, confirmation with evidence, and an alert to the caregiver.
+
+7
+00:00:34,593 --> 00:00:39,158
+It's 8:00. Rafael's watch vibrates: time for his metformin.
+
+8
+00:00:39,608 --> 00:00:43,661
+As he takes it, the system gathers evidence: the hand-to-mouth gesture,
+
+9
+00:00:44,111 --> 00:00:48,677
+the sequence of opening the bottle and drinking water, and his usual schedule.
+
+10
+00:00:49,127 --> 00:00:52,796
+No single signal is proof; together, they build confidence.
+
+11
+00:00:53,246 --> 00:00:58,878
+With strong evidence, the dose is confirmed automatically. If in doubt, the watch asks him.
+
+12
+00:01:08,593 --> 00:01:12,091
+Elsewhere, his daughter Laura gets the confirmation on her phone.
+
+13
+00:01:12,541 --> 00:01:17,960
+And if a dose has no evidence after 30 minutes, she gets an alert to give him a call.
+
+14
+00:01:18,410 --> 00:01:21,077
+So caregivers don't have to keep watch all day.
+
+15
+00:01:30,593 --> 00:01:37,291
+In clinic, you see every dose with its actual time, its delay, how it was confirmed, and with what confidence.
+
+16
+00:01:37,741 --> 00:01:42,435
+And the patterns: for example, that the evening dose is the one most often missed.
+
+17
+00:01:42,885 --> 00:01:46,191
+So you can adjust the regimen before increasing the dose.
+
+18
+00:01:47,491 --> 00:01:57,710
+Wrist-based pill-taking detection has already been tested in a real-world study, DoseMate, with 94–95% balanced accuracy.
+
+19
+00:01:58,160 --> 00:02:05,435
+Even so, "unconfirmed" doesn't mean "not taken", and MediTrack is not a medical device: it supports adherence.
+
+20
+00:02:06,735 --> 00:02:15,161
+You can try the prototype online at christopherargenis.github.io/MediTrack. Or scan this code.
+
+21
+00:02:15,611 --> 00:02:19,409
+We're looking for physicians to join a 4-week pilot. Thank you.

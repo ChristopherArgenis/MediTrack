@@ -502,7 +502,7 @@ function seed(keepWatch){
   S = {
     t: 7*60 + 58, speed: 60, running: true,
     tol: 30, reremind: 15, thr: 0.85,
-    fitbit: true, cgLinked: true, onWrist: true,
+    fitbit: true, cgLinked: true, cgConfirm: true, onWrist: true,
     watchId: keepWatch || 'gwfe',
     caregiver: {name:'Laura', rel:'hija'},
     meds, records: [], notifs: [], log: [], cg: [],
@@ -560,6 +560,10 @@ function confirm(rec, source, conf){
   rec.source = source; rec.conf = conf ?? null; rec.confAt = S.t; rec.snoozeUntil = null;
   rec.status = (was === 'pending' && S.t <= rec.sched + S.tol) ? 'confirmed' : 'delayed';
   logx('estado', `IntakeRecord #${rec.id} ${m.name}: ${was} → ${rec.status} (${SRC[source]}${conf ? ' · P=' + conf.toFixed(2) : ''}).`);
+  if (was === 'pending' && S.cgLinked && S.cgConfirm && source !== 'caregiver'){
+    S.cg.unshift({at:S.t, ok:true, text:`✓ Rafael tomó su <b>${esc(m.name)} ${esc(m.dose)}</b> (${SRC[source]}) a las ${hm(S.t)}.`});
+    notify('caregiver', 'push', `Confirmación: ${m.name} tomada a las ${hm(S.t)}`);
+  }
   if (was === 'unconfirmed' && S.cgLinked){
     S.cg.unshift({at:S.t, ok:true, text:`Rafael confirmó ${m.name} (${SRC[source]}, ${Math.round(S.t - rec.sched)} min después).`});
     notify('caregiver', 'push', `Actualización: ${m.name} confirmada tarde`);
@@ -963,13 +967,14 @@ function renderView(){
         <input type="range" min="0.7" max="0.95" step="0.05" value="${S.thr}" id="thr">
         <div class="help">Probabilidad fusionada mínima para confirmar sin preguntar. Entre ${ASK} y el umbral, se pregunta.</div></div>
       <div class="set"><div class="tog"><div><div class="lbl">${esc(W().name)}</div><div class="help">${S.fitbit ? (W().app ? 'App MediTrack en el reloj · IMU activa en las ventanas de toma' : 'Solo notificaciones reflejadas · sin app en el reloj') : 'Desconectado · solo notificaciones del teléfono'}</div></div><button type="button" class="sw ${S.fitbit ? 'on' : ''}" data-sw="fitbit" aria-label="Reloj conectado"></button></div></div>
-      <div class="set"><div class="tog"><div><div class="lbl">Cuidador: ${esc(S.caregiver.name)} (${esc(S.caregiver.rel)})</div><div class="help">${S.cgLinked ? 'Recibe avisos solo si una toma queda sin confirmar.' : 'Sin cuidador vinculado: no hay escalamiento.'}</div></div><button type="button" class="sw ${S.cgLinked ? 'on' : ''}" data-sw="cgLinked" aria-label="Cuidador vinculado"></button></div></div>
+      <div class="set"><div class="tog"><div><div class="lbl">Cuidador: ${esc(S.caregiver.name)} (${esc(S.caregiver.rel)})</div><div class="help">${S.cgLinked ? 'Recibe avisos solo si una toma queda sin confirmar.' : 'Sin cuidador vinculado: no hay escalamiento.'}</div></div><button type="button" class="sw ${S.cgLinked ? 'on' : ''}" data-sw="cgLinked" aria-label="Cuidador vinculado"></button></div>
+        <div class="tog"><div><div class="lbl">Avisos de confirmación</div><div class="help">${S.cgConfirm ? 'Laura también recibe un aviso cada vez que se confirma una toma.' : 'Laura solo recibe avisos cuando falta evidencia.'}</div></div><button type="button" class="sw ${S.cgConfirm ? 'on' : ''}" data-sw="cgConfirm" aria-label="Avisos de confirmación al cuidador"></button></div></div>
       <p class="mu" style="font-size:11.5px;margin:0">Los horarios se guardan en UTC. La señal de movimiento se procesa en el dispositivo y solo se guarda el resultado.</p>`;
   }
 }
 function renderCG(){
   const f = $('#cgfeed');
-  if (!S.cg.length){ f.innerHTML = `<p class="mu" style="margin:0;font-size:12.5px">${S.cgLinked ? 'Sin avisos. Laura solo recibe mensajes si una toma queda sin confirmar.' : 'No hay cuidador vinculado.'}</p>`; return; }
+  if (!S.cg.length){ f.innerHTML = `<p class="mu" style="margin:0;font-size:12.5px">${!S.cgLinked ? 'No hay cuidador vinculado.' : S.cgConfirm ? 'Sin avisos todavía. Laura recibe las confirmaciones y un aviso si una toma queda sin evidencia (se cambia en Ajustes).' : 'Sin avisos. Laura solo recibe mensajes si una toma queda sin confirmar.'}</p>`; return; }
   f.innerHTML = S.cg.map(c => { const r = c.recId && S.records.find(x => x.id === c.recId);
     return `<div class="bubble ${c.ok ? 'okb' : ''}"><small>${hm(c.at)} · MediTrack</small>${c.text}
     ${!c.ok && r && r.status === 'unconfirmed' ? `<br><button type="button" data-cgok="${r.id}">Le llamé: sí la tomó</button>` : ''}</div>`; }).join('');
@@ -999,7 +1004,7 @@ document.addEventListener('click', e => {
     logx('sistema', `Medication «${m.name}» desactivada (is_active = 0).`); render(); }
   else if (t.dataset.tol){ S.tol = +t.dataset.tol; logx('sistema', `Tolerancia = ${S.tol} min.`); render(); }
   else if (t.dataset.sw){ const k = t.dataset.sw; S[k] = !S[k];
-    logx('sistema', {fitbit: S.fitbit ? 'Reloj reconectado.' : 'Reloj desconectado: recordatorios solo en el teléfono.', cgLinked: `Cuidador ${S.cgLinked ? 'vinculado' : 'desvinculado'}.`}[k]);
+    logx('sistema', {fitbit: S.fitbit ? 'Reloj reconectado.' : 'Reloj desconectado: recordatorios solo en el teléfono.', cgLinked: `Cuidador ${S.cgLinked ? 'vinculado' : 'desvinculado'}.`, cgConfirm: `Avisos de confirmación al cuidador ${S.cgConfirm ? 'activados' : 'desactivados'}.`}[k]);
     if (k === 'fitbit') setWatch('face'); render(); }
   else if (t.dataset.cgok){ const r = S.records.find(x => x.id === +t.dataset.cgok); S.cg = S.cg.filter(c => c.recId !== r.id || c.ok);
     logx('cuidador', `${S.caregiver.name} confirma la toma tras llamar.`); confirm(r, 'caregiver'); setWatch('face'); }

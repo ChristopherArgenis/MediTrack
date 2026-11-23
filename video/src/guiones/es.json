@@ -1,0 +1,83 @@
+{
+  "idioma": "es",
+  "voz": "alex_nicola",
+  "aprobado": true,
+  "escenas": [
+    {"id": "gancho", "frases": [
+      {"id": "g1", "voz": "Doctor, doctora: ¿cómo sabe si su paciente realmente tomó su medicamento?", "sub": "Doctor, doctora: ¿cómo sabe si su paciente realmente tomó su medicamento?"},
+      {"id": "g2", "voz": "Según la OMS, en enfermedades crónicas la adherencia ronda apenas el cincuenta por ciento.", "sub": "Según la OMS, en enfermedades crónicas la adherencia ronda apenas el 50 %."}
+    ]},
+    {"id": "problema", "frases": [
+      {"id": "p1", "voz": "Con varios medicamentos y horarios, el olvido es fácil.", "sub": "Con varios medicamentos y horarios, el olvido es fácil."},
+      {"id": "p2", "voz": "Aparece la duda de si ya se tomó, y en consulta solo queda el autorreporte.", "sub": "Aparece la duda de si ya se tomó, y en consulta solo queda el autorreporte."},
+      {"id": "p3", "voz": "A veces se sube una dosis, cuando el problema real era la toma.", "sub": "A veces se sube una dosis, cuando el problema real era la toma."}
+    ]},
+    {"id": "presenta", "frases": [
+      {"id": "m1", "voz": "Por eso creamos MediTrack: recordatorios en el reloj, confirmación con evidencia, y un aviso al cuidador.", "sub": "Por eso creamos MediTrack: recordatorios en el reloj, confirmación con evidencia y un aviso al cuidador."}
+    ]},
+    {"id": "rafael", "frases": [
+      {"id": "r1", "voz": "Son las ocho. El reloj de Rafael vibra: es hora de su metformina.", "sub": "Son las 8:00. El reloj de Rafael vibra: es hora de su metformina."},
+      {"id": "r2", "voz": "Mientras la toma, el sistema reúne evidencias: el gesto de llevarse la mano a la boca,", "sub": "Mientras la toma, el sistema reúne evidencias: el gesto de llevarse la mano a la boca,"},
+      {"id": "r3", "voz": "la secuencia de abrir el frasco y beber agua, y que sea su horario habitual.", "sub": "la secuencia de abrir el frasco y beber agua, y que sea su horario habitual."},
+      {"id": "r4", "voz": "Ninguna señal sola es prueba; juntas suman confianza.", "sub": "Ninguna señal sola es prueba; juntas suman confianza."},
+      {"id": "r5", "voz": "Con evidencia fuerte, la toma se confirma sola. Si hay duda, el reloj le pregunta.", "sub": "Con evidencia fuerte, la toma se confirma sola. Si hay duda, el reloj le pregunta."}
+    ]},
+    {"id": "laura", "frases": [
+      {"id": "l1", "voz": "En otro lugar, su hija Laura recibe la confirmación en su teléfono.", "sub": "En otro lugar, su hija Laura recibe la confirmación en su teléfono."},
+      {"id": "l2", "voz": "Y si una toma queda sin evidencia después de treinta minutos, ella recibe un aviso para llamarle.", "sub": "Y si una toma queda sin evidencia después de 30 minutos, ella recibe un aviso para llamarle."},
+      {"id": "l3", "voz": "Así, el cuidador no tiene que vigilar todo el día.", "sub": "Así, el cuidador no tiene que vigilar todo el día."}
+    ]},
+    {"id": "reporte", "frases": [
+      {"id": "d1", "voz": "En consulta, usted ve cada dosis con su hora real, su retraso, cómo se confirmó, y con qué confianza.", "sub": "En consulta, usted ve cada dosis con su hora real, su retraso, cómo se confirmó y con qué confianza."},
+      {"id": "d2", "voz": "Y los patrones: por ejemplo, que la dosis de la noche es la que más falla.", "sub": "Y los patrones: por ejemplo, que la dosis de la noche es la que más falla."},
+      {"id": "d3", "voz": "Así puede ajustar el esquema antes de subir la dosis.", "sub": "Así puede ajustar el esquema antes de subir la dosis."}
+    ]},
+    {"id": "evidencia", "frases": [
+      {"id": "e1", "voz": "El reconocimiento de la toma con reloj ya se probó en un estudio en vida real, DoseMate, con noventa y cuatro a noventa y cinco por ciento de exactitud balanceada.", "sub": "El reconocimiento de la toma con reloj ya se probó en un estudio en vida real, DoseMate, con 94–95 % de exactitud balanceada."},
+      {"id": "e2", "voz": "Aun así, sin confirmar no significa no tomada, y MediTrack no es un dispositivo médico: es un apoyo a la adherencia.", "sub": "Aun así, «sin confirmar» no significa «no tomada», y MediTrack no es un dispositivo médico: es un apoyo a la adherencia."}
+    ]},
+    {"id": "cierre", "frases": [
+      {"id": "c1", "voz": "Puede probar el prototipo en la web: christopher argenis punto github punto io, diagonal MediTrack. O escanee este código.", "sub": "Puede probar el prototipo en la web: christopherargenis.github.io/MediTrack. O escanee este código."},
+      {"id": "c2", "voz": "Buscamos médicos que nos acompañen en un piloto de cuatro semanas. Gracias.", "sub": "Buscamos médicos que nos acompañen en un piloto de 4 semanas. Gracias."}
+    ]}
+  ],
+  "ui": {
+    "fuente_oms": "OMS, 2003 · adherencia a tratamientos de largo plazo en países desarrollados",
+    "adherencia": "de adherencia en enfermedades crónicas",
+    "prob_titulo": "El problema",
+    "prob": [["Polifarmacia", "Varios medicamentos y horarios"], ["Duda", "«¿Ya me la tomé?»"], ["Sin datos en consulta", "Solo autorreporte"], ["Ajustes a ciegas", "Subir la dosis cuando falla la toma"]],
+    "lema": "Recordar · confirmar con evidencia · avisar solo si hace falta",
+    "hora": "Hora de tu medicina",
+    "med": "Metformina",
+    "dosis": "850 mg · con alimentos",
+    "ev_titulo": "Evidencias de la toma",
+    "ev": ["Gesto mano-boca", "Abrir → boca → beber", "Horario habitual", "Etiqueta NFC del frasco (opcional)"],
+    "ev_sensor": ["acelerómetro + giroscopio", "giro de muñeca + inclinación", "hora programada + historial", "teléfono"],
+    "p_label": "P(tomó)",
+    "confirmada": "Confirmada",
+    "pregunta": "Si hay duda, el reloj pregunta: «¿Tomaste tu Metformina?»",
+    "notif_app": "MediTrack · ahora",
+    "notif_ok": "✓ Rafael tomó su Metformina",
+    "notif_ok2": "8:06 · confirmada automáticamente",
+    "notif_alerta": "Sin confirmación: Metformina de las 20:00",
+    "notif_alerta2": "20:30 · no hubo evidencia en 30 min",
+    "casa": "Casa de Rafael · 8:00",
+    "oficina": "Oficina de Laura · 8:06",
+    "opcional": "Aviso de confirmación: opcional, lo decide el paciente",
+    "rep_titulo": "Lo que usted ve en consulta",
+    "rep_ficticio": "Ejemplo ficticio",
+    "rep_cols": ["Día", "Programada", "Medicamento", "Estado", "Confirmación", "Fuente · confianza"],
+    "rep_filas": [["Lun", "08:00", "Metformina 850 mg", "a tiempo", "08:06", "automática · 0.93"], ["Lun", "20:00", "Metformina 850 mg", "con retraso", "21:10", "manual"], ["Mar", "09:00", "Losartán 50 mg", "a tiempo", "09:12", "NFC + gesto · 0.98"], ["Mar", "20:00", "Metformina 850 mg", "sin confirmar", "—", "aviso a la cuidadora"]],
+    "rep_patron": "Patrón: la dosis de las 20:00 falla con más frecuencia",
+    "ev2_titulo": "Evidencia científica",
+    "dosemate": "DoseMate · CHIL 2024",
+    "dosemate_txt": "20 participantes · 1,154 eventos con smartwatch en vida real",
+    "ba": "de exactitud balanceada",
+    "limite1": "«Sin confirmar» ≠ «no tomada»",
+    "limite2": "No es un dispositivo médico",
+    "cta": "Pruebe el prototipo",
+    "piloto": "Buscamos médicos para un piloto de 4 semanas",
+    "gracias": "Gracias",
+    "escanea": "Escanee para abrir el prototipo"
+  }
+}

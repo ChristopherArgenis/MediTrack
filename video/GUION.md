@@ -1,6 +1,6 @@
 # MediTrack · Video para médicos (ES / EN)
 
-**Estado:** borrador para aprobación. No se renderiza hasta que se apruebe.
+**Estado:** ✅ aprobado el 23/11/2026, con las 3 sugerencias incluidas y la voz en inglés **fenrir**. El texto definitivo vive en `src/guiones/es.json` y `src/guiones/en.json`.
 
 | | |
 |---|---|
@@ -9,18 +9,18 @@
 | Formato | 1920×1080, 30 fps, MP4 (H.264 + AAC) |
 | Motor | Remotion 4.0.541 + Three.js (`@remotion/three`), igual que Py_UniversoDC_YT |
 | Voz ES | **Alex** (`alex_nicola`, Kokoro local, la del canal) |
-| Voz EN | Kokoro, voz entrenada en inglés nativo (a elegir entre 4 muestras) |
+| Voz EN | **fenrir** (`am_fenrir`, Kokoro, voz entrenada en inglés de EE. UU.) |
 | Versiones | El mismo video en dos idiomas: cambian la narración, los subtítulos y los textos en pantalla |
 | Reglas heredadas | 100 % gratis, sin imágenes ni audio de internet y con las cifras citadas con su fuente. Los ejemplos se marcan como “ejemplo ficticio” |
 
 ## Personajes 3D
 
-Modelos **estilizados low-poly**, hechos en Three.js con primitivas (cápsulas, esferas y cajas). No son realistas y no se usan modelos descargados de internet.
+Figuras **humanoides articuladas tipo maniquí, sin rostro**, hechas en Three.js con piezas torneadas (torso, extremidades que se adelgazan como las reales y manos con dedos), con proporciones realistas, ropa, cabello y orejas. No se usan modelos descargados de internet.
 
-- **Rafael, 72:** cabello y bigote canos, lentes, suéter. Está sentado en un sillón junto a una mesita con el frasco y un vaso de agua, y lleva un smartwatch redondo en la muñeca izquierda.
-- **Laura, 44, su hija:** está en un escritorio de oficina con laptop y su teléfono boca arriba.
+- **Rafael, 72:** canas, lentes y suéter. Está sentado en un sillón junto a una mesita con el frasco y un vaso de agua, y lleva un smartwatch redondo en la muñeca izquierda.
+- **Laura, 44, su hija:** cabello recogido y blusa. Está en su escritorio, con laptop y su teléfono.
 
-Todos los movimientos (levantar la mano, beber, la vibración del reloj o del teléfono, la cámara) se calculan a partir del número de fotograma, como pide la skill `threejs-remotion`.
+Hay 18 articulaciones (pelvis, columna, cabeza, hombros, codos, muñecas, caderas, rodillas y tobillos) y las poses clave están en `src/three/poses.ts`. La coreografía se ancla al inicio de cada frase de la narración, así queda sincronizada en los dos idiomas.
 
 ## Escenas
 
@@ -42,9 +42,15 @@ En pantalla, la dirección siempre aparece completa: **christopherargenis.github
 - Narración con Kokoro local, con el mismo filtro y las mismas pausas que Alex en el repo.
 - Música suave en bucle (sintetizada con `make_audio.py`, sin derechos de terceros) a −24 dB, más un efecto corto de vibración cuando vibran el reloj o el teléfono.
 
+## Sugerencias aprobadas
+
+1. **Aviso de confirmación opcional al cuidador:** interruptor en *Ajustes* del prototipo, mencionado en los documentos y con el campo `Caregiver.notify_on_confirm` en el esquema.
+2. **Subtítulos integrados en el video**, más un archivo `.srt` por idioma.
+3. **Código QR** en la pantalla final, que lleva a `christopherargenis.github.io/MediTrack/prototipo.html`.
+
 ## Entregables
 
 - `video/out/meditrack-medicos-es.mp4`
 - `video/out/meditrack-medicos-en.mp4`
-- Si se aprueba la sugerencia 2, los subtítulos `.srt` de cada idioma.
+- `video/out/meditrack-medicos-es.srt` y `video/out/meditrack-medicos-en.srt`
 - El código de Remotion queda en `video/` y no afecta GitHub Pages.

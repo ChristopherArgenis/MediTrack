@@ -1,0 +1,334 @@
+{
+ "es": {
+  "total": 4227,
+  "escenas": [
+   {
+    "id": "gancho",
+    "from": 0,
+    "dur": 374,
+    "frases": [
+     {
+      "id": "g1",
+      "from": 15,
+      "dur": 147
+     },
+     {
+      "id": "g2",
+      "from": 175,
+      "dur": 175
+     }
+    ]
+   },
+   {
+    "id": "problema",
+    "from": 374,
+    "dur": 429,
+    "frases": [
+     {
+      "id": "p1",
+      "from": 389,
+      "dur": 105
+     },
+     {
+      "id": "p2",
+      "from": 507,
+      "dur": 141
+     },
+     {
+      "id": "p3",
+      "from": 662,
+      "dur": 118
+     }
+    ]
+   },
+   {
+    "id": "presenta",
+    "from": 803,
+    "dur": 239,
+    "frases": [
+     {
+      "id": "m1",
+      "from": 818,
+      "dur": 200
+     }
+    ]
+   },
+   {
+    "id": "rafael",
+    "from": 1042,
+    "dur": 1020,
+    "frases": [
+     {
+      "id": "r1",
+      "from": 1057,
+      "dur": 130
+     },
+     {
+      "id": "r2",
+      "from": 1200,
+      "dur": 164
+     },
+     {
+      "id": "r3",
+      "from": 1378,
+      "dur": 141
+     },
+     {
+      "id": "r4",
+      "from": 1533,
+      "dur": 108
+     },
+     {
+      "id": "r5",
+      "from": 1654,
+      "dur": 162
+     }
+    ]
+   },
+   {
+    "id": "laura",
+    "from": 2062,
+    "dur": 660,
+    "frases": [
+     {
+      "id": "l1",
+      "from": 2077,
+      "dur": 121
+     },
+     {
+      "id": "l2",
+      "from": 2211,
+      "dur": 182
+     },
+     {
+      "id": "l3",
+      "from": 2407,
+      "dur": 99
+     }
+    ]
+   },
+   {
+    "id": "reporte",
+    "from": 2722,
+    "dur": 490,
+    "frases": [
+     {
+      "id": "d1",
+      "from": 2737,
+      "dur": 193
+     },
+     {
+      "id": "d2",
+      "from": 2943,
+      "dur": 126
+     },
+     {
+      "id": "d3",
+      "from": 3083,
+      "dur": 105
+     }
+    ]
+   },
+   {
+    "id": "evidencia",
+    "from": 3212,
+    "dur": 587,
+    "frases": [
+     {
+      "id": "e1",
+      "from": 3227,
+      "dur": 307
+     },
+     {
+      "id": "e2",
+      "from": 3547,
+      "dur": 227
+     }
+    ]
+   },
+   {
+    "id": "cierre",
+    "from": 3799,
+    "dur": 428,
+    "frases": [
+     {
+      "id": "c1",
+      "from": 3814,
+      "dur": 228
+     },
+     {
+      "id": "c2",
+      "from": 4055,
+      "dur": 148
+     }
+    ]
+   }
+  ]
+ },
+ "en": {
+  "total": 4206,
+  "escenas": [
+   {
+    "id": "gancho",
+    "from": 0,
+    "dur": 325,
+    "frases": [
+     {
+      "id": "g1",
+      "from": 15,
+      "dur": 119
+     },
+     {
+      "id": "g2",
+      "from": 148,
+      "dur": 154
+     }
+    ]
+   },
+   {
+    "id": "problema",
+    "from": 325,
+    "dur": 460,
+    "frases": [
+     {
+      "id": "p1",
+      "from": 340,
+      "dur": 107
+     },
+     {
+      "id": "p2",
+      "from": 461,
+      "dur": 160
+     },
+     {
+      "id": "p3",
+      "from": 634,
+      "dur": 127
+     }
+    ]
+   },
+   {
+    "id": "presenta",
+    "from": 785,
+    "dur": 238,
+    "frases": [
+     {
+      "id": "m1",
+      "from": 800,
+      "dur": 198
+     }
+    ]
+   },
+   {
+    "id": "rafael",
+    "from": 1023,
+    "dur": 1020,
+    "frases": [
+     {
+      "id": "r1",
+      "from": 1038,
+      "dur": 137
+     },
+     {
+      "id": "r2",
+      "from": 1188,
+      "dur": 122
+     },
+     {
+      "id": "r3",
+      "from": 1323,
+      "dur": 137
+     },
+     {
+      "id": "r4",
+      "from": 1474,
+      "dur": 110
+     },
+     {
+      "id": "r5",
+      "from": 1597,
+      "dur": 169
+     }
+    ]
+   },
+   {
+    "id": "laura",
+    "from": 2043,
+    "dur": 660,
+    "frases": [
+     {
+      "id": "l1",
+      "from": 2058,
+      "dur": 105
+     },
+     {
+      "id": "l2",
+      "from": 2176,
+      "dur": 163
+     },
+     {
+      "id": "l3",
+      "from": 2352,
+      "dur": 80
+     }
+    ]
+   },
+   {
+    "id": "reporte",
+    "from": 2703,
+    "dur": 507,
+    "frases": [
+     {
+      "id": "d1",
+      "from": 2718,
+      "dur": 201
+     },
+     {
+      "id": "d2",
+      "from": 2932,
+      "dur": 141
+     },
+     {
+      "id": "d3",
+      "from": 3087,
+      "dur": 99
+     }
+    ]
+   },
+   {
+    "id": "evidencia",
+    "from": 3210,
+    "dur": 577,
+    "frases": [
+     {
+      "id": "e1",
+      "from": 3225,
+      "dur": 307
+     },
+     {
+      "id": "e2",
+      "from": 3545,
+      "dur": 218
+     }
+    ]
+   },
+   {
+    "id": "cierre",
+    "from": 3787,
+    "dur": 419,
+    "frases": [
+     {
+      "id": "c1",
+      "from": 3802,
+      "dur": 253
+     },
+     {
+      "id": "c2",
+      "from": 4068,
+      "dur": 114
+     }
+    ]
+   }
+  ]
+ }
+}
