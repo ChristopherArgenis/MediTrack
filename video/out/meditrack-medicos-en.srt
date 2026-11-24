@@ -79,5 +79,5 @@ Even so, "unconfirmed" doesn't mean "not taken", and MediTrack is not a medical 
 You can try the prototype online at christopherargenis.github.io/MediTrack. Or scan this code.
 
 21
-00:02:15,611 --> 00:02:19,409
-We're looking for physicians to join a 4-week pilot. Thank you.
+00:02:15,611 --> 00:02:19,963
+We invite you to explore the app and see how MediTrack works. Thank you.

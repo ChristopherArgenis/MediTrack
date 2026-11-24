@@ -33,7 +33,7 @@ Hay 18 articulaciones (pelvis, columna, cabeza, hombros, codos, muñecas, cadera
 | 5 · **3D: Laura** | 1:12–1:38 | La cámara viaja de la casa de Rafael a la oficina de Laura. Su teléfono vibra con la notificación “✓ Rafael tomó su Metformina · 8:06”. Después, en pantalla dividida, el caso contrario: “Sin confirmación a las 20:30 → aviso” | En otro lugar, su hija Laura recibe la confirmación en su teléfono. Y si una toma queda sin evidencia después de treinta minutos, ella recibe un aviso para llamarle. Así el cuidador no tiene que vigilar todo el día. | Elsewhere, his daughter Laura gets the confirmation on her phone. And if a dose has no evidence after thirty minutes, she gets an alert to give him a call. So caregivers don't have to keep watch all day. |
 | 6 · Lo que ve usted | 1:38–1:58 | Reporte de consulta marcado como “ejemplo ficticio”: hora real, retraso, fuente y confianza. Se resalta “la dosis de las 20:00 falla con más frecuencia” | En consulta, usted ve cada dosis con su hora real, su retraso, cómo se confirmó y con qué confianza. Y los patrones: por ejemplo, que la dosis de la noche es la que más falla. Así puede ajustar el esquema antes de subir la dosis. | In clinic, you see every dose with its actual time, delay, how it was confirmed and with what confidence. And the patterns: for example, that the evening dose is the one most often missed. So you can adjust the regimen before increasing the dose. |
 | 7 · Evidencia y límites | 1:58–2:14 | Tarjeta DoseMate (2024): 20 participantes, 94–95 % de exactitud balanceada. Abajo: “Sin confirmar ≠ no tomada · No es un dispositivo médico” | El reconocimiento de la toma con reloj ya se probó en un estudio en vida real, DoseMate, con noventa y cuatro a noventa y cinco por ciento de exactitud balanceada. Aun así, sin confirmar no significa no tomada, y MediTrack no es un dispositivo médico: es un apoyo a la adherencia. | Wrist-based pill-taking detection has already been tested in a real-world study, DoseMate, with ninety-four to ninety-five percent balanced accuracy. Even so, unconfirmed doesn't mean not taken, and MediTrack is not a medical device: it supports adherence. |
-| 8 · Pruébelo | 2:14–2:30 | Captura del prototipo y su dirección web; al final, invitación al piloto | Puede probar el prototipo en la web: christopher argenis punto github punto io, diagonal MediTrack. Buscamos médicos que nos acompañen en un piloto de cuatro semanas. Gracias. | You can try the prototype online at christopher argenis dot github dot io, slash MediTrack. We're looking for physicians to join a four-week pilot. Thank you. |
+| 8 · Pruébelo | 2:14–2:30 | Captura del prototipo, su dirección web, el QR y la invitación a explorar la app (sin registro) | Puede probar el prototipo en la web: christopher argenis punto github punto io, diagonal MediTrack. O escanee este código. Le invitamos a revisar la app y explorar cómo funciona MediTrack. Gracias. | You can try the prototype online at christopher argenis dot github dot io, slash MediTrack. Or scan this code. We invite you to explore the app and see how MediTrack works. Thank you. |
 
 En pantalla, la dirección siempre aparece completa: **christopherargenis.github.io/MediTrack/prototipo.html**.
 
@@ -41,6 +41,13 @@ En pantalla, la dirección siempre aparece completa: **christopherargenis.github
 
 - Narración con Kokoro local, con el mismo filtro y las mismas pausas que Alex en el repo.
 - Música suave en bucle (sintetizada con `make_audio.py`, sin derechos de terceros) a −24 dB, más un efecto corto de vibración cuando vibran el reloj o el teléfono.
+
+## Correcciones del 24/11/2026
+
+- **Rafael:** al tomar la pastilla y el vaso, la mano estaba al revés. Se corrigió el giro de la muñeca (tapa 180°, pastilla 165°, vaso y beber 120°) y la postura para tomar el vaso: el brazo va al costado y el antebrazo hacia la mesita, así el vaso queda de pie. Los giros se eligieron con `src/PruebaManos.tsx`.
+- **Laura:** el teléfono estaba al revés. Ahora tiene la pantalla hacia ella y la parte de arriba del teléfono hacia la punta de los dedos.
+- **Escena de Laura:** se divide en 3 columnas; el teléfono ampliado ocupa el tercio izquierdo y la escena 3D los otros dos.
+- **Cierre:** ya no se buscan médicos para un piloto. Ahora se invita a revisar y explorar la app.
 
 ## Sugerencias aprobadas
 

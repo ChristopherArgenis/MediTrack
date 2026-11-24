@@ -17,17 +17,18 @@ export const RAFAEL = {
   // antebrazo izquierdo horizontal frente al pecho, reloj hacia arriba, mira hacia abajo
   mirar: conPose(BASE, { hombroI: D(-30, 42, -12), codoI: r(-96), munecaI: D(0, 180, 0), cabeza: D(30, 18, 0), columna: D(6) }),
   // alcanza la tapa del frasco en la mesita
-  frasco: conPose(BASE, { hombroI: D(-26, 0, 44), codoI: r(-22), munecaI: D(-10, 110, 0), columna: D(4, 8, -10), cabeza: D(20, 24, 0), agarreI: 0.7 }),
+  frasco: conPose(BASE, { hombroI: D(-26, 0, 44), codoI: r(-22), munecaI: D(-10, 180, 0), columna: D(4, 8, -10), cabeza: D(20, 24, 0), agarreI: 0.7 }),
   // mano dentro del frasco (un poco más abajo)
-  frascoBajo: conPose(BASE, { hombroI: D(-22, 0, 44), codoI: r(-18), munecaI: D(-18, 110, 0), columna: D(5, 8, -12), cabeza: D(22, 24, 0), agarreI: 0.9 }),
+  frascoBajo: conPose(BASE, { hombroI: D(-22, 0, 44), codoI: r(-18), munecaI: D(-18, 180, 0), columna: D(5, 8, -12), cabeza: D(22, 24, 0), agarreI: 0.9 }),
   // deja la tapa junto al frasco
-  aLado: conPose(BASE, { hombroI: D(-30, 0, 40), codoI: r(-26), munecaI: D(-8, 110, 0), columna: D(4, 10, -9), cabeza: D(18, 26, 0), agarreI: 0.5 }),
+  aLado: conPose(BASE, { hombroI: D(-30, 0, 40), codoI: r(-26), munecaI: D(-8, 180, 0), columna: D(4, 10, -9), cabeza: D(18, 26, 0), agarreI: 0.5 }),
   // pastilla a la boca
-  boca: conPose(BASE, { hombroI: D(-46, -34, -20), codoI: r(-142), munecaI: D(-25, 60, 0), cabeza: D(-8, 0, 0), columna: D(-2), agarreI: 0.95 }),
+  boca: conPose(BASE, { hombroI: D(-46, -34, -20), codoI: r(-142), munecaI: D(-25, 165, 0), cabeza: D(-8, 0, 0), columna: D(-2), agarreI: 0.95 }),
   // alcanza el vaso
-  vaso: conPose(BASE, { hombroI: D(-34, 0, 40), codoI: r(-24), munecaI: D(0, 90, 0), columna: D(4, 8, -9), cabeza: D(16, 20, 0), agarreI: 0.62 }),
+  // brazo al costado y antebrazo casi horizontal hacia la mesita, pulgar arriba: el vaso queda de pie
+  vaso: conPose(BASE, { hombroI: D(-10, 32, 34), codoI: r(-80), munecaI: D(0, 120, 0), columna: D(6, 6, -12), cabeza: D(16, 20, 0), agarreI: 0.62 }),
   // bebe: vaso a la boca e inclinado, cabeza hacia atrás
-  beber: conPose(BASE, { hombroI: D(-50, -20, -12), codoI: r(-122), munecaI: D(-62, 90, 0), cabeza: D(-20, 0, 0), columna: D(-6), agarreI: 0.62 }),
+  beber: conPose(BASE, { hombroI: D(-50, -20, -12), codoI: r(-122), munecaI: D(-62, 120, 0), cabeza: D(-20, 0, 0), columna: D(-6), agarreI: 0.62 }),
 } satisfies Record<string, Pose>;
 
 const SENTADA: Pose = {
@@ -48,5 +49,5 @@ export const LAURA = {
   // mira el teléfono frente a su pecho
   verTel: conPose(SENTADA, { hombroD: D(-30, 20, -6), codoD: r(-112), munecaD: D(-45, 0, 0), cabeza: D(26, -6, 0), columna: D(4), agarreD: 0.7 }),
   // teléfono al oído derecho para llamar
-  llamar: conPose(SENTADA, { hombroD: D(-24, 0, -58), codoD: r(-150), munecaD: D(-10, 70, 0), cabeza: D(4, -8, -10), columna: D(0), agarreD: 0.7 }),
+  llamar: conPose(SENTADA, { hombroD: D(-30, 0, -66), codoD: r(-150), munecaD: D(-10, -90, 0), cabeza: D(4, -8, -10), columna: D(0), agarreD: 0.7 }),
 } satisfies Record<string, Pose>;

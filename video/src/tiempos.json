@@ -1,6 +1,6 @@
 {
  "es": {
-  "total": 4227,
+  "total": 4222,
   "escenas": [
    {
     "id": "gancho",
@@ -149,7 +149,7 @@
    {
     "id": "cierre",
     "from": 3799,
-    "dur": 428,
+    "dur": 423,
     "frases": [
      {
       "id": "c1",
@@ -159,14 +159,14 @@
      {
       "id": "c2",
       "from": 4055,
-      "dur": 148
+      "dur": 143
      }
     ]
    }
   ]
  },
  "en": {
-  "total": 4206,
+  "total": 4223,
   "escenas": [
    {
     "id": "gancho",
@@ -315,7 +315,7 @@
    {
     "id": "cierre",
     "from": 3787,
-    "dur": 419,
+    "dur": 436,
     "frases": [
      {
       "id": "c1",
@@ -325,7 +325,7 @@
      {
       "id": "c2",
       "from": 4068,
-      "dur": 114
+      "dur": 131
      }
     ]
    }

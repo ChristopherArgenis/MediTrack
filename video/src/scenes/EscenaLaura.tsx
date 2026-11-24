@@ -55,11 +55,11 @@ export const EscenaLaura: React.FC<PropsEscena> = ({ ui, frases, dur, lang }) =>
   const encendido = s >= L1 - 0.2 ? 1 : 0;
 
   const cam = camEn([
-    [0, { pos: [-1.7, 1.45, 2.5], mira: [-0.1, 0.9, 0.3], fov: 34 }],
-    [L1 + 0.8, { pos: [-1.55, 1.4, 2.25], mira: [-0.15, 0.9, 0.3], fov: 33 }],
-    [L1 + 2.6, { pos: [-1.05, 1.32, 1.6], mira: [-0.12, 1.0, 0.2], fov: 32 }],
-    [L2 + 2.0, { pos: [-1.05, 1.32, 1.6], mira: [-0.12, 1.0, 0.2], fov: 32 }],
-    [L2 + 3.5, { pos: [-1.4, 1.35, 2.0], mira: [-0.1, 0.95, 0.25], fov: 33 }],
+    [0, { pos: [-1.5, 1.45, 2.2], mira: [-0.1, 0.92, 0.3], fov: 38 }],
+    [L1 + 0.8, { pos: [-1.4, 1.4, 2.0], mira: [-0.12, 0.92, 0.3], fov: 37 }],
+    [L1 + 2.6, { pos: [-1.0, 1.32, 1.5], mira: [-0.1, 1.0, 0.2], fov: 36 }],
+    [L2 + 2.0, { pos: [-1.0, 1.32, 1.5], mira: [-0.1, 1.0, 0.2], fov: 36 }],
+    [L2 + 3.5, { pos: [-1.3, 1.35, 1.9], mira: [-0.1, 0.95, 0.25], fov: 37 }],
   ], s);
 
   const telIn = suave(f, (L1 - 0.1) * FPS, (L1 + 0.4) * FPS);
@@ -69,12 +69,12 @@ export const EscenaLaura: React.FC<PropsEscena> = ({ ui, frases, dur, lang }) =>
 
   return (
     <AbsoluteFill>
-      <Lienzo cam={cam} fondo={fondo} luz={luz} ambiente={lerp(0.6, 0.35, noche)}>
+      <Lienzo cam={cam} fondo={fondo} luz={luz} ambiente={lerp(0.6, 0.35, noche)} ancho={1280} izquierda={640}>
         <Oficina noche={noche} />
         <Humanoide
           pose={pose}
           aspecto={ASPECTO_LAURA}
-          enManoD={enMano ? <group position={[0, -0.02, 0.01]} rotation={[0, Math.PI, 0]}><Telefono pantalla={t} vibra={vibra} encendido={encendido} /></group> : null}
+          enManoD={enMano ? <group position={[0, -0.02, 0.01]} rotation={[0, 0, Math.PI]}><Telefono pantalla={t} vibra={vibra} encendido={encendido} /></group> : null}
         />
         {!enMano && (
           <group position={TEL_MESA} rotation={[-Math.PI / 2, 0, 0.3]}>
@@ -85,15 +85,18 @@ export const EscenaLaura: React.FC<PropsEscena> = ({ ui, frases, dur, lang }) =>
         <pointLight position={[0.5, ESCRITORIO.alto + 0.5, ESCRITORIO.z]} intensity={noche * 1.6} distance={3} color="#ffd29a" />
       </Lienzo>
 
-      <div style={{ position: "absolute", left: 60, top: 54, display: "flex", gap: 12 }}>
+      {/* columna izquierda (1/3): el teléfono de Laura en grande */}
+      <div style={{ position: "absolute", left: 0, top: 0, width: 640, height: 1080, background: noche > 0.5 ? "#232833" : C.page, display: "grid", justifyItems: "center", alignContent: "start", paddingTop: 40, gap: 18 }}>
+        <div style={{ opacity: telIn, transform: `translateY(${(1 - telIn) * 30}px)` }}>
+          <TelAmpliado e={e} entra={notifIn} grande nota={alerta ? undefined : ui.opcional} oscuro={noche > 0.5} />
+        </div>
+      </div>
+      <div style={{ position: "absolute", left: 700, top: 54, display: "flex", gap: 12 }}>
         <Chip bg="rgba(255,255,255,.92)" color={C.fg}>{ui.oficina.split("·")[0].trim()} · {alerta ? (lang === "es" ? "20:30" : "8:30 PM") : lang === "es" ? "8:06" : "8:06 AM"}</Chip>
       </div>
 
-      <div style={{ position: "absolute", right: 110, top: 70, opacity: telIn, transform: `translateX(${(1 - telIn) * 50}px)` }}>
-        <TelAmpliado e={e} entra={notifIn} nota={alerta ? undefined : ui.opcional} />
-      </div>
       {alerta && (
-        <div style={{ position: "absolute", left: 60, top: 120, opacity: suave(f, (L2 + 2.4) * FPS, (L2 + 3.0) * FPS) }}>
+        <div style={{ position: "absolute", left: 700, top: 120, opacity: suave(f, (L2 + 2.4) * FPS, (L2 + 3.0) * FPS) }}>
           <Chip bg={C.missSoft} color="#a3261d" style={{ font: `800 26px ${FONT}` }}>{lang === "es" ? "Laura le llama a Rafael" : "Laura calls Rafael"}</Chip>
         </div>
       )}

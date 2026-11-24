@@ -43,9 +43,11 @@ export const Lienzo: React.FC<{
   fondo?: string;
   luz?: { pos: V3; color?: string; intensidad?: number };
   ambiente?: number;
+  ancho?: number;
+  izquierda?: number;
   children: React.ReactNode;
-}> = ({ cam, fondo = "#e9e3da", luz = { pos: [2.5, 4.5, 3] }, ambiente = 0.55, children }) => (
-  <ThreeCanvas width={W} height={H} shadows dpr={1} gl={{ antialias: true }} camera={{ fov: cam.fov ?? 35, near: 0.05, far: 60 }} style={{ position: "absolute", inset: 0, background: fondo }}>
+}> = ({ cam, fondo = "#e9e3da", luz = { pos: [2.5, 4.5, 3] }, ambiente = 0.55, ancho = W, izquierda = 0, children }) => (
+  <ThreeCanvas width={ancho} height={H} shadows dpr={1} gl={{ antialias: true }} camera={{ fov: cam.fov ?? 35, near: 0.05, far: 60 }} style={{ position: "absolute", left: izquierda, top: 0, width: ancho, height: H, background: fondo }}>
     <Rig cam={cam} />
     <Ambiente intensidad={ambiente} />
     <color attach="background" args={[fondo]} />

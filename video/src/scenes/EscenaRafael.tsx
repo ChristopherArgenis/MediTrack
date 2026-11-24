@@ -110,13 +110,13 @@ export const EscenaRafael: React.FC<PropsEscena> = ({ ui, frases, dur }) => {
           enManoI={
             tapaEnMano ? <group position={[0, -0.01, 0]}><Tapa /></group>
               : pastilla ? <group position={[0, 0.005, 0.012]}><Pastilla /></group>
-                : vasoEnMano ? <group position={[0, -0.06, 0.005]} rotation={[0, 0, Math.PI / 2]}><group rotation={[0, 0, -Math.PI / 2]}><Vaso agua={agua} /></group></group>
+                : vasoEnMano ? <group position={[-0.05, 0, 0.03]} rotation={[0, 0, -Math.PI / 2]}><Vaso agua={agua} /></group>
                   : null
           }
         />
         <group position={[MESA.x - 0.1, MESA.alto, MESA.z + 0.04]}><Frasco conTapa={!tapaQuitada} /></group>
         {tapaQuitada && !tapaEnMano && <group position={[MESA.x - 0.02, MESA.alto + 0.009, MESA.z + 0.14]}><Tapa /></group>}
-        {!vasoEnMano && <group position={[MESA.x + 0.07, MESA.alto, MESA.z + 0.08]}><Vaso agua={s > Cv + 1.6 ? agua : 0.72} /></group>}
+        {!vasoEnMano && <group position={[MESA.x - 0.01, MESA.alto, MESA.z + 0.14]}><Vaso agua={s > Cv + 1.6 ? agua : 0.72} /></group>}
       </Lienzo>
 
       <div style={{ position: "absolute", left: 60, top: 54 }}><Chip bg="rgba(255,255,255,.92)" color={C.fg}>{ui.casa}</Chip></div>

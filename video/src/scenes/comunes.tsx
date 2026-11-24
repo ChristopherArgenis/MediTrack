@@ -114,8 +114,8 @@ export const dibujarTel = (ctx: CanvasRenderingContext2D, e: EstadoTel) => {
 };
 
 /** Teléfono ampliado (HTML) con la notificación, al lado de la escena 3D. */
-export const TelAmpliado: React.FC<{ e: EstadoTel; entra: number; style?: React.CSSProperties; nota?: string }> = ({ e, entra, style, nota }) => (
-  <div style={{ width: 400, display: "grid", gap: 16, ...style }}>
+export const TelAmpliado: React.FC<{ e: EstadoTel; entra: number; style?: React.CSSProperties; nota?: string; grande?: boolean; oscuro?: boolean }> = ({ e, entra, style, nota, grande, oscuro }) => (
+  <div style={{ width: 400, display: "grid", gap: 16, transform: grande ? "scale(1.05)" : undefined, transformOrigin: "top center", ...style }}>
     <div style={{ height: 760, borderRadius: 54, border: "12px solid #0b0f12", background: "linear-gradient(170deg,#14a39b,#06615d)", boxShadow: "0 40px 80px -40px rgba(10,25,35,.7)", position: "relative", overflow: "hidden" }}>
       <div style={{ position: "absolute", top: 70, width: "100%", textAlign: "center", font: `700 92px ${MONO}`, color: "#fff" }}>{e.hora}</div>
       {e.tipo !== "nada" && (
@@ -129,6 +129,6 @@ export const TelAmpliado: React.FC<{ e: EstadoTel; entra: number; style?: React.
         </div>
       )}
     </div>
-    {nota && <div style={{ font: `700 20px ${FONT}`, color: C.mu, textAlign: "center", opacity: entra }}>{nota}</div>}
+    {nota && <div style={{ font: `700 20px ${FONT}`, color: oscuro ? "#c8d6de" : C.mu, textAlign: "center", opacity: entra }}>{nota}</div>}
   </div>
 );

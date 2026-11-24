@@ -9,9 +9,8 @@ import { ASPECTO_RAFAEL } from "./three/personajes";
 
 const NOMBRES = Object.keys(RAFAEL) as (keyof typeof RAFAEL)[];
 const CAMS = [
-  { pos: [1.7, 1.25, 2.3] as [number, number, number], mira: [0.2, 0.8, 0.1] as [number, number, number], fov: 32 },
-  { pos: [0.1, 1.1, 2.6] as [number, number, number], mira: [0.1, 0.85, 0] as [number, number, number], fov: 30 },
-  { pos: [0.9, 1.35, 0.9] as [number, number, number], mira: [0.15, 0.95, 0.15] as [number, number, number], fov: 34 },
+  { pos: [1.25, 1.15, 1.05] as [number, number, number], mira: [0.45, 0.85, 0.15] as [number, number, number], fov: 30 },
+  { pos: [0.2, 1.15, 1.2] as [number, number, number], mira: [0.25, 0.95, 0.1] as [number, number, number], fov: 32 },
 ];
 
 /** Fotograma n: pose NOMBRES[n % k] con la cámara CAMS[floor(n / k)]. Solo para ajustar poses. */
