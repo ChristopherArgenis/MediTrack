@@ -455,4 +455,38 @@ plt.tight_layout(); plt.show()
 
 # %% [markdown]
 # ## 9. Conclusiones
-# (Se completan con los resultados de la ejecución.)
+#
+# 1. **El preprocesamiento replica el del artículo.** Salen **1,160 eventos con 185 negativos** de unos 19 s, contra los
+#    1,154 eventos con 185 negativos que reporta DoseMate. Los negativos están muy concentrados: 167 son de `user2001`.
+# 2. **Cuando el modelo ya conoce a la persona, funciona razonablemente.** Con la partición aleatoria, donde la misma
+#    persona aparece en entrenamiento y en prueba, el CNN-LSTM logra **exactitud balanceada 0.832, F1 0.931 y AUC 0.914**.
+#    Queda por debajo del **0.95 / 0.962 publicado**, que además usó datasets abiertos de otras actividades como negativos.
+# 3. **Con personas nuevas (LOSO) casi no generaliza.** La exactitud balanceada cae a **0.528** y la especificidad a
+#    **0.200**. El AUC conjunto de **0.380** no es una medida justa, porque mezcla las probabilidades de personas
+#    distintas. Dentro de cada persona, el AUC es **0.672 en `user2001`** (hay algo de señal) y **0.496 en `user003`**
+#    (nada). La línea base con Random Forest es peor (exactitud balanceada 0.483). Con estos datos, el gesto por sí solo
+#    **no basta** para reconocer la toma en alguien que el modelo no ha visto. Hay dos razones: casi todos los negativos
+#    vienen de una persona, y un “no tomó” en DoseMate es una grabación en la que la persona sí manipuló el frasco, así que
+#    el movimiento se parece mucho al de una toma.
+# 4. **La personalización ayuda, pero exige ajustar el umbral.** En `user2001`, agregar 4/5 de sus propios eventos sube
+#    la exactitud balanceada de **0.566 a 0.653**, el AUC de **0.672 a 0.704** y la especificidad de **0.162 a 0.880**.
+#    A cambio, la sensibilidad baja de **0.970 a 0.426**. El umbral de decisión tiene que calibrarse para cada persona.
+# 5. **Efecto en la fusión de evidencias de MediTrack.**
+#    - Con el modelo de persona nueva y sin NFC, el sistema confirmaría automáticamente el **72.4 % de los “no tomó”**,
+#      casi igual que el **70.9 % de las tomas reales**.
+#    - El NFC no ayuda a distinguirlas, porque en ambos casos se toca el frasco: sube las dos cifras (80.0 % y 84.8 %).
+#    - Con el modelo personalizado, en `user2001` las falsas confirmaciones bajan a **3.0 %**, pero solo el **25.7 %** de
+#      las tomas reales se confirma solo. El resto pasa a pregunta o a confirmación manual.
+#
+# **Qué implica para MediTrack**
+# - No hay que presentar el 94–95 % de DoseMate como desempeño propio. Lo que mide este notebook con personas nuevas es
+#   bastante menor.
+# - El MVP debe apoyarse en la **confirmación manual y el NFC**. El gesto conviene usarlo como evidencia de apoyo que
+#   reduce preguntas, no como prueba.
+# - Hace falta una **fase de calibración personal**: las primeras tomas se confirman a mano para ajustar el modelo y el
+#   umbral de cada usuario.
+# - Para mejorar el modelo se necesitan **más negativos de muchas personas** (el piloto) y, como hizo DoseMate, datasets
+#   abiertos de otras actividades de muñeca como negativos.
+#
+# *Fuente de los datos: Nzeyimana et al. (2024), DoseMate, PMLR 248:566–581. Repositorio sin licencia explícita, usado con
+# fines académicos y sin redistribuir los datos.*
