@@ -1,0 +1,30 @@
+{
+  "name": "meditrack-video",
+  "version": "1.0.0",
+  "description": "Video de MediTrack para médicos (ES/EN) con Remotion + Three.js",
+  "private": true,
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@fontsource/jetbrains-mono": "5.2.5",
+    "@fontsource/manrope": "5.2.5",
+    "@react-three/fiber": "9.8.2",
+    "@remotion/cli": "4.0.541",
+    "@remotion/fonts": "4.0.541",
+    "@remotion/media": "4.0.541",
+    "@remotion/three": "4.0.541",
+    "qrcode": "1.5.4",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.541",
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/three": "0.187.0",
+    "typescript": "5.9.3"
+  },
+  "scripts": {
+    "studio": "remotion studio",
+    "lint": "tsc"
+  }
+}

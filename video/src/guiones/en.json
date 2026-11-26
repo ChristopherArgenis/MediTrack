@@ -1,0 +1,258 @@
+{
+  "idioma": "en",
+  "voz": "fenrir",
+  "aprobado": true,
+  "escenas": [
+    {
+      "id": "gancho",
+      "frases": [
+        {
+          "id": "g1",
+          "voz": "Doctor, how do you know if your patient actually took their medication?",
+          "sub": "Doctor, how do you know if your patient actually took their medication?"
+        },
+        {
+          "id": "g2",
+          "voz": "According to the WHO, adherence in chronic diseases is only around fifty percent.",
+          "sub": "According to the WHO, adherence in chronic diseases is only around 50%."
+        }
+      ]
+    },
+    {
+      "id": "problema",
+      "frases": [
+        {
+          "id": "p1",
+          "voz": "With several medications and schedules, it's easy to forget.",
+          "sub": "With several medications and schedules, it's easy to forget."
+        },
+        {
+          "id": "p2",
+          "voz": "Patients doubt whether they already took a dose, and in clinic, all you have is self-report.",
+          "sub": "Patients doubt whether they already took a dose, and in clinic, all you have is self-report."
+        },
+        {
+          "id": "p3",
+          "voz": "Sometimes a dose is increased, when the real problem was adherence.",
+          "sub": "Sometimes a dose is increased, when the real problem was adherence."
+        }
+      ]
+    },
+    {
+      "id": "presenta",
+      "frases": [
+        {
+          "id": "m1",
+          "voz": "That's why we built MediTrack: reminders on the watch, confirmation with evidence, and an alert to the caregiver.",
+          "sub": "That's why we built MediTrack: reminders on the watch, confirmation with evidence, and an alert to the caregiver."
+        }
+      ]
+    },
+    {
+      "id": "rafael",
+      "frases": [
+        {
+          "id": "r1",
+          "voz": "It's eight o'clock. Rafael's watch vibrates: time for his metformin.",
+          "sub": "It's 8:00. Rafael's watch vibrates: time for his metformin."
+        },
+        {
+          "id": "r2",
+          "voz": "As he takes it, the system gathers evidence: the hand-to-mouth gesture,",
+          "sub": "As he takes it, the system gathers evidence: the hand-to-mouth gesture,"
+        },
+        {
+          "id": "r3",
+          "voz": "the sequence of opening the bottle and drinking water, and his usual schedule.",
+          "sub": "the sequence of opening the bottle and drinking water, and his usual schedule."
+        },
+        {
+          "id": "r4",
+          "voz": "No single signal is proof; together, they build confidence.",
+          "sub": "No single signal is proof; together, they build confidence."
+        },
+        {
+          "id": "r5",
+          "voz": "With strong evidence, the dose is confirmed automatically. If in doubt, the watch asks him.",
+          "sub": "With strong evidence, the dose is confirmed automatically. If in doubt, the watch asks him."
+        }
+      ]
+    },
+    {
+      "id": "laura",
+      "frases": [
+        {
+          "id": "l1",
+          "voz": "Elsewhere, his daughter Laura gets the confirmation on her phone.",
+          "sub": "Elsewhere, his daughter Laura gets the confirmation on her phone."
+        },
+        {
+          "id": "l2",
+          "voz": "And if a dose has no evidence after thirty minutes, she gets an alert to give him a call.",
+          "sub": "And if a dose has no evidence after 30 minutes, she gets an alert to give him a call."
+        },
+        {
+          "id": "l3",
+          "voz": "So caregivers don't have to keep watch all day.",
+          "sub": "So caregivers don't have to keep watch all day."
+        }
+      ]
+    },
+    {
+      "id": "reporte",
+      "frases": [
+        {
+          "id": "d1",
+          "voz": "In clinic, you see every dose with its actual time, its delay, how it was confirmed, and with what confidence.",
+          "sub": "In clinic, you see every dose with its actual time, its delay, how it was confirmed, and with what confidence."
+        },
+        {
+          "id": "d2",
+          "voz": "And the patterns: for example, that the evening dose is the one most often missed.",
+          "sub": "And the patterns: for example, that the evening dose is the one most often missed."
+        },
+        {
+          "id": "d3",
+          "voz": "So you can adjust the regimen before increasing the dose.",
+          "sub": "So you can adjust the regimen before increasing the dose."
+        }
+      ]
+    },
+    {
+      "id": "evidencia",
+      "frases": [
+        {
+          "id": "e1",
+          "voz": "Wrist-based pill-taking detection has already been tested in a real-world study, DoseMate, with ninety-four to ninety-five percent balanced accuracy.",
+          "sub": "Wrist-based pill-taking detection has already been tested in a real-world study, DoseMate, with 94–95% balanced accuracy."
+        },
+        {
+          "id": "e2",
+          "voz": "Even so, unconfirmed doesn't mean not taken, and MediTrack is not a medical device: it supports adherence.",
+          "sub": "Even so, \"unconfirmed\" doesn't mean \"not taken\", and MediTrack is not a medical device: it supports adherence."
+        }
+      ]
+    },
+    {
+      "id": "cierre",
+      "frases": [
+        {
+          "id": "c1",
+          "voz": "You can try the prototype online, at christopher argenis dot github dot io, slash MediTrack. Or scan this code.",
+          "sub": "You can try the prototype online at christopherargenis.github.io/MediTrack. Or scan this code."
+        },
+        {
+          "id": "c2",
+          "voz": "We invite you to explore the app and see how MediTrack works. Thank you.",
+          "sub": "We invite you to explore the app and see how MediTrack works. Thank you."
+        }
+      ]
+    }
+  ],
+  "ui": {
+    "fuente_oms": "WHO, 2003 · adherence to long-term therapies in developed countries",
+    "adherencia": "adherence in chronic diseases",
+    "prob_titulo": "The problem",
+    "prob": [
+      [
+        "Polypharmacy",
+        "Several drugs and schedules"
+      ],
+      [
+        "Doubt",
+        "\"Did I already take it?\""
+      ],
+      [
+        "No data in clinic",
+        "Self-report only"
+      ],
+      [
+        "Blind adjustments",
+        "Raising the dose when adherence fails"
+      ]
+    ],
+    "lema": "Remind · confirm with evidence · alert only when needed",
+    "hora": "Time for your medicine",
+    "med": "Metformin",
+    "dosis": "850 mg · with food",
+    "ev_titulo": "Dose evidence",
+    "ev": [
+      "Hand-to-mouth gesture",
+      "Open → mouth → drink",
+      "Usual schedule",
+      "Bottle NFC tag (optional)"
+    ],
+    "ev_sensor": [
+      "accelerometer + gyroscope",
+      "wrist twist + tilt",
+      "scheduled time + history",
+      "phone"
+    ],
+    "p_label": "P(taken)",
+    "confirmada": "Confirmed",
+    "pregunta": "If in doubt, the watch asks: \"Did you take your Metformin?\"",
+    "notif_app": "MediTrack · now",
+    "notif_ok": "✓ Rafael took his Metformin",
+    "notif_ok2": "8:06 AM · confirmed automatically",
+    "notif_alerta": "Not confirmed: 8:00 PM Metformin",
+    "notif_alerta2": "8:30 PM · no evidence in 30 min",
+    "casa": "Rafael's home · 8:00 AM",
+    "oficina": "Laura's office · 8:06 AM",
+    "opcional": "Confirmation alerts: optional, the patient decides",
+    "rep_titulo": "What you see in clinic",
+    "rep_ficticio": "Fictional example",
+    "rep_cols": [
+      "Day",
+      "Scheduled",
+      "Medication",
+      "Status",
+      "Confirmed",
+      "Source · confidence"
+    ],
+    "rep_filas": [
+      [
+        "Mon",
+        "8:00 AM",
+        "Metformin 850 mg",
+        "on time",
+        "8:06 AM",
+        "automatic · 0.93"
+      ],
+      [
+        "Mon",
+        "8:00 PM",
+        "Metformin 850 mg",
+        "late",
+        "9:10 PM",
+        "manual"
+      ],
+      [
+        "Tue",
+        "9:00 AM",
+        "Losartan 50 mg",
+        "on time",
+        "9:12 AM",
+        "NFC + gesture · 0.98"
+      ],
+      [
+        "Tue",
+        "8:00 PM",
+        "Metformin 850 mg",
+        "unconfirmed",
+        "—",
+        "caregiver alerted"
+      ]
+    ],
+    "rep_patron": "Pattern: the 8:00 PM dose is missed most often",
+    "ev2_titulo": "Scientific evidence",
+    "dosemate": "DoseMate · CHIL 2024",
+    "dosemate_txt": "20 participants · 1,154 real-world smartwatch events",
+    "ba": "balanced accuracy",
+    "limite1": "\"Unconfirmed\" ≠ \"not taken\"",
+    "limite2": "Not a medical device",
+    "cta": "Try the prototype",
+    "piloto": "Explore the app in your browser: no sign-up needed",
+    "gracias": "Thank you",
+    "escanea": "Scan to open the prototype"
+  }
+}

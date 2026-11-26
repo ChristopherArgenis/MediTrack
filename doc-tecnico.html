@@ -180,6 +180,7 @@ decisión:  P ≥ 0.85 → confirmed (fuente 'sensor')
       <tr><td>Fusión ≥ umbral</td><td><code>pending → confirmed</code> (o <code>unconfirmed → delayed</code>)</td></tr>
       <tr><td>0.50 ≤ fusión &lt; umbral</td><td>Pregunta en el reloj o en el teléfono</td></tr>
       <tr><td>“+10” (posponer)</td><td>Nuevo recordatorio en 10 min. La expiración espera a que ocurra.</td></tr>
+      <tr><td>Confirmación con <code>notify_on_confirm</code> activo</td><td>Notification al cuidador con <code>kind = 'update'</code> (opcional, lo decide el usuario)</td></tr>
       <tr><td>t = +tolerancia (30 min) sin evidencia</td><td><code>pending → unconfirmed</code> y Notification al cuidador</td></tr>
       <tr><td>t = +2 h</td><td>Se cierra la ventana de evidencias. La confirmación manual sigue posible y queda como <code>delayed</code>.</td></tr>
     </table></div>

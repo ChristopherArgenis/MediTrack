@@ -81,6 +81,7 @@ CREATE TABLE Caregiver (
   email                 TEXT UNIQUE,
   phone                 TEXT,
   consent_at            TEXT NOT NULL,               -- cuándo el usuario autorizó compartir avisos
+  notify_on_confirm     INTEGER NOT NULL DEFAULT 0 CHECK (notify_on_confirm IN (0,1)), -- también recibe confirmaciones
   is_active             INTEGER NOT NULL DEFAULT 1 CHECK (is_active IN (0,1))
 );
 

@@ -1,0 +1,85 @@
+WEBVTT
+
+1
+00:00:00.500 --> 00:00:05.385
+Doctor, doctora: ¿cómo sabe si su paciente realmente tomó su medicamento?
+
+2
+00:00:05.835 --> 00:00:11.659
+Según la OMS, en enfermedades crónicas la adherencia ronda apenas el 50 %.
+
+3
+00:00:12.959 --> 00:00:16.458
+Con varios medicamentos y horarios, el olvido es fácil.
+
+4
+00:00:16.908 --> 00:00:21.601
+Aparece la duda de si ya se tomó, y en consulta solo queda el autorreporte.
+
+5
+00:00:22.051 --> 00:00:25.977
+A veces se sube una dosis, cuando el problema real era la toma.
+
+6
+00:00:27.277 --> 00:00:33.933
+Por eso creamos MediTrack: recordatorios en el reloj, confirmación con evidencia y un aviso al cuidador.
+
+7
+00:00:35.233 --> 00:00:39.563
+Son las 8:00. El reloj de Rafael vibra: es hora de su metformina.
+
+8
+00:00:40.013 --> 00:00:45.496
+Mientras la toma, el sistema reúne evidencias: el gesto de llevarse la mano a la boca,
+
+9
+00:00:45.946 --> 00:00:50.639
+la secuencia de abrir el frasco y beber agua, y que sea su horario habitual.
+
+10
+00:00:51.089 --> 00:00:54.673
+Ninguna señal sola es prueba; juntas suman confianza.
+
+11
+00:00:55.123 --> 00:01:00.521
+Con evidencia fuerte, la toma se confirma sola. Si hay duda, el reloj le pregunta.
+
+12
+00:01:09.233 --> 00:01:13.265
+En otro lugar, su hija Laura recibe la confirmación en su teléfono.
+
+13
+00:01:13.715 --> 00:01:19.795
+Y si una toma queda sin evidencia después de 30 minutos, ella recibe un aviso para llamarle.
+
+14
+00:01:20.245 --> 00:01:23.551
+Así, el cuidador no tiene que vigilar todo el día.
+
+15
+00:01:31.233 --> 00:01:37.654
+En consulta, usted ve cada dosis con su hora real, su retraso, cómo se confirmó y con qué confianza.
+
+16
+00:01:38.104 --> 00:01:42.307
+Y los patrones: por ejemplo, que la dosis de la noche es la que más falla.
+
+17
+00:01:42.757 --> 00:01:46.255
+Así puede ajustar el esquema antes de subir la dosis.
+
+18
+00:01:47.555 --> 00:01:57.795
+El reconocimiento de la toma con reloj ya se probó en un estudio en vida real, DoseMate, con 94–95 % de exactitud balanceada.
+
+19
+00:01:58.245 --> 00:02:05.819
+Aun así, «sin confirmar» no significa «no tomada», y MediTrack no es un dispositivo médico: es un apoyo a la adherencia.
+
+20
+00:02:07.119 --> 00:02:14.713
+Puede probar el prototipo en la web: christopherargenis.github.io/MediTrack. O escanee este código.
+
+21
+00:02:15.163 --> 00:02:19.921
+Le invitamos a revisar la app y explorar cómo funciona MediTrack. Gracias.

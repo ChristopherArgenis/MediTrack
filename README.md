@@ -20,6 +20,7 @@ automática por gesto de ingesta (ML) y aviso escalonado al cuidador.
 | `pres-general.html` / `.pdf` | Público general: lenguaje sencillo, 3 pasos, familia, privacidad y qué reloj necesito (9) |
 | `flujo.html` / `img/flujo.png` | Diapositiva única con el flujo de una toma y sus conexiones |
 | `documento.html`, `presentacion.html` | Redirecciones de los enlaces antiguos |
+| `notebooks/meditrack_modelo_cnn_lstm.ipynb` | Notebook ejecutado: datos de DoseMate (se descargan al correrlo), segmentación como el artículo, modelo CNN-LSTM, evaluación aleatoria y LOSO, personalización y fusión de evidencias. Abre en Google Colab sin instalar nada |
 | `db/schema.sql` | Esquema SQLite (Device, IntakeRecord, Evidence, FusionDecision, ...) |
 | `db/test_schema.py` | Prueba del esquema y de la fusión de evidencias |
 | `assets/` | Tema visual, estilos de documentos, motor de presentaciones (`deck.css`, `deck.js`), `nav.js` y logo |
