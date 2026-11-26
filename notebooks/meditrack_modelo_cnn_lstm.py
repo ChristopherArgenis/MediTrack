@@ -40,11 +40,12 @@ from sklearn.metrics import (balanced_accuracy_score, f1_score, roc_auc_score, r
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.utils.class_weight import compute_class_weight
 
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"     # oculta mensajes internos de TensorFlow
 warnings.filterwarnings("ignore")
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
+tf.get_logger().setLevel("ERROR")
 
 SEMILLA = 42
 np.random.seed(SEMILLA)
@@ -293,6 +294,40 @@ por_usuario = (pd.DataFrame({"usuario": grupos, "y": y, "p": p_loso})
 por_usuario.round(3)
 
 # %% [markdown]
+# ### 6.3 ¿Por qué baja tanto en LOSO?
+# El AUC calculado juntando todas las vueltas compara probabilidades de **personas distintas**, y 167 de los 185
+# negativos son de un solo participante (`user2001`). Una medida más justa es el **AUC dentro de cada persona** que
+# tiene eventos de ambas clases.
+
+# %%
+for u in ["user2001", "user003"]:
+    m = grupos == u
+    print(f"{u}: {m.sum()} eventos ({(y[m] == 0).sum()} no tomó) · AUC dentro del usuario (LOSO) = {roc_auc_score(y[m], p_loso[m]):.3f}")
+
+# %% [markdown]
+# ### 6.4 Personalización: ¿ayudan unos días de datos de la propia persona?
+# En la práctica, MediTrack puede pedir al usuario que confirme a mano sus primeras tomas para ajustar el modelo. Aquí se
+# simula: para `user2001` y `user003` se entrena con **todos los demás participantes más 4/5 de sus propios eventos**, y
+# se prueba con el 1/5 restante (5 particiones estratificadas dentro del usuario).
+
+# %%
+t0 = time.time()
+p_pers = np.full(len(y), np.nan)
+for u in ["user2001", "user003"]:
+    idx_u = np.where(grupos == u)[0]
+    otros = np.where(grupos != u)[0]
+    for ent_u, prueba_u in StratifiedKFold(5, shuffle=True, random_state=SEMILLA).split(idx_u, y[idx_u]):
+        ent = np.concatenate([otros, idx_u[ent_u]])
+        p_pers[idx_u[prueba_u]] = entrenar_y_predecir(X[ent], y[ent], X[idx_u[prueba_u]])
+print(f"Personalización · {time.time() - t0:.0f} s")
+comparacion = []
+for u in ["user2001", "user003"]:
+    m = grupos == u
+    for nombre, p in [("LOSO (persona nueva)", p_loso), ("personalizado", p_pers)]:
+        comparacion.append({"usuario": u, "modelo": nombre} | metricas(y[m], p[m]))
+pd.DataFrame(comparacion).round(3)
+
+# %% [markdown]
 # ## 7. Comparación
 # ### 7.1 Línea base: características simples + Random Forest (LOSO)
 # Para saber si el modelo profundo aporta, se compara con un Random Forest entrenado sobre estadísticas por canal
@@ -393,8 +428,18 @@ def tabla_decisiones(p_fusion):
 
 p_sin_nfc = fusion(gesto=p_loso, horario=0.75)
 p_con_nfc = fusion(gesto=p_loso, horario=0.75, nfc=1.0)
-print("Sin NFC (% de cada fila)"); display(tabla_decisiones(p_sin_nfc))
-print("Con NFC (% de cada fila)"); display(tabla_decisiones(p_con_nfc))
+print("Modelo LOSO · sin NFC (% de cada fila)"); display(tabla_decisiones(p_sin_nfc))
+print("Modelo LOSO · con NFC (% de cada fila)"); display(tabla_decisiones(p_con_nfc))
+
+# %%
+# Las mismas decisiones para user2001, comparando el modelo de persona nueva con el personalizado
+m = grupos == "user2001"
+for nombre, p in [("LOSO (persona nueva)", p_loso), ("personalizado", p_pers)]:
+    pf = fusion(gesto=p[m], horario=0.75)
+    d = pd.crosstab(pd.Series(np.where(y[m] == 1, "tomó", "no tomó"), name="real"),
+                    pd.Series(decision(pf), name="decisión"), normalize="index") * 100
+    print(f"user2001 · {nombre} · sin NFC (% de cada fila)")
+    display(d.reindex(columns=["confirmar", "preguntar", "esperar"], fill_value=0).round(1))
 
 # %%
 v = np.linspace(0, 1, 101)
